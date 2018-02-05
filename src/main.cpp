@@ -106,14 +106,6 @@ bool closest_intersection(vec4 start, vec4 dir, vector<Triangle> &triangles, Int
     return found;
 }
 
-// returns: a 4D direction vector from the camera's origin to a pixel.
-vec4 primary_ray(int x_pixelCoordinate, int y_pixelCoordinate, int width, int height, float focal_length, vec4 camera_pos) {
-    float x_cameraCoordinate = x_pixelCoordinate - width/2;
-    float y_cameraCoordinate = y_pixelCoordinate - height/2;
-    vec4 dir = vec4(x_cameraCoordinate - camera_pos.x, y_cameraCoordinate - camera_pos.y, focal_length - camera_pos.z, 1);
-    return dir;
-}
-
 // param intersection_pos: the 4D position of the intersection we want to whether the light can reach.
 // param point_to_light: the vector from the intersection point to the light source.
 // param exclude_tri_index: ignores this triangle, even if an intersection is
@@ -123,10 +115,17 @@ vec4 primary_ray(int x_pixelCoordinate, int y_pixelCoordinate, int width, int he
 bool is_occluded(vec4 start, vec4 dir, vector<Triangle> triangles, int exclude_tri_index) {
     bool found = false;
 
+    float r = glm::length(dir);
+
     //Only iterate until occluded surface is found
     for (int i=0; i<triangles.size() && !found; i++) {
-        vec3 x = intersection(start, dir, triangles[i]);
-        found = is_inside_triangle(x) && i != exclude_tri_index;
+        vec3 x = intersection(start, normalize(dir), triangles[i]);
+        // found = is_inside_triangle(x) && i != exclude_tri_index;
+        float t = x.x;
+        float u = x.y;
+        float v = x.z;
+
+        found = 0 < t && 0 <= u && 0 <= v && u + v <= 1 && i != exclude_tri_index && t < r;
     }
 
     return found;
@@ -162,6 +161,14 @@ vec3 indirect_light(Intersection &i, vec4 light_pos, vec3 light_col, vector<Tria
     }
 
     return direct_light(shadow_ray, i.triangle->normal, light_pos, light_col);
+}
+
+// returns: a 4D direction vector from the camera's origin to a pixel.
+vec4 primary_ray(int x_pixelCoordinate, int y_pixelCoordinate, int width, int height, float focal_length, vec4 camera_pos) {
+    float x_cameraCoordinate = x_pixelCoordinate - width/2;
+    float y_cameraCoordinate = y_pixelCoordinate - height/2;
+    vec4 dir = vec4(x_cameraCoordinate - camera_pos.x, y_cameraCoordinate - camera_pos.y, focal_length - camera_pos.z, 1);
+    return glm::normalize(dir);
 }
 
 /*Place your drawing here*/
