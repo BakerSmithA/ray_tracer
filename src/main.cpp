@@ -80,15 +80,17 @@ vec4 convert_to_camera_coordinates(float u, float v, Triangle tri) {
 // param triangles: all triangles in the scene.
 // param closest_intersection: set to the intersection with the closest triangle to the camera.
 // param camera_origin: the position of the camera. Used to calculate the distance from points to the camera.
+// param exclude_tri_index: ignores this triangle, even if an intersection is
+//                          found. This can be used to avoid self-occlusion.
 // returns: whether an intersection point was found to triangles in the scene.
-bool closest_intersection(vec4 start, vec4 dir, vector<Triangle> &triangles, Intersection &closest_intersection) {
+bool closest_intersection(vec4 start, vec4 dir, vector<Triangle> &triangles, Intersection &closest_intersection, int exclude_tri_index = -1) {
     closest_intersection.distance = std::numeric_limits<float>::max();
     bool found = false;
 
     for (int i=0; i<triangles.size(); i++) {
         vec3 x = intersection(start, dir, triangles[i]);
 
-        if (is_inside_triangle(x)) {
+        if (exclude_tri_index != i && is_inside_triangle(x)) {
             vec4 intersection_point = convert_to_camera_coordinates(x.y, x.z, triangles[i]);
             float dist = glm::length(intersection_point - start);
 
@@ -113,19 +115,20 @@ bool closest_intersection(vec4 start, vec4 dir, vector<Triangle> &triangles, Int
 // returns: whether the path of light from the light to the intersection is
 //          occluded by another object.
 bool is_occluded(vec4 start, vec4 dir, vector<Triangle> triangles, int exclude_tri_index) {
-    bool found = false;
     float dist_to_light = glm::length(dir);
 
-    //Only iterate until occluded surface is found
-    for (int i=0; i<triangles.size() && !found; i++) {
-        vec3 x = intersection(start, normalize(dir), triangles[i]);
-        float t = x.x;
-        found = is_inside_triangle(x)
-             && i != exclude_tri_index
-             && t <= dist_to_light;
+    Intersection i;
+    bool found = closest_intersection(start, normalize(dir), triangles, i, exclude_tri_index);
+
+    if (found) {
+        // The distance from the start to the intersected point must be less
+        // than the distance to the light source, otherwise the intersection
+        // occurred 'after' the light.
+        float intersection_dist = glm::length(start - i.position);
+        return intersection_dist <= dist_to_light;
     }
 
-    return found;
+    return false;
 }
 
 // param point_to_light: the vector from the intersection point to the light source.
