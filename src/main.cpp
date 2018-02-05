@@ -61,7 +61,7 @@ bool is_inside_triangle(vec3 x) {
     float u = x.y;
     float v = x.z;
 
-    return 0 <= t && 0 <= u && 0 <= v && u + v <= 1;
+    return 0 < t && 0 <= u && 0 <= v && u + v <= 1;
 }
 
 // param u: used to describe a point in the triangle's plane.
@@ -114,18 +114,15 @@ bool closest_intersection(vec4 start, vec4 dir, vector<Triangle> &triangles, Int
 //          occluded by another object.
 bool is_occluded(vec4 start, vec4 dir, vector<Triangle> triangles, int exclude_tri_index) {
     bool found = false;
-
-    float r = glm::length(dir);
+    float dist_to_light = glm::length(dir);
 
     //Only iterate until occluded surface is found
     for (int i=0; i<triangles.size() && !found; i++) {
         vec3 x = intersection(start, normalize(dir), triangles[i]);
-        // found = is_inside_triangle(x) && i != exclude_tri_index;
         float t = x.x;
-        float u = x.y;
-        float v = x.z;
-
-        found = 0 < t && 0 <= u && 0 <= v && u + v <= 1 && i != exclude_tri_index && t < r;
+        found = is_inside_triangle(x)
+             && i != exclude_tri_index
+             && t <= dist_to_light;
     }
 
     return found;
