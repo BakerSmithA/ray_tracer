@@ -28,7 +28,8 @@ vec4 primary_ray(int x_pixelCoordinate, int y_pixelCoordinate, int width, int he
 }
 
 vec3 color(vec4 ray, vec4 mass_pos) {
-    float dist = orthogonal_dist(mass_pos, ray);
+    vec4 diff = orthogonal(mass_pos, ray);
+    float dist = glm::length(diff);
     float x = (dist - 0.55) * 1.5;
     vec3 white(1,1,1);
     vec3 black(0,0,0);
