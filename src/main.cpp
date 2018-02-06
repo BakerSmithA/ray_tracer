@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <limits.h>
 #include <math.h>
+#include "mass.h"
+#include "ray.h"
 
 using namespace std;
 using glm::vec3;
@@ -218,7 +220,7 @@ void update(vec4& camera_pos, vec4& light_pos) {
     else if(scancodes[SDL_SCANCODE_W]) light_pos.z += 0.01;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, const char* argv[]) {
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     vector<Triangle> triangles;
