@@ -7,8 +7,8 @@ using glm::vec4;
 
 class Mass {
 public:
-    const vec4 position;
-    const float mass;
+    vec4 position;
+    float mass;
 
     Mass(vec4 position, float mass): position(position), mass(mass) {
     }

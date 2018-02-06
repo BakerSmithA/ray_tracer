@@ -173,8 +173,27 @@ vec4 primary_ray(int x_pixelCoordinate, int y_pixelCoordinate, int width, int he
     return glm::normalize(dir);
 }
 
+// return: the new direction of the ray after being deflected by the mass.
+vec4 gravitational_lens(vec4 ray, Mass &mass, vec4 *start) {
+    // A scalar multiple of ray, to the vector that is orthogonal to the mass.
+    vec4 projection = orthogonal_projection(mass.position, ray);
+    // The shortest vector from the ray to the mass.
+    vec4 diff = mass.position - projection;
+    // The length of the shortest distance from the ray to the mass.
+    float closest_dist = glm::length(diff);
+
+    float deflection_angle = mass.deflection_angle(closest_dist);
+
+    //cout << deflection_angle << endl;
+
+    *start = projection;
+
+    // Reflects ray by deflection_angle in the plane defined by projection and diff.
+    return deflected(ray, deflection_angle, projection, diff);
+}
+
 /*Place your drawing here*/
-void draw(screen* screen, vector<Triangle> triangles, float focal_length, vec4 camera_pos, vec4 light_pos, vec3 light_col) {
+void draw(screen* screen, vector<Triangle> triangles, float focal_length, vec4 camera_pos, vec4 light_pos, vec3 light_col, Mass &mass) {
     /* Clear buffer */
     memset(screen->buffer, 0, screen->height*screen->width*sizeof(uint32_t));
 
@@ -182,8 +201,13 @@ void draw(screen* screen, vector<Triangle> triangles, float focal_length, vec4 c
         for (int x=0; x<SCREEN_WIDTH; x++) {
             vec4 dir = primary_ray(x, y, SCREEN_WIDTH, SCREEN_HEIGHT, focal_length, camera_pos);
 
+            vec4 new_start;
+            vec4 def = gravitational_lens(dir, mass, &new_start);
+
+            //cout << def.x << "," << def.y << "," << def.z << endl;
+
             Intersection intersection;
-            bool found = closest_intersection(camera_pos, dir, triangles, intersection);
+            bool found = closest_intersection(camera_pos, def, triangles, intersection);
 
             if (found) {
                 vec3 light_intensity = indirect_light(intersection, light_pos, light_col, triangles);
@@ -195,7 +219,7 @@ void draw(screen* screen, vector<Triangle> triangles, float focal_length, vec4 c
 }
 
 /*Place updates of parameters here*/
-void update(vec4& camera_pos, vec4& light_pos) {
+void update(vec4& camera_pos, vec4& light_pos, Mass &mass) {
     static int t = SDL_GetTicks();
     /* Compute frame time */
     int t2 = SDL_GetTicks();
@@ -212,12 +236,19 @@ void update(vec4& camera_pos, vec4& light_pos) {
     else if (scancodes[SDL_SCANCODE_LEFT]) camera_pos.x -= 0.01;
 
     //Translate Light Source
-    else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
-    else if(scancodes[SDL_SCANCODE_D]) light_pos.x += 0.01;
-    else if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= 0.01;
-    else if(scancodes[SDL_SCANCODE_E]) light_pos.y += 0.01;
-    else if(scancodes[SDL_SCANCODE_S]) light_pos.z -= 0.01;
-    else if(scancodes[SDL_SCANCODE_W]) light_pos.z += 0.01;
+    // else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_D]) light_pos.x += 0.01;
+    // else if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_E]) light_pos.y += 0.01;
+    // else if(scancodes[SDL_SCANCODE_S]) light_pos.z -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_W]) light_pos.z += 0.01;
+
+    else if(scancodes[SDL_SCANCODE_A]) mass.position.x -= 0.01;
+    else if(scancodes[SDL_SCANCODE_D]) mass.position.x += 0.01;
+    else if(scancodes[SDL_SCANCODE_Q]) mass.position.y -= 0.01;
+    else if(scancodes[SDL_SCANCODE_E]) mass.position.y += 0.01;
+    else if(scancodes[SDL_SCANCODE_S]) mass.position.z -= 0.01;
+    else if(scancodes[SDL_SCANCODE_W]) mass.position.z += 0.01;
 }
 
 int main(int argc, const char* argv[]) {
@@ -232,9 +263,11 @@ int main(int argc, const char* argv[]) {
     vec4 light_pos(0, -0.5, -0.7, 1.0);
     vec3 light_col = 18.0f * vec3(1, 1, 1);
 
+    Mass mass(vec4(0, -0.5, -0.7, 1.0), 1);
+
     while(NoQuitMessageSDL()){
-        update(camera_pos, light_pos);
-        draw(screen, triangles, focal_length, camera_pos, light_pos, light_col);
+        update(camera_pos, light_pos, mass);
+        draw(screen, triangles, focal_length, camera_pos, light_pos, light_col, mass);
         SDL_Renderframe(screen);
     }
 

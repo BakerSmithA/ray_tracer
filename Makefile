@@ -1,4 +1,4 @@
-FILE=test
+FILE=main
 
 ########
 #   Directories
