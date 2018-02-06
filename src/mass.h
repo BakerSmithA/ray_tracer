@@ -12,6 +12,15 @@ public:
 
     Mass(vec4 position, float mass): position(position), mass(mass) {
     }
+
+    // return: the angle a ray is deflected given the closest distance from the
+    //         ray to the center of mass. The deflection angle is inversely
+    //         proportional to the distance.
+    float deflection_angle(float closest_distance) {
+        // Using the forumla found here:
+        //  https://en.wikipedia.org/wiki/Gravitational_lens
+        return this->mass / (closest_distance * closest_distance);
+    }
 };
 
 #endif // MASS_H
