@@ -174,7 +174,7 @@ vec4 primary_ray(int x_pixelCoordinate, int y_pixelCoordinate, int width, int he
 }
 
 // return: the new direction of the ray after being deflected by the mass.
-vec4 gravitational_lens(vec4 ray, Mass &mass, vec4 *start) {
+vec4 gravitational_lens(vec4 ray, Mass &mass) {
     // A scalar multiple of ray, to the vector that is orthogonal to the mass.
     vec4 projection = orthogonal_projection(mass.position, ray);
     // The shortest vector from the ray to the mass.
@@ -183,10 +183,6 @@ vec4 gravitational_lens(vec4 ray, Mass &mass, vec4 *start) {
     float closest_dist = glm::length(diff);
 
     float deflection_angle = mass.deflection_angle(closest_dist);
-
-    //cout << deflection_angle << endl;
-
-    *start = projection;
 
     // Reflects ray by deflection_angle in the plane defined by projection and diff.
     return deflected(ray, deflection_angle, projection, diff);
@@ -200,11 +196,7 @@ void draw(screen* screen, vector<Triangle> triangles, float focal_length, vec4 c
     for (int y=0; y<SCREEN_HEIGHT; y++) {
         for (int x=0; x<SCREEN_WIDTH; x++) {
             vec4 dir = primary_ray(x, y, SCREEN_WIDTH, SCREEN_HEIGHT, focal_length, camera_pos);
-
-            vec4 new_start;
-            vec4 def = gravitational_lens(dir, mass, &new_start);
-
-            //cout << def.x << "," << def.y << "," << def.z << endl;
+            vec4 def = gravitational_lens(dir, mass);
 
             Intersection intersection;
             bool found = closest_intersection(camera_pos, def, triangles, intersection);
@@ -228,27 +220,29 @@ void update(vec4& camera_pos, vec4& light_pos, Mass &mass) {
 
     std::cout << "Render time: " << dt << " ms" << std::endl;
 
+    float delta = 0.05f;
+
     //Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
-    if(scancodes[SDL_SCANCODE_DOWN]) camera_pos.z -= 0.01;
-    else if(scancodes[SDL_SCANCODE_UP]) camera_pos.z += 0.01;
-    else if(scancodes[SDL_SCANCODE_RIGHT]) camera_pos.x += 0.01;
-    else if (scancodes[SDL_SCANCODE_LEFT]) camera_pos.x -= 0.01;
+    if(scancodes[SDL_SCANCODE_DOWN]) camera_pos.z -= delta;
+    if(scancodes[SDL_SCANCODE_UP]) camera_pos.z += delta;
+    if(scancodes[SDL_SCANCODE_RIGHT]) camera_pos.x += delta;
+    if (scancodes[SDL_SCANCODE_LEFT]) camera_pos.x -= delta;
 
     //Translate Light Source
-    // else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
-    // else if(scancodes[SDL_SCANCODE_D]) light_pos.x += 0.01;
-    // else if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= 0.01;
-    // else if(scancodes[SDL_SCANCODE_E]) light_pos.y += 0.01;
-    // else if(scancodes[SDL_SCANCODE_S]) light_pos.z -= 0.01;
-    // else if(scancodes[SDL_SCANCODE_W]) light_pos.z += 0.01;
+    // if(scancodes[SDL_SCANCODE_A]) light_pos.x -= delta;
+    // if(scancodes[SDL_SCANCODE_D]) light_pos.x += delta;
+    // if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= delta;
+    // if(scancodes[SDL_SCANCODE_E]) light_pos.y += delta;
+    // if(scancodes[SDL_SCANCODE_S]) light_pos.z -= delta;
+    // if(scancodes[SDL_SCANCODE_W]) light_pos.z += delta;
 
-    else if(scancodes[SDL_SCANCODE_A]) mass.position.x -= 0.01;
-    else if(scancodes[SDL_SCANCODE_D]) mass.position.x += 0.01;
-    else if(scancodes[SDL_SCANCODE_Q]) mass.position.y -= 0.01;
-    else if(scancodes[SDL_SCANCODE_E]) mass.position.y += 0.01;
-    else if(scancodes[SDL_SCANCODE_S]) mass.position.z -= 0.01;
-    else if(scancodes[SDL_SCANCODE_W]) mass.position.z += 0.01;
+    if(scancodes[SDL_SCANCODE_A]) mass.position.x -= delta;
+    if(scancodes[SDL_SCANCODE_D]) mass.position.x += delta;
+    if(scancodes[SDL_SCANCODE_Q]) mass.position.y -= delta;
+    if(scancodes[SDL_SCANCODE_E]) mass.position.y += delta;
+    if(scancodes[SDL_SCANCODE_S]) mass.position.z -= delta;
+    if(scancodes[SDL_SCANCODE_W]) mass.position.z += delta;
 }
 
 int main(int argc, const char* argv[]) {
@@ -258,12 +252,13 @@ int main(int argc, const char* argv[]) {
     LoadTestModel(triangles);
 
     float focal_length = SCREEN_WIDTH/2;
-    vec4 camera_pos(0, 0, -2.25, 1);
+    //vec4 camera_pos(0, 0, -2.25, 1);
+    vec4 camera_pos(0, 0, -5, 1);
 
     vec4 light_pos(0, -0.5, -0.7, 1.0);
     vec3 light_col = 18.0f * vec3(1, 1, 1);
 
-    Mass mass(vec4(0, -0.5, -0.7, 1.0), 1);
+    Mass mass(vec4(0, -0.5, -0.7, 1.0), 0.4);
 
     while(NoQuitMessageSDL()){
         update(camera_pos, light_pos, mass);
