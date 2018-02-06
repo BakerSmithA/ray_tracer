@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 #include "SDLauxiliary.h"
-#include "TestModelH.h"
+#include "models/TestModelH.h"
 #include <stdint.h>
 #include <limits.h>
 #include <math.h>
