@@ -5,7 +5,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::normalize;
 using glm::cross;
-using glm::epsilonEqual;
+// using glm::epsilonEqual;
 
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
@@ -30,22 +30,22 @@ public:
 	{
 	}
 
-	// return: whether the point [t u v], in the triangle's coordinates system
+	// return: whether the point [t u v], in the triangle's coordinate system
 	//		   (i.e. e1 and e2 are the basis vectors), is inside the triangle
 	bool is_inside(vec3 pos) {
-		float t = x.x;
-		float u = x.y;
-		float v = x.z;
+		float t = pos.x;
+		float u = pos.y;
+		float v = pos.z;
 
 		return 0 < t && 0 <= u && 0 <= v && u + v <= 1;
 	}
 
-	bool operator == (const Triangle &other) const {
-		return epsilonEqual(this->color, other->color, 0.0001)
-			&& epsilonEqual(this->v0, other->v0, 0.0001)
-			&& epsilonEqual(this->v1, other->v1, 0.0001)
-			&& epsilonEqual(this->v2, other->v2, 0.0001);
- 	}
+	// bool operator == (const Triangle &other) const {
+	// 	return epsilonEqual(this->color, other.color, 0.0001)
+	// 		&& epsilonEqual(this->v0, other.v0, 0.0001)
+	// 		&& epsilonEqual(this->v1, other.v1, 0.0001)
+	// 		&& epsilonEqual(this->v2, other.v2, 0.0001);
+ 	// }
 };
 
 #endif // TRIANGLE_H

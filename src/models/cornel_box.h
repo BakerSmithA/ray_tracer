@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
-#include "geometry/triangle.h"
+#include "../geometry/triangle.h"
 
 using std::vector;
 

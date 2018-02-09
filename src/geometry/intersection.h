@@ -2,6 +2,7 @@
 #include "ray.h"
 #include "triangle.h"
 
+using glm::mat3;
 using glm::inverse;
 
 #ifndef INTERSECTION_H
@@ -20,8 +21,8 @@ public:
     // return: the intersection [t u v] with the triangle, in the triangle's
     //         coordinates (i.e. e1 and e2 are the basis vectors).
     static vec3 with_triangle(Triangle &tri, Ray &ray) {
-        vec3 b = project_4D(ray.start - tri.v0);
-        mat3 A = mat3(-project_4D(ray.dir), tri.e1, tri.e2);
+        vec3 b = vec3(ray.start - tri.v0);
+        mat3 A = mat3(-vec3(ray.dir), tri.e1, tri.e2);
         return inverse(A) * b;
     }
 };
