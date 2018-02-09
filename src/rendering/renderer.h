@@ -18,7 +18,7 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
     vec3 acc_colour = vec3(0, 0, 0);
     // Colour is addative for all lights.
     for (const PointLight &light: scene.lights) {
-        acc_colour += i->triangle.shader->color(*i, ray, scene, light);
+        acc_colour += i->triangle.shader->color(i->pos, i->triangle.normal, ray, scene, light);
     }
 
     delete i;
