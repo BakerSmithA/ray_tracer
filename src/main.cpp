@@ -221,8 +221,7 @@ void update(vec4& camera_pos, vec4& light_pos) {
 int main(int argc, char* argv[]) {
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
-    vector<Triangle> triangles;
-    LoadTestModel(triangles);
+    vector<Triangle> triangles = cornel_box();
 
     float focal_length = SCREEN_WIDTH/2;
     vec4 camera_pos(0, 0, -2.25, 1);
