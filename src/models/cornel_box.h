@@ -176,11 +176,10 @@ vector<Triangle> cornel_box_triangles() {
 
 // return: the lights in the cornel box.
 vector<PointLight> cornel_box_lights() {
-	vec4 light_pos(0, -0.5, -0.7, 1.0);
-	vec3 light_col = 18.0f * vec3(1, 1, 1);
-
 	vector<PointLight> lights;
-	lights.push_back(PointLight(light_pos, light_col));
+
+	lights.push_back(PointLight(vec4(0, -0.5, -0.7, 1.0), vec3(18, 18, 18)));
+	lights.push_back(PointLight(vec4(0.5, 0.32, -0.9, 1.0), vec3(8, 8, 8)));
 
 	return lights;
 }
