@@ -7,21 +7,6 @@ using glm::length;
 #ifndef DIFFUSE_H
 #define DIFFUSE_H
 
-//     // The distance from the light source to the intersection, i.e. the radius of the sphere.
-//     float r = glm::length(shadow_ray);
-//
-//     // The proportion of light hitting the surface.
-//     float prop = glm::dot(glm::normalize(normal), glm::normalize(shadow_ray));
-//
-//     // Because negative light is not allowed.
-//     float projection_factor = std::max(prop, 0.0f);
-//
-//     // Because the power of the light hitting a point follows the inverse square law.
-//     float surface_area_at_radius_r = 4 * M_PI * r * r;
-//     vec3 power_per_surface_area_at_radius_r = light_col / surface_area_at_radius_r;
-//
-//     return projection_factor * power_per_surface_area_at_radius_r;
-
 // Models an ideally diffuse surface.
 class Diffuse: public Shader {
 public:
