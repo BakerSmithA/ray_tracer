@@ -37,20 +37,20 @@ vec3 project_4D(vec4 vec) {
 // returns: the intersection point (t, u, v) between the ray (decribed the start
 //          and direction vectors) and the triangle.
 vec3 intersection(vec4 start, vec4 dir, Triangle tri) {
-    // See 2.1: Triangles in 3D from lab 2.
-    vec4 v0 = tri.v0;
-    vec4 v1 = tri.v1;
-    vec4 v2 = tri.v2;
-
-    // See equations (4) and (5) from lab 2.
-    vec3 e1 = project_4D(v1 - v0);
-    vec3 e2 = project_4D(v2 - v0);
-
-    // See 2.3: Intersection from lab2.
-    // Intersecting the ray and the plane desribed by the triangle's basis
-    // vectors e1 and e2.
-    vec3 b = project_4D(start - v0);
-    mat3 A(-project_4D(dir), e1, e2);
+    // // See 2.1: Triangles in 3D from lab 2.
+    // vec4 v0 = tri.v0;
+    // vec4 v1 = tri.v1;
+    // vec4 v2 = tri.v2;
+    //
+    // // See equations (4) and (5) from lab 2.
+    // vec3 e1 = project_4D(v1 - v0);
+    // vec3 e2 = project_4D(v2 - v0);
+    //
+    // // See 2.3: Intersection from lab2.
+    // // Intersecting the ray and the plane desribed by the triangle's basis
+    // // vectors e1 and e2.
+    vec3 b = project_4D(start - tri.v0);
+    mat3 A(-project_4D(dir), tri.e1, tri.e2);
     return glm::inverse(A) * b;
 }
 
