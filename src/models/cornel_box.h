@@ -1,30 +1,38 @@
-#ifndef TEST_MODEL_CORNEL_BOX_H
-#define TEST_MODEL_CORNEL_BOX_H
-
-// Defines a simple test model: The Cornel Box
-
 #include <glm/glm.hpp>
 #include <vector>
 #include "../geometry/triangle.h"
+#include "../lights/point_light.h"
+#include "../shaders/diffuse.h"
 
 using std::vector;
 
-// Loads the Cornell Box. It is scaled to fill the volume:
-// -1 <= x <= +1
-// -1 <= y <= +1
-// -1 <= z <= +1
-vector<Triangle> cornel_box() {
+#ifndef CORNEL_BOX_H
+#define CORNEL_BOX_H
+
+// return: all the triangles of the cornel box in the volume:
+// 			-1 <= x <= +1
+// 			-1 <= y <= +1
+// 			-1 <= z <= +1
+vector<Triangle> cornel_box_triangles() {
 	using glm::vec3;
 	using glm::vec4;
 
 	// Defines colors:
-	vec3 red(0.75f, 0.15f, 0.15f);
-	vec3 yellow(0.75f, 0.75f, 0.15f);
-	vec3 green(0.15f, 0.75f, 0.15f);
-	vec3 cyan(0.15f, 0.75f, 0.75f);
-	vec3 blue(0.15f, 0.15f, 0.75f);
-	vec3 purple(0.75f, 0.15f, 0.75f);
-	vec3 white(0.75f, 0.75f, 0.75f);
+	const vec3 red = vec3(0.75f, 0.15f, 0.15f);
+	const vec3 yellow = vec3(0.75f, 0.75f, 0.15f);
+	const vec3 green = vec3(0.15f, 0.75f, 0.15f);
+	const vec3 cyan = vec3(0.15f, 0.75f, 0.75f);
+	const vec3 blue = vec3(0.15f, 0.15f, 0.75f);
+	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
+	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
+
+	const Shader *red_diffuse = new Diffuse(red);
+	const Shader *yellow_diffuse = new Diffuse(yellow);
+	const Shader *green_diffuse = new Diffuse(green);
+	const Shader *cyan_diffuse = new Diffuse(cyan);
+	const Shader *blue_diffuse = new Diffuse(blue);
+	const Shader *purple_diffuse = new Diffuse(purple);
+	const Shader *white_diffuse = new Diffuse(white);
 
 	vector<Triangle> triangles;
 	triangles.clear();
@@ -46,24 +54,24 @@ vector<Triangle> cornel_box() {
 	vec4 H(0,L,L,1);
 
 	// Floor:
-	triangles.push_back(Triangle(C, B, A, green));
-	triangles.push_back(Triangle(C, D, B, green));
+	triangles.push_back(Triangle(C, B, A, green_diffuse));
+	triangles.push_back(Triangle(C, D, B, green_diffuse));
 
 	// Left wall
-	triangles.push_back(Triangle(A, E, C, purple));
-	triangles.push_back(Triangle(C, E, G, purple));
+	triangles.push_back(Triangle(A, E, C, purple_diffuse));
+	triangles.push_back(Triangle(C, E, G, purple_diffuse));
 
 	// Right wall
-	triangles.push_back(Triangle(F, B, D, yellow));
-	triangles.push_back(Triangle(H, F, D, yellow));
+	triangles.push_back(Triangle(F, B, D, yellow_diffuse));
+	triangles.push_back(Triangle(H, F, D, yellow_diffuse));
 
 	// Ceiling
-	triangles.push_back(Triangle(E, F, G, cyan));
-	triangles.push_back(Triangle(F, H, G, cyan));
+	triangles.push_back(Triangle(E, F, G, cyan_diffuse));
+	triangles.push_back(Triangle(F, H, G, cyan_diffuse));
 
 	// Back wall
-	triangles.push_back(Triangle(G, D, C, white));
-	triangles.push_back(Triangle(G, H, D, white));
+	triangles.push_back(Triangle(G, D, C, white_diffuse));
+	triangles.push_back(Triangle(G, H, D, white_diffuse));
 
 	// ---------------------------------------------------------------------------
 	// Short block
@@ -79,24 +87,24 @@ vector<Triangle> cornel_box() {
 	H = vec4(82,165,225,1);
 
 	// Front
-	triangles.push_back(Triangle(E,B,A,red));
-	triangles.push_back(Triangle(E,F,B,red));
+	triangles.push_back(Triangle(E,B,A,red_diffuse));
+	triangles.push_back(Triangle(E,F,B,red_diffuse));
 
 	// Front
-	triangles.push_back(Triangle(F,D,B,red));
-	triangles.push_back(Triangle(F,H,D,red));
+	triangles.push_back(Triangle(F,D,B,red_diffuse));
+	triangles.push_back(Triangle(F,H,D,red_diffuse));
 
 	// BACK
-	triangles.push_back(Triangle(H,C,D,red));
-	triangles.push_back(Triangle(H,G,C,red));
+	triangles.push_back(Triangle(H,C,D,red_diffuse));
+	triangles.push_back(Triangle(H,G,C,red_diffuse));
 
 	// LEFT
-	triangles.push_back(Triangle(G,E,C,red));
-	triangles.push_back(Triangle(E,A,C,red));
+	triangles.push_back(Triangle(G,E,C,red_diffuse));
+	triangles.push_back(Triangle(E,A,C,red_diffuse));
 
 	// TOP
-	triangles.push_back(Triangle(G,F,E,red));
-	triangles.push_back(Triangle(G,H,F,red));
+	triangles.push_back(Triangle(G,F,E,red_diffuse));
+	triangles.push_back(Triangle(G,H,F,red_diffuse));
 
 	// ---------------------------------------------------------------------------
 	// Tall block
@@ -112,24 +120,24 @@ vector<Triangle> cornel_box() {
 	H = vec4(314,330,456,1);
 
 	// Front
-	triangles.push_back(Triangle(E,B,A,blue));
-	triangles.push_back(Triangle(E,F,B,blue));
+	triangles.push_back(Triangle(E,B,A,blue_diffuse));
+	triangles.push_back(Triangle(E,F,B,blue_diffuse));
 
 	// Front
-	triangles.push_back(Triangle(F,D,B,blue));
-	triangles.push_back(Triangle(F,H,D,blue));
+	triangles.push_back(Triangle(F,D,B,blue_diffuse));
+	triangles.push_back(Triangle(F,H,D,blue_diffuse));
 
 	// BACK
-	triangles.push_back(Triangle(H,C,D,blue));
-	triangles.push_back(Triangle(H,G,C,blue));
+	triangles.push_back(Triangle(H,C,D,blue_diffuse));
+	triangles.push_back(Triangle(H,G,C,blue_diffuse));
 
 	// LEFT
-	triangles.push_back(Triangle(G,E,C,blue));
-	triangles.push_back(Triangle(E,A,C,blue));
+	triangles.push_back(Triangle(G,E,C,blue_diffuse));
+	triangles.push_back(Triangle(E,A,C,blue_diffuse));
 
 	// TOP
-	triangles.push_back(Triangle(G,F,E,blue));
-	triangles.push_back(Triangle(G,H,F,blue));
+	triangles.push_back(Triangle(G,F,E,blue_diffuse));
+	triangles.push_back(Triangle(G,H,F,blue_diffuse));
 
 	// ----------------------------------------------
 	// Scale to the volume [-1,1]^3
@@ -160,10 +168,26 @@ vector<Triangle> cornel_box() {
 		new_v1.w = 1.0;
 		new_v2.w = 1.0;
 
-		new_triangles.push_back(Triangle(new_v0, new_v1, new_v2, triangles[i].color));
+		new_triangles.push_back(Triangle(new_v0, new_v1, new_v2, triangles[i].shader));
 	}
 
 	return new_triangles;
 }
 
-#endif
+// return: the lights in the cornel box.
+vector<PointLight> cornel_box_lights() {
+	vec4 light_pos(0, -0.5, -0.7, 1.0);
+	vec3 light_col = 18.0f * vec3(1, 1, 1);
+
+	vector<PointLight> lights;
+	lights.push_back(PointLight(light_pos, light_col));
+
+	return lights;
+}
+
+// return: a cornel box scene.
+Scene cornel_box() {
+	return Scene(cornel_box_triangles(), cornel_box_lights());
+}
+
+#endif // CORNEL_BOX_H

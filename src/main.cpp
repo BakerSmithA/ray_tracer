@@ -197,30 +197,30 @@
 // }
 //
 // /*Place updates of parameters here*/
-// void update(vec4& camera_pos, vec4& light_pos) {
-//     static int t = SDL_GetTicks();
-//     /* Compute frame time */
-//     int t2 = SDL_GetTicks();
-//     float dt = float(t2-t);
-//     t = t2;
-//
-//     std::cout << "Render time: " << dt << " ms" << std::endl;
-//
-//     //Translate Camera Position
-//     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
-//     if(scancodes[SDL_SCANCODE_DOWN]) camera_pos.z -= 0.01;
-//     else if(scancodes[SDL_SCANCODE_UP]) camera_pos.z += 0.01;
-//     else if(scancodes[SDL_SCANCODE_RIGHT]) camera_pos.x += 0.01;
-//     else if (scancodes[SDL_SCANCODE_LEFT]) camera_pos.x -= 0.01;
-//
-//     //Translate Light Source
-//     else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
-//     else if(scancodes[SDL_SCANCODE_D]) light_pos.x += 0.01;
-//     else if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= 0.01;
-//     else if(scancodes[SDL_SCANCODE_E]) light_pos.y += 0.01;
-//     else if(scancodes[SDL_SCANCODE_S]) light_pos.z -= 0.01;
-//     else if(scancodes[SDL_SCANCODE_W]) light_pos.z += 0.01;
-// }
+void update() {
+    static int t = SDL_GetTicks();
+    /* Compute frame time */
+    int t2 = SDL_GetTicks();
+    float dt = float(t2-t);
+    t = t2;
+
+    std::cout << "Render time: " << dt << " ms" << std::endl;
+
+    //Translate Camera Position
+    // const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
+    // if(scancodes[SDL_SCANCODE_DOWN]) camera_pos.z -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_UP]) camera_pos.z += 0.01;
+    // else if(scancodes[SDL_SCANCODE_RIGHT]) camera_pos.x += 0.01;
+    // else if (scancodes[SDL_SCANCODE_LEFT]) camera_pos.x -= 0.01;
+    //
+    // //Translate Light Source
+    // else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_D]) light_pos.x += 0.01;
+    // else if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_E]) light_pos.y += 0.01;
+    // else if(scancodes[SDL_SCANCODE_S]) light_pos.z -= 0.01;
+    // else if(scancodes[SDL_SCANCODE_W]) light_pos.z += 0.01;
+}
 
 int main(int argc, char* argv[]) {
     // screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
@@ -244,11 +244,12 @@ int main(int argc, char* argv[]) {
     // KillSDL(screen);
     // return 0;
 
-    screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
-    Scene scene = Scene(cornel_box());
+    Scene scene = cornel_box();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2);
+    screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {
+        update();
         render(scene, cam, screen);
         SDL_Renderframe(screen);
     }
