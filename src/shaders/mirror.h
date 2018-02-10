@@ -13,7 +13,8 @@ public:
     //         specific light. Becomes the color of point the bounced ray
     //         intersects with.
     vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
-        vec4 outgoing_dir = 2.0f * dot(-incoming.dir, tri.normal) * tri.normal + incoming.dir;
+        vec4 incident_ray = -incoming.dir;
+        vec4 outgoing_dir = 2.0f * dot(incident_ray, tri.normal) * tri.normal - incident_ray;
         Ray reflected_outgoing = Ray(position, outgoing_dir);
 
         unique_ptr<Intersection> i = scene.closest_intersection(reflected_outgoing, &tri);

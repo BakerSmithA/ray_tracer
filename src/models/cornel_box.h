@@ -5,6 +5,7 @@
 #include "../lights/ambient_light.h"
 #include "../shaders/diffuse.h"
 #include "../shaders/mirror.h"
+#include "../shaders/mix.h"
 
 using std::vector;
 
@@ -28,11 +29,11 @@ vector<Triangle> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	const Shader *red_diffuse = new Mirror(); //new Diffuse(red);
+	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), 0.7);
 	const Shader *yellow_diffuse = new Diffuse(yellow);
 	const Shader *green_diffuse = new Diffuse(green);
 	const Shader *cyan_diffuse = new Diffuse(cyan);
-	const Shader *blue_diffuse = new Diffuse(blue);
+	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), 0.7);
 	const Shader *purple_diffuse = new Diffuse(purple);
 	const Shader *white_diffuse = new Diffuse(white);
 
