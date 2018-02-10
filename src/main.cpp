@@ -22,7 +22,7 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 256
 #define FULLSCREEN_MODE false
-#define MAX_NUM_RAY_BOUNCES 1
+#define MAX_NUM_RAY_BOUNCES 2
 //
 // typedef struct Intersection {
 //     // The 4D position of an intersection.
