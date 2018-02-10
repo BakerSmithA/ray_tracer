@@ -29,13 +29,17 @@ public:
     //                          This can be useful to avoid self-intersection.
     // return:                  The closest intersection to the start of the ray,
     //                          or null if no intersection was found.
-    unique_ptr<Intersection> closest_intersection(Ray &ray) const {
+    unique_ptr<Intersection> closest_intersection(Ray &ray, const Triangle *excluded_tri = nullptr) const {
         float closest_distance = std::numeric_limits<float>::max();
         int closest_triangle_idx = -1;
         // The intersection point in the scene's coordinate system.
         vec4 intersection_pos;
 
         for (int i=0; i<this->triangles.size(); i++) {
+            if (&this->triangles[i] == excluded_tri) {
+                continue;
+            }
+
             // The intersection in the triangle's coordinate system.
             vec3 i_tri_cord = Intersection::with_triangle(triangles[i], ray);
 

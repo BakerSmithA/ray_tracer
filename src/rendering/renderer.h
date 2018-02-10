@@ -33,7 +33,7 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
 
         // Only add colour if the light doesn't cast shadows, or the point is
         // not in shadow.
-        acc_colour += i->triangle.shader->color(i->pos, i->triangle.normal, ray, scene, *light);
+        acc_colour += i->triangle.shader->color(i->pos, i->triangle, ray, scene, *light);
     }
 
     return acc_colour;

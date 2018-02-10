@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 
 using glm::dot;
+using std::unique_ptr;
 
 #ifndef MIRROR_H
 #define MIRROR_H
@@ -11,9 +12,16 @@ public:
     // return: the color of the intersected surface, as illuminated by a
     //         specific light. Becomes the color of point the bounced ray
     //         intersects with.
-    vec3 color(vec4 position, vec4 surface_normal, const Ray &incoming, const Scene &scene, const Light &light) const {
-        vec4 outgoing_dir = 2.0f * dot(incoming.dir, surface_normal) * (surface_normal - incoming.dir);
-        return vec3(0,0,0);
+    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+        vec4 outgoing_dir = 2.0f * dot(-incoming.dir, tri.normal) * tri.normal + incoming.dir;
+        Ray reflected_outgoing = Ray(position, outgoing_dir);
+
+        unique_ptr<Intersection> i = scene.closest_intersection(reflected_outgoing, &tri);
+        if (!i) {
+            return vec3(0, 0, 0);
+        }
+
+        return i->triangle.shader->color(position, i->triangle, reflected_outgoing, scene, light);
     }
 };
 

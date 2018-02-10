@@ -9,6 +9,8 @@
 
 #include "rendering/renderer.h"
 #include "models/cornel_box.h"
+#include <glm/glm.hpp>
+#include <SDL.h>
 
 // using namespace std;
 // using glm::vec3;
@@ -197,7 +199,7 @@
 // }
 //
 // /*Place updates of parameters here*/
-void update() {
+void update(Camera &camera) {
     static int t = SDL_GetTicks();
     /* Compute frame time */
     int t2 = SDL_GetTicks();
@@ -207,11 +209,11 @@ void update() {
     std::cout << "Render time: " << dt << " ms" << std::endl;
 
     //Translate Camera Position
-    // const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
-    // if(scancodes[SDL_SCANCODE_DOWN]) camera_pos.z -= 0.01;
-    // else if(scancodes[SDL_SCANCODE_UP]) camera_pos.z += 0.01;
-    // else if(scancodes[SDL_SCANCODE_RIGHT]) camera_pos.x += 0.01;
-    // else if (scancodes[SDL_SCANCODE_LEFT]) camera_pos.x -= 0.01;
+    const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
+    if(scancodes[SDL_SCANCODE_DOWN]) camera.pos.z -= 0.01;
+    if(scancodes[SDL_SCANCODE_UP]) camera.pos.z += 0.01;
+    if(scancodes[SDL_SCANCODE_RIGHT]) camera.pos.x += 0.01;
+    if (scancodes[SDL_SCANCODE_LEFT]) camera.pos.x -= 0.01;
     //
     // //Translate Light Source
     // else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
@@ -249,7 +251,7 @@ int main(int argc, char* argv[]) {
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {
-        update();
+        update(cam);
         render(scene, cam, screen);
         SDL_Renderframe(screen);
     }

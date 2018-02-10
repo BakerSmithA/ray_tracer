@@ -7,7 +7,7 @@
 class Shader {
 public:
     // return: the color of the intersected surface, as illuminated by a specific light.
-    virtual vec3 color(vec4 position, vec4 surface_normal, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
+    virtual vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
 };
 
 #endif // SHADER_H

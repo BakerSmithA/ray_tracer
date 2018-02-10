@@ -17,8 +17,8 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, vec4 surface_normal, const Ray &incoming, const Scene &scene, const Light &light) const {
-        return light.intensity(position, surface_normal) * this->base_color;
+    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+        return light.intensity(position, tri.normal) * this->base_color;
     }
 };
 
