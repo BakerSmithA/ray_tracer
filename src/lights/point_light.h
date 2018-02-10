@@ -29,6 +29,17 @@ public:
 
         return projection_factor * intensity;
     }
+
+    // return: whether the light casts shadows.
+    bool does_cast_shadows() const {
+        return true;
+    }
+
+    // return: a shadow ray from the point and the light source. This is
+    //         only used if the light casts shadows.
+    Ray shadow_ray_to(vec4 point) const {
+        return Ray(point, this->pos - point);
+    }
 };
 
 #endif // POINT_LIGHT_H

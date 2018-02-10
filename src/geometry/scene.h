@@ -65,7 +65,7 @@ public:
     //                     This is useful for avoiding self-intersections.
     // return:             whether the ray is obstructed by geometry between its
     //                     start and start + direction.
-    bool is_obstructed(Ray &ray, Triangle &excluded_tri) const {
+    bool is_obstructed(const Ray &ray, const Triangle &excluded_tri) const {
         bool obstructed = false;
 
         for (int i=0; i<this->triangles.size() && !obstructed; i++) {
