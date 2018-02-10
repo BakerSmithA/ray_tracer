@@ -1,5 +1,5 @@
 #include <glm/glm.hpp>
-#include "shader.hpp"
+#include "shader.h"
 
 using glm::dot;
 using std::unique_ptr;
@@ -14,7 +14,7 @@ public:
     //         specific light. Becomes the color of point the bounced ray
     //         intersects with. If the incoming ray has no bounces remaining,
     //         black is returned.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, Light &light) const {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }

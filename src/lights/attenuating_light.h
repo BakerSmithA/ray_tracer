@@ -10,9 +10,9 @@ class AttenuatingLight : public Light {
 public:
 
     //All lights that reduce in brightness with distance (attenuating lights) have a position 
-    vec3 pos;
+    vec4 pos;
 
-    AttenuatingLight(vec3 color, vec3 pos) : Light(color), pos(pos) {}
+    AttenuatingLight(vec3 color, vec4 pos) : Light(color), pos(pos) {}
 
     //Attenuating lights with directions (create shadow/incident rays) always cast shadows
     virtual bool does_cast_shadows() const override { return true; }
@@ -23,12 +23,12 @@ public:
 
     // The intensity of light is inversely proportional to the distance squared.
     vec3 attenuation_of_light_from(vec3 point) const {
-        float dist = length(point - pos);
+        float dist = length(point - vec3(pos));
         float surface_area_at_radius_r = 4 * M_PI * dist * dist;
         vec3 intensity = this->color / surface_area_at_radius_r;
         return intensity;
     }
-}
+};
 
 #endif // ATTENUATING_LIGHT_H
 

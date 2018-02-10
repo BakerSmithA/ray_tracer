@@ -1,4 +1,5 @@
 #include "../geometry/scene.h"
+#include "../lights/attenuating_light.h"
 
 #ifndef SHADER_H
 #define SHADER_H
@@ -7,16 +8,16 @@
 class Shader {
 public:
     // return: the color of the intersected surface, as illuminated by a specific light.
-    virtual vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
+    virtual vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, Light &light) const = 0;
 
     // return: the color of the intersected surface, taking shadows from the
     //         light into account. If the position is in shadow, black is
     //         returned, otherwise the shader is used to calculate color.
-    vec3 shadowed_color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+    vec3 shadowed_color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, Light &light) const {
         // Work out whether we cast shadows, and if we do, whether the intersection
         // point is in shadow.
         if (light.does_cast_shadows()) {
-            AttenuatingLight atten_light = static_cast<AttenuatingLight>(light);
+            AttenuatingLight& atten_light = static_cast<AttenuatingLight&>(light);
             // If the shadow ray between the intersection and the light is
             // obstructed, no light from this light reaches the intersection.
             Ray shadow_ray = atten_light.shadow_ray_to(position);

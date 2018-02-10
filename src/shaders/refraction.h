@@ -17,7 +17,7 @@ public:
     // return: the color of the intersected surface, as illuminated by a
     //         specific light. Becomes the color of the point that the
     //         refracted ray hits.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, Light &light) const {
     }
 };
 

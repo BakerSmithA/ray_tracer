@@ -11,14 +11,14 @@ using std::unique_ptr;
 
 // return: the color in the scene at the point where the ray intersects the scene.
 vec3 colour_in_scene(Scene &scene, Ray &primary_ray) {
-    unique_ptr<Intersection> i = scene.closest_intersection(ray);
+    unique_ptr<Intersection> i = scene.closest_intersection(primary_ray);
 
     //Return black if visibility/primary ray failed to hit scene
     if (!i) return vec3(0, 0, 0);
 
     vec3 acc_colour = vec3(0, 0, 0);
     // Colour is addative for all lights.
-    for (const Light *light: scene.lights) {
+    for (Light *light: scene.lights) {
         acc_colour += i->triangle.shader->shadowed_color(i->pos, i->triangle, primary_ray, scene, *light);
     }
 

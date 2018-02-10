@@ -1,5 +1,5 @@
 #include <glm/glm.hpp>
-#include "shader.hpp"
+#include "shader.h"
 
 using glm::mix;
 
@@ -20,7 +20,7 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, Light &light) const {
         vec3 color1 = this->s1->color(position, tri, incoming, scene, light);
         vec3 color2 = this->s2->color(position, tri, incoming, scene, light);
 
