@@ -12,7 +12,7 @@ public:
     // return: the color of the intersected surface, as illuminated by a
     //         specific light. Becomes the color of point the bounced ray
     //         intersects with. If the incoming ray has no bounces remaining,
-    //         white is returned.
+    //         black is returned.
     vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);

@@ -29,13 +29,14 @@ vector<Triangle> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), 0.8);
-	const Shader *yellow_diffuse = new Diffuse(yellow);
-	const Shader *green_diffuse = new Diffuse(green);
-	const Shader *cyan_diffuse = new Diffuse(cyan);
-	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), 0.8);
-	const Shader *purple_diffuse = new Diffuse(purple);
-	const Shader *white_diffuse = new Diffuse(white);
+	float prop = 0.4;
+	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), prop);
+	const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
+	const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
+	const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
+	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
+	const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
+	const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
 
 	vector<Triangle> triangles;
 	triangles.clear();
