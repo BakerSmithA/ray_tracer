@@ -13,19 +13,13 @@ public:
     // param surface_normal: the normal of the object at the point.
     // return: the intensity of light at the position in the scene, i.e. the
     //         color of the light for ambient lights.
-    vec3 intensity(vec4 point, vec4 surface_normal) const override {
+    vec3 intensity(vec4 point, vec4 surface_normal, Ray primary) const override {
         return this->color;
     }
 
     // return: whether the light casts shadows.
-    bool does_cast_shadows() const override {
+    virtual bool does_cast_shadows() const override {
         return false;
-    }
-
-    // return: a shadow ray between the point and the light source. This is
-    //         only used if the light casts shadows.
-    Ray shadow_ray_to(vec4 point) const override {
-        throw runtime_error("Ambient lights cannot cast shadows");
     }
 };
 

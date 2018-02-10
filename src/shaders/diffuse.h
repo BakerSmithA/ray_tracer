@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include "shader.hpp"
 
 using glm::dot;
 using glm::normalize;
@@ -18,7 +19,7 @@ public:
 
     // return: the color of the intersected surface, as illuminated by a specific light.
     vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
-        return light.intensity(position, tri.normal) * this->base_color;
+        return light.intensity(position, tri.normal, incoming) * this->base_color;
     }
 };
 

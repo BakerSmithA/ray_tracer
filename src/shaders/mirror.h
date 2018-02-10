@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include "shader.hpp"
 
 using glm::dot;
 using std::unique_ptr;

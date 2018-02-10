@@ -1,3 +1,6 @@
+#include <glm/glm.hpp>
+#include "shader.hpp"
+
 #ifndef REFRACTION_H
 #define REFRACTION_H
 

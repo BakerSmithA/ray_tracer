@@ -16,9 +16,10 @@ public:
         // Work out whether we cast shadows, and if we do, whether the intersection
         // point is in shadow.
         if (light.does_cast_shadows()) {
+            AttenuatingLight atten_light = static_cast<AttenuatingLight>(light);
             // If the shadow ray between the intersection and the light is
             // obstructed, no light from this light reaches the intersection.
-            Ray shadow_ray = light.shadow_ray_to(position);
+            Ray shadow_ray = atten_light.shadow_ray_to(position);
             // Exclude the current triangle from obstruction calculations.
             if (scene.is_obstructed(shadow_ray, tri)) {
                 return vec3(0, 0, 0);
