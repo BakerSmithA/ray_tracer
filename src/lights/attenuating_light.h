@@ -22,8 +22,8 @@ public:
     virtual Ray shadow_ray_to(vec4 point) const = 0;
 
     // The intensity of light is inversely proportional to the distance squared.
-    vec3 attenuation_of_light_from(vec3 point) const {
-        float dist = length(point - vec3(pos));
+    vec3 attenuation_of_light_from(vec4 point) const {
+        float dist = length(vec3(point) - vec3(pos));
         float surface_area_at_radius_r = 4 * M_PI * dist * dist;
         vec3 intensity = this->color / surface_area_at_radius_r;
         return intensity;

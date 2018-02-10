@@ -1,7 +1,8 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "../geometry/triangle.h"
-#include "../lights/point_light.h"
+#include "../lights/phong_point_light.h"
+#include "../lights/blinn_point_light.h"
 #include "../lights/ambient_light.h"
 #include "../shaders/diffuse.h"
 #include "../shaders/mirror.h"
@@ -182,7 +183,7 @@ vector<Triangle> cornel_box_triangles() {
 vector<Light*> cornel_box_lights() {
 	vector<Light*> lights;
 
-	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0)));
+	//lights.push_back(new BlinnPointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0), 1));
 	lights.push_back(new AmbientLight(vec3(0.3, 0.2, 0.2)));
 
 	return lights;
