@@ -4,14 +4,16 @@
 #include "camera.h"
 #include "SDLauxiliary.h"
 
+using std::unique_ptr;
+
 #ifndef RENDERER_H
 #define RENDERER_H
 
 // return: the color in the scene at the point where the ray intersects the scene.
 vec3 colour_in_scene(Scene &scene, Ray &ray) {
-    Intersection *i = scene.closest_intersection(ray);
+    unique_ptr<Intersection> i = scene.closest_intersection(ray);
 
-    if (i == NULL) {
+    if (!i) {
         return vec3(0, 0, 0);
     }
 
@@ -34,7 +36,6 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
         acc_colour += i->triangle.shader->color(i->pos, i->triangle.normal, ray, scene, *light);
     }
 
-    delete i;
     return acc_colour;
 }
 

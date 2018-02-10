@@ -8,6 +8,7 @@
 
 using glm::length;
 using std::vector;
+using std::unique_ptr;
 
 #ifndef SCENE_H
 #define SCENE_H
@@ -26,8 +27,9 @@ public:
     // param ray:               A ray, in scene coordinates, check intersection with.
     // param excluded_triangle: the triangle to discount intersections with.
     //                          This can be useful to avoid self-intersection.
-    // return:                  The closest intersection to the start of the ray.
-    Intersection *closest_intersection(Ray &ray) const {
+    // return:                  The closest intersection to the start of the ray,
+    //                          or null if no intersection was found.
+    unique_ptr<Intersection> closest_intersection(Ray &ray) const {
         float closest_distance = std::numeric_limits<float>::max();
         int closest_triangle_idx = -1;
         // The intersection point in the scene's coordinate system.
@@ -55,10 +57,10 @@ public:
         }
 
         if (closest_triangle_idx == -1) {
-            return NULL;
+            return nullptr;
         }
 
-        return new Intersection(intersection_pos, triangles[closest_triangle_idx]);
+        return unique_ptr<Intersection>(new Intersection(intersection_pos, triangles[closest_triangle_idx]));
     }
 
     // param excluded_tri: obstructions by this triangle will not be included.
