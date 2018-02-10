@@ -12,7 +12,8 @@ using glm::dot;
 class BlinnPointLight: public PointLight {
 public:
 
-    BlinnPointLight(vec3 color, vec4 pos, float dropoff): PointLight(color, pos, dropoff) {}
+    float dropoff;
+    BlinnPointLight(vec3 color, vec4 pos, float dropoff): PointLight(color, pos, Light::LightType::SPECULAR), dropoff(dropoff) {}
 
     vec3 intensity(vec4 point, vec4 surface_normal, Ray primary) const {
 

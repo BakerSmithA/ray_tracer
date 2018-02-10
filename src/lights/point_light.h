@@ -10,8 +10,7 @@ using glm::vec3;
 class PointLight: public AttenuatingLight {
 public:
 
-    float dropoff;
-    PointLight(vec3 color, vec4 pos, float dropoff): AttenuatingLight(color, pos), dropoff(dropoff) {}
+    PointLight(vec3 color, vec4 pos, Light::LightType type): AttenuatingLight(color, pos, type) {}
 
     // return: a shadow ray that passes through `point` in the direction of the light
     virtual Ray shadow_ray_to(vec4 point) const override {

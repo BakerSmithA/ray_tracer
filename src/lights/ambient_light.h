@@ -6,8 +6,8 @@ using std::runtime_error;
 // Models a constant light everywhere in the scene.
 class AmbientLight: public Light {
 public:
-    // Inherit the default constructor.
-    using Light::Light;
+
+    AmbientLight(vec3 col) : Light(col, Light::LightType::AMBIENT) {};
 
     // param point: the point to be illuminated.
     // param surface_normal: the normal of the object at the point.

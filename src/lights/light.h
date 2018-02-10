@@ -6,9 +6,12 @@
 // Models a light source.
 class Light {
 public:
+    enum class LightType { DIFFUSE, SPECULAR, AMBIENT };
+    
     const vec3 color;
-
-    Light(vec3 color): color(color) {}
+    const LightType type;
+    
+    Light(vec3 color, LightType type): color(color), type(type) {}
 
     // param point: the point to be illuminated.
     // param surface_normal: the normal of the object at the point.

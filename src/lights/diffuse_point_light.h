@@ -1,5 +1,5 @@
 #include <math.h>
-#include "attenuating_light.h"
+#include "point_light.h"
 
 using glm::vec3;
 
@@ -7,12 +7,10 @@ using glm::vec3;
 #define POINT_LIGHT_H
 
 // Models a point light which radiates light outwards.
-class DirectionalLight: public AttenuatingLight {
+class DirectionalLight: public PointLight {
 public:
 
-    vec4 dir;
-
-    DirectionalLight(vec3 color, vec4 pos, vec4 dir): AttenuatingLight(color, pos, Light::LightType::DIFFUSE), dir(dir) {}
+    DirectionalLight(vec3 color, vec4 pos): PointLight(color, pos, Light::LightType::DIFFUSE), dir(dir) {}
 
     vec3 intensity(vec4 point, vec4 surface_normal, Ray primary) const override {
         //Direction of shadow/incident ray
@@ -31,7 +29,7 @@ public:
     Ray shadow_ray_to(vec4 point) const override {
         // The ray can only be used to check obstructions between the point and
         // light. Therefore it cannot bounce.
-        return Ray(point, dir, 0);
+        return Ray(point, point - pos, 0);
     }
 };
 
