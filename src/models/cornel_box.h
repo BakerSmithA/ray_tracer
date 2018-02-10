@@ -29,7 +29,7 @@ vector<Triangle> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	float prop = 0.4;
+	float prop = 0.5;
 	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), prop);
 	const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
 	const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);

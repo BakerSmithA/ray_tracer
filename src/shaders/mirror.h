@@ -28,7 +28,7 @@ public:
             return vec3(0, 0, 0);
         }
 
-        return i->triangle.shader->color(position, i->triangle, reflected_outgoing, scene, light);
+        return i->triangle.shader->shadowed_color(i->pos, i->triangle, reflected_outgoing, scene, light);
     }
 };
 
