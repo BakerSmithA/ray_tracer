@@ -4,7 +4,7 @@
 #include "intersection.h"
 #include "triangle.h"
 #include "projection.h"
-#include "../lights/point_light.h"
+#include "../lights/light.h"
 
 using glm::length;
 using std::vector;
@@ -16,9 +16,9 @@ using std::vector;
 class Scene {
 public:
     const vector<Triangle> triangles;
-    const vector<PointLight> lights;
+    const vector<Light*> lights;
 
-    Scene(const vector<Triangle> triangles, const vector<PointLight> lights):
+    Scene(const vector<Triangle> triangles, const vector<Light*> lights):
         triangles(triangles), lights(lights)
     {
     }
