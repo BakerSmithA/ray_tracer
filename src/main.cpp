@@ -22,6 +22,7 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 256
 #define FULLSCREEN_MODE false
+#define MAX_NUM_RAY_BOUNCES 1
 //
 // typedef struct Intersection {
 //     // The 4D position of an intersection.
@@ -247,7 +248,7 @@ int main(int argc, char* argv[]) {
     // return 0;
 
     Scene scene = cornel_box();
-    Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2);
+    Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {

@@ -11,11 +11,17 @@ class Mirror: public Shader {
 public:
     // return: the color of the intersected surface, as illuminated by a
     //         specific light. Becomes the color of point the bounced ray
-    //         intersects with.
+    //         intersects with. If the incoming ray has no bounces remaining,
+    //         white is returned.
     vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+        if (!incoming.can_bounce()) {
+            return vec3(0, 0, 0);
+        }
+
         vec4 incident_ray = -incoming.dir;
         vec4 outgoing_dir = 2.0f * dot(incident_ray, tri.normal) * tri.normal - incident_ray;
-        Ray reflected_outgoing = Ray(position, outgoing_dir);
+        // The outgoing ray has one less bounce remaining than the incoming ray.
+        Ray reflected_outgoing = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
 
         unique_ptr<Intersection> i = scene.closest_intersection(reflected_outgoing, &tri);
         if (!i) {

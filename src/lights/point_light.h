@@ -39,7 +39,9 @@ public:
     // return: a shadow ray from the point and the light source. This is
     //         only used if the light casts shadows.
     Ray shadow_ray_to(vec4 point) const override {
-        return Ray(point, this->pos - point);
+        // The ray can only be used to check obstructions between the point and
+        // light. Therefore it cannot bounce.
+        return Ray(point, this->pos - point, 0);
     }
 };
 
