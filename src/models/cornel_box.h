@@ -2,6 +2,7 @@
 #include <vector>
 #include "../geometry/triangle.h"
 #include "../lights/point_light.h"
+#include "../lights/ambient_light.h"
 #include "../shaders/diffuse.h"
 
 using std::vector;
@@ -179,7 +180,7 @@ vector<Light*> cornel_box_lights() {
 	vector<Light*> lights;
 
 	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0)));
-	//lights.push_back(new PointLight(vec3(8, 8, 8), vec4(0.5, 0.32, -0.9, 1.0)));
+	lights.push_back(new AmbientLight(vec3(0.2, 0.2, 0.2)));
 
 	return lights;
 }

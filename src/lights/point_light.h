@@ -4,6 +4,7 @@
 #ifndef POINT_LIGHT_H
 #define POINT_LIGHT_H
 
+// Models a point light which radiates light outwards.
 class PointLight: public Light {
 public:
     const vec4 pos;
@@ -14,7 +15,7 @@ public:
     // param point: the point to be illuminated.
     // param surface_normal: the normal of the object at the point.
     // return: the intensity of light at the position in the scene.
-    vec3 intensity(vec4 point, vec4 surface_normal) const {
+    vec3 intensity(vec4 point, vec4 surface_normal) const override {
         // The distance from the light source to the intersection, i.e. the radius of the sphere.
         vec4 shadow_ray = this->pos - point;
         // The proportion of light hitting the surface.
@@ -31,13 +32,13 @@ public:
     }
 
     // return: whether the light casts shadows.
-    bool does_cast_shadows() const {
+    bool does_cast_shadows() const override {
         return true;
     }
 
     // return: a shadow ray from the point and the light source. This is
     //         only used if the light casts shadows.
-    Ray shadow_ray_to(vec4 point) const {
+    Ray shadow_ray_to(vec4 point) const override {
         return Ray(point, this->pos - point);
     }
 };

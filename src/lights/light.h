@@ -1,10 +1,9 @@
 #include "../geometry/ray.h"
 
-using std::runtime_error;
-
 #ifndef LIGHT_H
 #define LIGHT_H
 
+// Models a light source.
 class Light {
 public:
     const vec3 color;

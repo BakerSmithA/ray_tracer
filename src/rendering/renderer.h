@@ -18,16 +18,20 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
     vec3 acc_colour = vec3(0, 0, 0);
     // Colour is addative for all lights.
     for (const Light *light: scene.lights) {
+        // Work out whether we cast shadows, and if we do, whether the intersection
+        // point is in shadow.
         if (light->does_cast_shadows()) {
             // If the shadow ray between the intersection and the light is
             // obstructed, no light from this light reaches the intersection.
             Ray shadow_ray = light->shadow_ray_to(i->pos);
-            if (!scene.is_obstructed(shadow_ray, i->triangle)) {
-                acc_colour += i->triangle.shader->color(i->pos, i->triangle.normal, ray, scene, *light);
+            if (scene.is_obstructed(shadow_ray, i->triangle)) {
+                continue;
             }
-        } else {
-            acc_colour += i->triangle.shader->color(i->pos, i->triangle.normal, ray, scene, *light);
         }
+
+        // Only add colour if the light doesn't cast shadows, or the point is
+        // not in shadow.
+        acc_colour += i->triangle.shader->color(i->pos, i->triangle.normal, ray, scene, *light);
     }
 
     delete i;
