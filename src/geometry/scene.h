@@ -71,7 +71,7 @@ public:
     //                     This is useful for avoiding self-intersections.
     // return:             whether the ray is obstructed by geometry between its
     //                     start and start + direction.
-    bool is_obstructed(const Ray &ray, const Triangle &excluded_tri) const {
+    bool is_obstructed(const Ray &ray, bool (Shader::*is_transparent)() const, const Triangle &excluded_tri) const {
         bool obstructed = false;
 
         for (int i=0; i<this->triangles.size() && !obstructed; i++) {
@@ -82,6 +82,7 @@ public:
             float t = i_tri_cord.x;
 
             obstructed = &excluded_tri != &triangles[i]
+                      && !(triangles[i].shader->*is_transparent)()
                       && triangles[i].is_inside(i_tri_cord)
                       && t < 1.0f; // The intersection occurred before the end of the ray.
         }

@@ -13,7 +13,7 @@ public:
     //         specific light. Becomes the color of point the bounced ray
     //         intersects with. If the incoming ray has no bounces remaining,
     //         black is returned.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const override {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }
@@ -29,6 +29,10 @@ public:
         }
 
         return i->triangle.shader->shadowed_color(i->pos, i->triangle, reflected_outgoing, scene, light);
+    }
+
+    bool is_transparent() const override {
+        return false;
     }
 };
 

@@ -6,6 +6,7 @@
 #include "../shaders/diffuse.h"
 #include "../shaders/mirror.h"
 #include "../shaders/mix.h"
+#include "../shaders/refraction.h"
 
 using std::vector;
 
@@ -30,13 +31,21 @@ vector<Triangle> cornel_box_triangles() {
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
 	float prop = 0.5;
-	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), prop);
-	const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
-	const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
-	const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
-	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
-	const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
-	const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
+	// const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), prop);
+	// const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
+	// const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
+	// const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
+	// const Shader *blue_diffuse = new Refraction(1/1.5);//new Mix(new Mirror(), new Diffuse(blue), prop);
+	// const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
+	// const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
+
+	const Shader *red_diffuse = new Diffuse(red);
+	const Shader *yellow_diffuse = new Diffuse(yellow);
+	const Shader *green_diffuse = new Diffuse(green);
+	const Shader *cyan_diffuse = new Diffuse(cyan);
+	const Shader *blue_diffuse = new Refraction(1/1.5);
+	const Shader *purple_diffuse = new Diffuse(purple);
+	const Shader *white_diffuse = new Diffuse(white);
 
 	vector<Triangle> triangles;
 	triangles.clear();
