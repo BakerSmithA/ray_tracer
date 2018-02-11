@@ -28,7 +28,7 @@ public:
         vec3 normal_3d = normalize(vec3(tri.normal));
         vec3 incoming_3d = normalize(vec3(incoming.dir));
 
-        // N x i = cos(theta_1)
+        // cos(theta_1) = -(N . i)
         float a = -dot(normal_3d, incoming_3d);
 
         // According to Wikipedia, if dot product is negative, flip normal and recalculate.

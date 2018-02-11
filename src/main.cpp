@@ -215,6 +215,9 @@ void update(Camera &camera) {
     if(scancodes[SDL_SCANCODE_UP]) camera.pos.z += 0.01;
     if(scancodes[SDL_SCANCODE_RIGHT]) camera.pos.x += 0.01;
     if (scancodes[SDL_SCANCODE_LEFT]) camera.pos.x -= 0.01;
+    if(scancodes[SDL_SCANCODE_A]) camera.pos.y -= 0.01;
+    if(scancodes[SDL_SCANCODE_D]) camera.pos.y += 0.01;
+
     //
     // //Translate Light Source
     // else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
