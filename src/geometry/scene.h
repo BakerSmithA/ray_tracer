@@ -84,7 +84,7 @@ public:
             obstructed = &excluded_tri != &triangles[i]
                       && !(triangles[i].shader->*is_transparent)()
                       && triangles[i].is_inside(i_tri_cord)
-                      && t < 1.0f; // The intersection occurred before the end of the ray.
+                      && t <= 1.0f; // The intersection occurred before the end of the ray.
         }
 
         return obstructed;

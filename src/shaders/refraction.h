@@ -29,13 +29,21 @@ public:
             return vec3(0, 0, 0);
         }
 
-        float refraction_index = incoming.is_in_vacuum ? this->ray_velocity_ratio : 1 / this->ray_velocity_ratio;
+        float refraction_index = this->ray_velocity_ratio;
 
         vec3 normal_3d = normalize(vec3(tri.normal));
         vec3 incoming_3d = normalize(vec3(incoming.dir));
 
         // N x i = cos(theta_1)
-        float a = dot(normal_3d, incoming_3d);
+        float a = -dot(normal_3d, incoming_3d);
+
+        // According to Wikipedia, if dot product is negative, flip normal and recalculate
+        // Captures when the light is going out of the glass (when angle between normal and refracted ray is larger than 90)
+        if (a < 0) {
+            normal_3d = -normal_3d;
+            a = -dot(normal_3d, incoming_3d);
+        }
+
         // 1 - cos(theta_1)^2
         float b = 1 - a * a;
         //
@@ -52,7 +60,7 @@ public:
         vec4 outgoing_dir = project_to_4D(g);
         // Assume there is only two states for the ray, in or not in a vacuum.
         // Therefore, if changes state when it crosses the boundary.
-        Ray refracted_outgoing = Ray(position, outgoing_dir, incoming.bounces_remaining - 1, !incoming.is_in_vacuum);
+        Ray refracted_outgoing = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
 
         unique_ptr<Intersection> i = scene.closest_intersection(refracted_outgoing, &tri);
         if (!i) {
@@ -66,28 +74,5 @@ public:
         return true;
     }
 };
-
-// // From vector form of Snell's law from:
-// //  http://www.starkeffects.com/snells-law-vector.shtml
-// vec3 normal_3d = normalize(vec3(tri.normal));
-// vec3 incoming_3d = normalize(vec3(incoming.dir));
-//
-// vec3  a = cross(-normal_3d, incoming_3d);
-// vec3  b = this->ray_velocity_ratio * cross(normal_3d, a);
-//
-// vec3  c = cross(normal_3d, incoming_3d);
-// float d = dot(c, c);
-// float e = 1 - (this->ray_velocity_ratio * this->ray_velocity_ratio) * d;
-// vec3  f = normal_3d * sqrt(e);
-//
-// vec4 outgoing_dir = project_to_4D(b - f);
-// Ray refracted_outgoing = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
-//
-// unique_ptr<Intersection> i = scene.closest_intersection(refracted_outgoing, &tri);
-// if (!i) {
-//     return vec3(0, 0, 0);
-// }
-//
-// return i->triangle.shader->shadowed_color(i->pos, i->triangle, refracted_outgoing, scene, light);
 
 #endif // REFRACTION_H
