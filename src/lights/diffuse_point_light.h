@@ -3,14 +3,14 @@
 
 using glm::vec3;
 
-#ifndef POINT_LIGHT_H
-#define POINT_LIGHT_H
+#ifndef DIFFUSE_POINT_LIGHT_H
+#define DIFFUSE_POINT_LIGHT_H
 
 // Models a point light which radiates light outwards.
-class DirectionalLight: public PointLight {
+class DiffusePointLight: public PointLight {
 public:
 
-    DirectionalLight(vec3 color, vec4 pos): PointLight(color, pos, Light::LightType::DIFFUSE), dir(dir) {}
+    DiffusePointLight(vec3 color, vec4 pos): PointLight(color, pos, Light::LightType::DIFFUSE){}
 
     vec3 intensity(vec4 point, vec4 surface_normal, Ray primary) const override {
         //Direction of shadow/incident ray
@@ -33,4 +33,4 @@ public:
     }
 };
 
-#endif // POINT_LIGHT_H
+#endif // DIFFUSE_POINT_LIGHT_H

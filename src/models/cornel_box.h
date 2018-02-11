@@ -3,8 +3,12 @@
 #include "../geometry/triangle.h"
 #include "../lights/phong_point_light.h"
 #include "../lights/blinn_point_light.h"
+#include "../lights/diffuse_point_light.h"
 #include "../lights/ambient_light.h"
 #include "../shaders/diffuse.h"
+#include "../shaders/composite.h"
+#include "../shaders/specular.h"
+#include "../shaders/ambient.h"
 #include "../shaders/mirror.h"
 #include "../shaders/mix.h"
 
@@ -30,14 +34,23 @@ vector<Triangle> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	float prop = 0.5;
-	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), prop);
-	const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
-	const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
-	const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
-	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
-	const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
-	const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
+	const Shader *red_diffuse = new Composite({ new Ambient(red), new Diffuse(red) });
+	const Shader *yellow_diffuse = new Composite({ new Ambient(yellow), new Diffuse(yellow) });
+	const Shader *green_diffuse = new Composite({ new Ambient(green), new Diffuse(green) });
+	const Shader *cyan_diffuse = new Composite({ new Ambient(cyan), new Diffuse(cyan) });
+	const Shader *blue_diffuse = new Composite({ new Ambient(blue), new Diffuse(blue) });
+	const Shader *purple_diffuse = new Composite({ new Ambient(purple), new Diffuse(purple) });
+	const Shader *white_diffuse = new Composite({ new Ambient(white), new Diffuse(white) });
+
+	// float prop = 0.5;
+	// const Shader *red_diffuse_mirrior = new Mix(new Composite({ new Ambient(red), new Diffuse(red) }), new Mirror(), prop);
+	// const Shader *yellow_diffuse_mirrior = new Mix(new Composite({ new Ambient(yellow), new Diffuse(yellow) }), new Mirror(), prop);
+	// const Shader *green_diffuse_mirrior = new Mix(new Composite({ new Ambient(green), new Diffuse(green) }), new Mirror(), prop);
+	// const Shader *cyan_diffuse_mirrior = new Mix(new Composite({ new Ambient(cyan), new Diffuse(cyan) }), new Mirror(), prop);
+	// const Shader *blue_diffuse_mirrior = new Mix(new Composite({ new Ambient(blue), new Diffuse(blue) }), new Mirror(), prop);
+	// const Shader *purple_diffuse_mirrior = new Mix(new Composite({ new Ambient(purple), new Diffuse(purple) }), new Mirror(), prop);
+	// const Shader *white_diffuse_mirrior = new Mix(new Composite({ new Ambient(white), new Diffuse(white) }), new Mirror(), prop);
+
 
 	vector<Triangle> triangles;
 	triangles.clear();
@@ -183,8 +196,10 @@ vector<Triangle> cornel_box_triangles() {
 vector<Light*> cornel_box_lights() {
 	vector<Light*> lights;
 
-	//lights.push_back(new BlinnPointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0), 1));
-	lights.push_back(new AmbientLight(vec3(0.3, 0.2, 0.2)));
+	lights.push_back(new PhongPointLight(vec3(200, 200, 200), vec4(-0.7, -0.5, 0.2, 1.0), 1));
+	//lights.push_back(new BlinnPointLight(vec3(200, 200, 200), vec4(-0.7, -0.5, 0.2, 1.0), 1));
+	//lights.push_back(new DiffusePointLight(vec3(200, 200, 200), vec4(-0.7, -0.5, 0.2, 1.0)));
+	// lights.push_back(new AmbientLight(vec3(0.7, 0.7, 0.7)));
 
 	return lights;
 }

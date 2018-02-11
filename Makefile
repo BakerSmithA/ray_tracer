@@ -45,3 +45,8 @@ build : $(OBJ) Makefile
 
 clean:
 	rm -f $(B_DIR)/*
+
+buildd:
+	make clean
+	make
+	./bin/main

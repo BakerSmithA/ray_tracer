@@ -12,7 +12,7 @@ public:
     //All lights that reduce in brightness with distance (attenuating lights) have a position 
     vec4 pos;
 
-    AttenuatingLight(vec3 color, vec4 pos, Light::Lighttype type) : Light(color, type), pos(pos) {}
+    AttenuatingLight(vec3 color, vec4 pos, Light::LightType type) : Light(color, type), pos(pos) {}
 
     //Attenuating lights with directions (create shadow/incident rays) always cast shadows
     virtual bool does_cast_shadows() const override { return true; }
