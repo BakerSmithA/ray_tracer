@@ -29,6 +29,8 @@ public:
             return vec3(0, 0, 0);
         }
 
+        float refraction_index = incoming.is_in_vacuum ? this->ray_velocity_ratio : 1 / this->ray_velocity_ratio;
+
         vec3 normal_3d = normalize(vec3(tri.normal));
         vec3 incoming_3d = normalize(vec3(incoming.dir));
 
@@ -37,18 +39,20 @@ public:
         // 1 - cos(theta_1)^2
         float b = 1 - a * a;
         //
-        float c = this->ray_velocity_ratio * this->ray_velocity_ratio * b;
+        float c = refraction_index * refraction_index * b;
         //
         float d = sqrt(1 - c);
         //
-        float e = this->ray_velocity_ratio * a;
+        float e = refraction_index * a;
         //
         vec3  f = (e - d) * normal_3d;
         //
-        vec3  g = this->ray_velocity_ratio * incoming_3d + f;
+        vec3  g = refraction_index * incoming_3d + f;
 
         vec4 outgoing_dir = project_to_4D(g);
-        Ray refracted_outgoing = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
+        // Assume there is only two states for the ray, in or not in a vacuum.
+        // Therefore, if changes state when it crosses the boundary.
+        Ray refracted_outgoing = Ray(position, outgoing_dir, incoming.bounces_remaining - 1, !incoming.is_in_vacuum);
 
         unique_ptr<Intersection> i = scene.closest_intersection(refracted_outgoing, &tri);
         if (!i) {

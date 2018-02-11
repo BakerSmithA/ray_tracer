@@ -39,7 +39,7 @@ vector<Triangle> cornel_box_triangles() {
 	// const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
 	// const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
 
-	const Shader *red_diffuse = new Refraction(0.8);//new Diffuse(red);
+	const Shader *red_diffuse = new Refraction(1);//new Diffuse(red);
 	const Shader *yellow_diffuse = new Diffuse(yellow);
 	const Shader *green_diffuse = new Diffuse(green);
 	const Shader *cyan_diffuse = new Diffuse(cyan);

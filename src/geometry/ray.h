@@ -15,9 +15,12 @@ public:
     // The number of bounces the ray has remaining. Once this reaches zero the
     // ray should no longer be used.
     const int bounces_remaining;
+    // Whether the ray is travelling in a vacuum, as opposed to another medium
+    // such as glass. This is used for refraction calculations.
+    const bool is_in_vacuum;
 
-    Ray(vec4 start, vec4 dir, int bounces_remaining):
-        start(start), dir(dir), bounces_remaining(bounces_remaining)
+    Ray(vec4 start, vec4 dir, int bounces_remaining, bool is_in_vacuum = true):
+        start(start), dir(dir), bounces_remaining(bounces_remaining), is_in_vacuum(is_in_vacuum)
     {
         if (bounces_remaining < 0) {
             throw runtime_error("Rays should not have negative bounces");
