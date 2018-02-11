@@ -34,13 +34,21 @@ vector<Triangle> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	const Shader *red_diffuse = new Composite({ new Ambient(red), new Diffuse(red) });
-	const Shader *yellow_diffuse = new Composite({ new Ambient(yellow), new Diffuse(yellow) });
-	const Shader *green_diffuse = new Composite({ new Ambient(green), new Diffuse(green) });
-	const Shader *cyan_diffuse = new Composite({ new Ambient(cyan), new Diffuse(cyan) });
-	const Shader *blue_diffuse = new Composite({ new Ambient(blue), new Diffuse(blue) });
-	const Shader *purple_diffuse = new Composite({ new Ambient(purple), new Diffuse(purple) });
-	const Shader *white_diffuse = new Composite({ new Ambient(white), new Diffuse(white) });
+	// const Shader *red_diffuse = new Composite({ new Ambient(red), new Diffuse(red) });
+	// const Shader *yellow_diffuse = new Composite({ new Ambient(yellow), new Diffuse(yellow) });
+	// const Shader *green_diffuse = new Composite({ new Ambient(green), new Diffuse(green) });
+	// const Shader *cyan_diffuse = new Composite({ new Ambient(cyan), new Diffuse(cyan) });
+	// const Shader *blue_diffuse = new Composite({ new Ambient(blue), new Diffuse(blue) });
+	// const Shader *purple_diffuse = new Composite({ new Ambient(purple), new Diffuse(purple) });
+	// const Shader *white_diffuse = new Composite({ new Ambient(white), new Diffuse(white) });
+
+	const Shader *red_diffuse_specular = new Composite({ new Ambient(red), new Diffuse(red), new Specular(red) });
+	const Shader *yellow_diffuse_specular = new Composite({ new Ambient(yellow), new Diffuse(yellow), new Specular(yellow) });
+	const Shader *green_diffuse_specular = new Composite({ new Ambient(green), new Diffuse(green), new Specular(green) });
+	const Shader *cyan_diffuse_specular = new Composite({ new Ambient(cyan), new Diffuse(cyan), new Specular(cyan) });
+	const Shader *blue_diffuse_specular = new Composite({ new Ambient(blue), new Diffuse(blue), new Specular(blue) });
+	const Shader *purple_diffuse_specular = new Composite({ new Ambient(purple), new Diffuse(purple), new Specular(purple) });
+	const Shader *white_diffuse_specular = new Composite({ new Ambient(white), new Diffuse(white), new Specular(white) });
 
 	// float prop = 0.5;
 	// const Shader *red_diffuse_mirrior = new Mix(new Composite({ new Ambient(red), new Diffuse(red) }), new Mirror(), prop);
@@ -72,24 +80,24 @@ vector<Triangle> cornel_box_triangles() {
 	vec4 H(0,L,L,1);
 
 	// Floor:
-	triangles.push_back(Triangle(C, B, A, green_diffuse));
-	triangles.push_back(Triangle(C, D, B, green_diffuse));
+	triangles.push_back(Triangle(C, B, A, green_diffuse_specular));
+	triangles.push_back(Triangle(C, D, B, green_diffuse_specular));
 
 	// Left wall
-	triangles.push_back(Triangle(A, E, C, purple_diffuse));
-	triangles.push_back(Triangle(C, E, G, purple_diffuse));
+	triangles.push_back(Triangle(A, E, C, purple_diffuse_specular));
+	triangles.push_back(Triangle(C, E, G, purple_diffuse_specular));
 
 	// Right wall
-	triangles.push_back(Triangle(F, B, D, yellow_diffuse));
-	triangles.push_back(Triangle(H, F, D, yellow_diffuse));
+	triangles.push_back(Triangle(F, B, D, yellow_diffuse_specular));
+	triangles.push_back(Triangle(H, F, D, yellow_diffuse_specular));
 
 	// Ceiling
-	triangles.push_back(Triangle(E, F, G, cyan_diffuse));
-	triangles.push_back(Triangle(F, H, G, cyan_diffuse));
+	triangles.push_back(Triangle(E, F, G, cyan_diffuse_specular));
+	triangles.push_back(Triangle(F, H, G, cyan_diffuse_specular));
 
 	// Back wall
-	triangles.push_back(Triangle(G, D, C, white_diffuse));
-	triangles.push_back(Triangle(G, H, D, white_diffuse));
+	triangles.push_back(Triangle(G, D, C, white_diffuse_specular));
+	triangles.push_back(Triangle(G, H, D, white_diffuse_specular));
 
 	// ---------------------------------------------------------------------------
 	// Short block
@@ -105,24 +113,24 @@ vector<Triangle> cornel_box_triangles() {
 	H = vec4(82,165,225,1);
 
 	// Front
-	triangles.push_back(Triangle(E,B,A,red_diffuse));
-	triangles.push_back(Triangle(E,F,B,red_diffuse));
+	triangles.push_back(Triangle(E,B,A,red_diffuse_specular));
+	triangles.push_back(Triangle(E,F,B,red_diffuse_specular));
 
 	// Front
-	triangles.push_back(Triangle(F,D,B,red_diffuse));
-	triangles.push_back(Triangle(F,H,D,red_diffuse));
+	triangles.push_back(Triangle(F,D,B,red_diffuse_specular));
+	triangles.push_back(Triangle(F,H,D,red_diffuse_specular));
 
 	// BACK
-	triangles.push_back(Triangle(H,C,D,red_diffuse));
-	triangles.push_back(Triangle(H,G,C,red_diffuse));
+	triangles.push_back(Triangle(H,C,D,red_diffuse_specular));
+	triangles.push_back(Triangle(H,G,C,red_diffuse_specular));
 
 	// LEFT
-	triangles.push_back(Triangle(G,E,C,red_diffuse));
-	triangles.push_back(Triangle(E,A,C,red_diffuse));
+	triangles.push_back(Triangle(G,E,C,red_diffuse_specular));
+	triangles.push_back(Triangle(E,A,C,red_diffuse_specular));
 
 	// TOP
-	triangles.push_back(Triangle(G,F,E,red_diffuse));
-	triangles.push_back(Triangle(G,H,F,red_diffuse));
+	triangles.push_back(Triangle(G,F,E,red_diffuse_specular));
+	triangles.push_back(Triangle(G,H,F,red_diffuse_specular));
 
 	// ---------------------------------------------------------------------------
 	// Tall block
@@ -138,24 +146,24 @@ vector<Triangle> cornel_box_triangles() {
 	H = vec4(314,330,456,1);
 
 	// Front
-	triangles.push_back(Triangle(E,B,A,blue_diffuse));
-	triangles.push_back(Triangle(E,F,B,blue_diffuse));
+	triangles.push_back(Triangle(E,B,A,blue_diffuse_specular));
+	triangles.push_back(Triangle(E,F,B,blue_diffuse_specular));
 
 	// Front
-	triangles.push_back(Triangle(F,D,B,blue_diffuse));
-	triangles.push_back(Triangle(F,H,D,blue_diffuse));
+	triangles.push_back(Triangle(F,D,B,blue_diffuse_specular));
+	triangles.push_back(Triangle(F,H,D,blue_diffuse_specular));
 
 	// BACK
-	triangles.push_back(Triangle(H,C,D,blue_diffuse));
-	triangles.push_back(Triangle(H,G,C,blue_diffuse));
+	triangles.push_back(Triangle(H,C,D,blue_diffuse_specular));
+	triangles.push_back(Triangle(H,G,C,blue_diffuse_specular));
 
 	// LEFT
-	triangles.push_back(Triangle(G,E,C,blue_diffuse));
-	triangles.push_back(Triangle(E,A,C,blue_diffuse));
+	triangles.push_back(Triangle(G,E,C,blue_diffuse_specular));
+	triangles.push_back(Triangle(E,A,C,blue_diffuse_specular));
 
 	// TOP
-	triangles.push_back(Triangle(G,F,E,blue_diffuse));
-	triangles.push_back(Triangle(G,H,F,blue_diffuse));
+	triangles.push_back(Triangle(G,F,E,blue_diffuse_specular));
+	triangles.push_back(Triangle(G,H,F,blue_diffuse_specular));
 
 	// ----------------------------------------------
 	// Scale to the volume [-1,1]^3
@@ -196,9 +204,9 @@ vector<Triangle> cornel_box_triangles() {
 vector<Light*> cornel_box_lights() {
 	vector<Light*> lights;
 
-	lights.push_back(new PhongPointLight(vec3(200, 200, 200), vec4(-0.7, -0.5, 0.2, 1.0), 1));
-	//lights.push_back(new BlinnPointLight(vec3(200, 200, 200), vec4(-0.7, -0.5, 0.2, 1.0), 1));
-	//lights.push_back(new DiffusePointLight(vec3(200, 200, 200), vec4(-0.7, -0.5, 0.2, 1.0)));
+	//lights.push_back(new PhongPointLight(vec3(50, 50, 50), vec4(0, -0.5, -0.5, 1.0), 1));
+	lights.push_back(new BlinnPointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.5, 1.0), 1));
+	// lights.push_back(new DiffusePointLight(vec3(50, 50, 50), vec4(0, -0.5, -0.5, 1.0)));
 	// lights.push_back(new AmbientLight(vec3(0.7, 0.7, 0.7)));
 
 	return lights;

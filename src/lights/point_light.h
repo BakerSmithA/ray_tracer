@@ -13,10 +13,10 @@ public:
     PointLight(vec3 color, vec4 pos, Light::LightType type): AttenuatingLight(color, pos, type) {}
 
     // return: a shadow ray that passes through `point` in the direction of the light
-    virtual Ray shadow_ray_to(vec4 point) const override {
+    virtual Ray shadow_ray_from(vec4 point) const override {
         // The ray can only be used to check obstructions between the point and
         // light. Therefore it cannot bounce.
-        return Ray(point, point - pos, 0);
+        return Ray(point, this->pos - point, 0);
     }
 };
 

@@ -4,6 +4,8 @@
         "__string": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "__split_buffer": "cpp",
+        "vector": "cpp"
     }
 }

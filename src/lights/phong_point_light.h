@@ -17,12 +17,12 @@ public:
     vec3 intensity(vec4 point, vec4 surface_normal, Ray primary) const {
 
         //Calculate reflection ray direction
-        vec4 incident_dir = shadow_ray_to(point).dir;
-        vec4 L = -incident_dir;
-        vec4 reflected_dir = 2.0f * dot(L, surface_normal) * surface_normal - L;
+        vec4 l = shadow_ray_from(point).dir;
+        vec4 reflected_dir = 2.0f * dot(l, surface_normal) * surface_normal - l;
         
         //Calculate component of viewing direction in the direction of reflected ray
-        float proj_prop = dot(normalize(primary.dir), normalize(reflected_dir));
+        vec4 v = -primary.dir;
+        float proj_prop = dot(normalize(v), normalize(reflected_dir));
         float proj_prop_scaled_down = glm::pow(proj_prop, dropoff);
 
         vec3 intensity = attenuation_of_light_from(point);

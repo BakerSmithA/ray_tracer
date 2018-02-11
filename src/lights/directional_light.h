@@ -28,10 +28,10 @@ public:
     }
 
     // return: a shadow ray that passes through `point` in the direction of the light
-    Ray shadow_ray_to(vec4 point) const override {
+    Ray shadow_ray_from(vec4 point) const override {
         // The ray can only be used to check obstructions between the point and
         // light. Therefore it cannot bounce.
-        return Ray(point, dir, 0);
+        return Ray(point, -dir, 0);
     }
 };
 

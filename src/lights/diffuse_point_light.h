@@ -14,7 +14,7 @@ public:
 
     vec3 intensity(vec4 point, vec4 surface_normal, Ray primary) const override {
         //Direction of shadow/incident ray
-        vec4 shadow_ray = shadow_ray_to(point).dir;
+        vec4 shadow_ray = shadow_ray_from(point).dir;
         // The proportion of light hitting the surface.
         float prop = dot(normalize(surface_normal), normalize(shadow_ray));
         // Because negative light is not allowed.
@@ -25,12 +25,6 @@ public:
         return projection_factor * intensity;
     }
 
-    // return: a shadow ray that passes through `point` in the direction of the light
-    Ray shadow_ray_to(vec4 point) const override {
-        // The ray can only be used to check obstructions between the point and
-        // light. Therefore it cannot bounce.
-        return Ray(point, point - pos, 0);
-    }
 };
 
 #endif // DIFFUSE_POINT_LIGHT_H
