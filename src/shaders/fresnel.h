@@ -23,7 +23,7 @@ public:
         vec4 incoming_dir = normalize(incoming.dir);
         float kr;
         float cosi = dot(normal, incoming_dir);
-        float etai = 1, etat = 1.3; //ior
+        float etai = 1, etat = 1.3; //ior. TODO: Change this value for different materials?
         if (cosi > 0) { std::swap(etai, etat); }
         // Compute sini using Snell's law
         float sint = etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
