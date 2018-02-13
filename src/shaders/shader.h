@@ -7,7 +7,7 @@
 class Shader {
 public:
     // return: the color of the intersected surface, as illuminated by a specific light.
-    virtual vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
+    virtual vec3 color(vec4 position, const Primitive &primitive, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
 
     // return: whether the shader is transparent, i.e. doesn't block shadows.
     virtual bool is_transparent() const = 0;

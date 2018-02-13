@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <vector>
 #include "intersection.h"
-#include "triangle.h"
+#include "primitive.h"
 #include "projection.h"
 #include "../lights/light.h"
 
@@ -16,11 +16,11 @@ using std::unique_ptr;
 // Contains all the geometry, lights, etc for a scene.
 class Scene {
 public:
-    const vector<Triangle> triangles;
+    const vector<Primitive> primitives;
     const vector<Light*> lights;
 
-    Scene(const vector<Triangle> triangles, const vector<Light*> lights):
-        triangles(triangles), lights(lights)
+    Scene(const vector<Primitive> primitives, const vector<Light*> lights):
+        primitives(primitives), lights(lights)
     {
     }
 
@@ -29,25 +29,23 @@ public:
     //                          This can be useful to avoid self-intersection.
     // return:                  The closest intersection to the start of the ray,
     //                          or null if no intersection was found.
-    unique_ptr<Intersection> closest_intersection(Ray &ray, const Triangle *excluded_tri = nullptr) const {
+    unique_ptr<Intersection> closest_intersection(Ray &ray, const Primitive *excluded_prim = nullptr) const {
         float closest_distance = std::numeric_limits<float>::max();
-        int closest_triangle_idx = -1;
+        int closest_primitive_idx = -1;
         // The intersection point in the scene's coordinate system.
         vec4 intersection_pos;
 
-        for (int i=0; i<this->triangles.size(); i++) {
-            if (&this->triangles[i] == excluded_tri) {
+        for (int i=0; i<this->primitives.size(); i++) {
+            if (&this->primitives[i] == excluded_prim) {
                 continue;
             }
 
-            // The intersection in the triangle's coordinate system.
-            vec3 i_tri_cord = Intersection::with_triangle(triangles[i], ray);
+            // The intersection in the scene coordinate system.
+            unique_ptr<vec4> intersection = primitives.intersection(ray);
 
-            if (!triangles[i].is_inside(i_tri_cord)) {
+            if (intersection == nullptr) {
                 continue;
             }
-
-            vec4 i_sce_cord = in_scene_coordinates(i_tri_cord, triangles[i]);
 
             // The distance from the point in scene coordinates to the ray in
             // scene coordinates.
@@ -55,49 +53,43 @@ public:
 
             if (dist < closest_distance) {
                 closest_distance = dist;
-                closest_triangle_idx = i;
+                closest_primitive_idx = i;
                 intersection_pos = i_sce_cord;
             }
         }
 
-        if (closest_triangle_idx == -1) {
+        if (closest_primitive_idx == -1) {
             return nullptr;
         }
 
-        return unique_ptr<Intersection>(new Intersection(intersection_pos, triangles[closest_triangle_idx]));
+        return unique_ptr<Intersection>(new Intersection(intersection_pos, primitives[closest_primitive_idx]));
     }
 
     // param excluded_tri: obstructions by this triangle will not be included.
     //                     This is useful for avoiding self-intersections.
     // return:             whether the ray is obstructed by geometry between its
     //                     start and start + direction.
-    bool is_obstructed(const Ray &ray, bool (Shader::*is_transparent)() const, const Triangle &excluded_tri) const {
+    bool is_obstructed(const Ray &ray, bool (Shader::*is_transparent)() const, const Primitive &excluded_prim) const {
         bool obstructed = false;
 
-        for (int i=0; i<this->triangles.size() && !obstructed; i++) {
+        for (int i=0; i<this->primitives.size() && !obstructed; i++) {
+
+
             // The intersection in the triangle's coordinate system.
-            vec3 i_tri_cord = Intersection::with_triangle(triangles[i], ray);
+            unique_ptr<vec4> intersetion = primitive.intersection(ray);
             // The proportion (scalar multiple) of the ray diection that the
             // triangle intersection is from the start of the ray.
-            float t = i_tri_cord.x;
+            //float t = i_tri_cord.x;
 
-            obstructed = &excluded_tri != &triangles[i]
-                      && !(triangles[i].shader->*is_transparent)()
-                      && triangles[i].is_inside(i_tri_cord)
-                      && t <= 1.0f; // The intersection occurred before the end of the ray.
+            obstructed = &excluded_prim != &primitives[i]
+                      && !(primitives[i].shader->*is_transparent)()
+                      && (intersetion != nullptr);
+                      //&& t <= 1.0f; // The intersection occurred before the end of the ray.
         }
 
         return obstructed;
     }
 
-private:
-    // return: a point [t u v], in the triangle's coordinate system (i.e. e1
-	//		   and e2 are the basis vectors) into the world coordinate system.
-	vec4 in_scene_coordinates(vec3 point, const Triangle &tri) const {
-        float u = point.y;
-        float v = point.z;
-        return project_to_4D(vec3(tri.v0) + u * tri.e1 + v * tri.e2);
-	}
 };
 
 #endif // SCENE_H

@@ -17,8 +17,8 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const override {
-        return light.intensity(position, tri.normal) * this->base_color;
+    vec3 color(vec4 position, const Primitive &prim, const Ray &incoming, const Scene &scene, const Light &light) const override {
+        return light.intensity(position, prim.compute_normal(position)) * this->base_color;
     }
 
     bool is_transparent() const override {

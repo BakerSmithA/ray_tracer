@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "__locale": "cpp",
+        "__string": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ios": "cpp",
+        "__split_buffer": "cpp",
+        "vector": "cpp",
+        "memory": "cpp"
+    }
+}

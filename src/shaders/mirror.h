@@ -11,9 +11,10 @@ using std::unique_ptr;
 class Mirror: public RaySpawner {
 public:
     // return: the direction of the reflected incoming ray.
-    vec4 outgoing_ray_dir(const Triangle &tri, const Ray &incoming) const override {
+    vec4 outgoing_ray_dir(const vec3 position, const Primitive &prim, const Ray &incoming) const override {
         vec4 incident_ray = -incoming.dir;
-        return 2.0f * dot(incident_ray, tri.normal) * tri.normal - incident_ray;
+        vec4 normal = prim.compute_normal(position);
+        return 2.0f * dot(incident_ray, normal) * normal - incident_ray;
     }
 
     bool is_transparent() const override {
