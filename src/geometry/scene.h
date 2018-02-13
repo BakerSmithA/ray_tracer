@@ -16,10 +16,10 @@ using std::unique_ptr;
 // Contains all the geometry, lights, etc for a scene.
 class Scene {
 public:
-    const vector<Primitive> primitives;
+    const vector<Primitive*> primitives;
     const vector<Light*> lights;
 
-    Scene(const vector<Primitive> primitives, const vector<Light*> lights):
+    Scene(const vector<Primitive*> primitives, const vector<Light*> lights):
         primitives(primitives), lights(lights)
     {
     }
@@ -36,12 +36,12 @@ public:
         vec4 intersection_pos;
 
         for (int i=0; i<this->primitives.size(); i++) {
-            if (&this->primitives[i] == excluded_prim) {
+            if (this->primitives[i] == excluded_prim) {
                 continue;
             }
 
             // The intersection in the scene coordinate system.
-            unique_ptr<vec4> intersection = primitives.intersection(ray);
+            unique_ptr<vec4> intersection = primitives[i]->intersection(ray);
 
             if (intersection == nullptr) {
                 continue;
@@ -49,12 +49,12 @@ public:
 
             // The distance from the point in scene coordinates to the ray in
             // scene coordinates.
-            float dist = length(i_sce_cord - ray.start);
+            float dist = length(*intersection - ray.start);
 
             if (dist < closest_distance) {
                 closest_distance = dist;
                 closest_primitive_idx = i;
-                intersection_pos = i_sce_cord;
+                intersection_pos = *intersection;
             }
         }
 
@@ -62,7 +62,7 @@ public:
             return nullptr;
         }
 
-        return unique_ptr<Intersection>(new Intersection(intersection_pos, primitives[closest_primitive_idx]));
+        return unique_ptr<Intersection>(new Intersection(intersection_pos, *primitives[closest_primitive_idx]));
     }
 
     // param excluded_tri: obstructions by this triangle will not be included.
@@ -76,15 +76,15 @@ public:
 
 
             // The intersection in the triangle's coordinate system.
-            unique_ptr<vec4> intersetion = primitive.intersection(ray);
+            unique_ptr<vec4> intersection = primitives[i]->intersection(ray);
             // The proportion (scalar multiple) of the ray diection that the
             // triangle intersection is from the start of the ray.
-            //float t = i_tri_cord.x;
+            //float t = length(*intersection - ray.start);
 
-            obstructed = &excluded_prim != &primitives[i]
-                      && !(primitives[i].shader->*is_transparent)()
-                      && (intersetion != nullptr);
-                      //&& t <= 1.0f; // The intersection occurred before the end of the ray.
+            obstructed = &excluded_prim != primitives[i]
+                      && !(primitives[i]->shader->*is_transparent)()
+                      && (intersection != nullptr)
+                      && length(*intersection - ray.start) <= 1.0f; // The intersection occurred before the end of the ray.
         }
 
         return obstructed;

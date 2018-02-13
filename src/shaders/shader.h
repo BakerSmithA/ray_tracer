@@ -7,7 +7,7 @@
 class Shader {
 public:
     // return: the color of the intersected surface, as illuminated by a specific light.
-    virtual vec3 color(vec4 position, const Primitive &primitive, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
+    virtual vec3 color(const vec4 position, const Primitive &primitive, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
 
     // return: whether the shader is transparent, i.e. doesn't block shadows.
     virtual bool is_transparent() const = 0;
@@ -15,7 +15,7 @@ public:
     // return: the color of the intersected surface, taking shadows from the
     //         light into account. If the position is in shadow, black is
     //         returned, otherwise the shader is used to calculate color.
-    vec3 shadowed_color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const {
+    vec3 shadowed_color(vec4 position, const Primitive &prim, const Ray &incoming, const Scene &scene, const Light &light) const {
         // Work out whether we cast shadows, and if we do, whether the intersection
         // point is in shadow.
         if (light.does_cast_shadows()) {
@@ -23,12 +23,12 @@ public:
             // obstructed, no light from this light reaches the intersection.
             Ray shadow_ray = light.shadow_ray_to(position);
             // Exclude the current triangle from obstruction calculations.
-            if (scene.is_obstructed(shadow_ray, &Shader::is_transparent, tri)) {
+            if (scene.is_obstructed(shadow_ray, &Shader::is_transparent, prim)) {
                 return vec3(0, 0, 0);
             }
         }
 
-        return this->color(position, tri, incoming, scene, light);
+        return this->color(position, prim, incoming, scene, light);
     }
 };
 

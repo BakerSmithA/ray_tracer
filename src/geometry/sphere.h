@@ -19,7 +19,7 @@ public:
     Sphere(vec4 center, float radius, Shader shader) 
         : center(center), radius(radius), Primitive(shader) {};
 
-	virtual unique_ptr<vec3> intersection(const Ray &ray) override {
+	virtual unique_ptr<vec3> intersection(const Ray &ray) const override {
         vec3 sminc = ray.start - center;
         vec3 d = normalize(ray.dir);
         
@@ -36,7 +36,7 @@ public:
         }
     }
 
-    virtual vec4 compute_normal(vec4 point) override {
+    virtual vec4 compute_normal(vec4 point) const override {
         return normalize(point - center);
     }
 };

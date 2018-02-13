@@ -5,7 +5,7 @@
 class RaySpawner: public Shader {
     // return: the ray direction used to find the color of the shader, e.g. the
     //         reflected ray for a mirror.
-    virtual vec4 outgoing_ray_dir(const Primitive &prim, const Ray &incoming) const = 0;
+    virtual vec4 outgoing_ray_dir(const vec4 Position, const Primitive &prim, const Ray &incoming) const = 0;
 
     // return: the color of the shader, determined by shooting another ray into
     //         the scene. Or, black if the incoming ray cannot bounce anymore.
@@ -18,12 +18,12 @@ class RaySpawner: public Shader {
         // The number of bounces is reduced due to this interaction.
         Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
 
-        unique_ptr<Intersection> i = scene.closest_intersection(outgoing_ray, &tri);
+        unique_ptr<Intersection> i = scene.closest_intersection(outgoing_ray, &prim);
         if (!i) {
             return vec3(0, 0, 0);
         }
 
-        return i->triangle.shader->shadowed_color(i->pos, i->triangle, outgoing_ray, scene, light);
+        return i->primitive.shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light);
     }
 };
 

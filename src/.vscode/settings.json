@@ -7,6 +7,8 @@
         "ios": "cpp",
         "__split_buffer": "cpp",
         "vector": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "__functional_base": "cpp",
+        "functional": "cpp"
     }
 }

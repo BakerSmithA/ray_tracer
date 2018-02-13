@@ -17,10 +17,10 @@ public:
 	// Used to tell the color of the triangle.
 	const Shader *shader;
 
-    Primitive(Shader *shader) : shader(shader) {};
+    Primitive(const Shader *shader) : shader(shader) {};
 
-	virtual unique_ptr<vec4> intersection(const Ray &ray) = 0;
-    virtual vec4 compute_normal(vec4 point) = 0;
+	virtual unique_ptr<vec4> intersection(const Ray &ray) const = 0;
+    virtual vec4 compute_normal(vec4 point) const = 0;
 };
 
 #endif // PRIMITIVE_H

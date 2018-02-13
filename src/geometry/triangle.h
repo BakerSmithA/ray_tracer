@@ -5,6 +5,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::normalize;
 using glm::cross;
+using glm::mat3;
 
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
@@ -23,24 +24,26 @@ public:
     const vec4 normal;
 
 	Triangle(vec4 v0, vec4 v1, vec4 v2, const Shader *shader):
-		v0(v0), v1(v1), v2(v2),
 		Primitive(shader),
+		v0(v0), v1(v1), v2(v2),
 		e1(vec3(v1 - v0)),
 		e2(vec3(v2 - v0)),
 		normal(project_to_4D(normalize(cross(e2, e1))))
 	{
 	}
 
-	virtual unique_ptr<vec4> intersection(const Ray &ray) override {
-        vec3 b = vec3(ray.start - tri.v0);
-        mat3 A = mat3(-vec3(ray.dir), tri.e1, tri.e2);
-		vec3 intersection_in_plane_coordinates = new vec3(inverse(A) * b);
-		vec4 intersection_in_world_coordinates = in_scene_coordinates(intersection_in_plane_coordinates);
-		if(is_inside(intersection_with_plane)) return unique_ptr<vec4>(new vec4(intersection_in_world_coordinates));
-        else nullptr;
+	virtual unique_ptr<vec4> intersection(const Ray &ray) const override {
+        vec3 b = vec3(ray.start - v0);
+        mat3 A = mat3(-vec3(ray.dir), e1, e2);
+		vec3 intersection_in_plane_coordinates = inverse(A) * b;
+		if(!is_inside(intersection_in_plane_coordinates)) return nullptr; 
+		else {
+			vec4 intersection_in_world_coordinates = in_scene_coordinates(intersection_in_plane_coordinates);
+        	return unique_ptr<vec4>(new vec4(intersection_in_world_coordinates));
+		}
     }
 
-    virtual vec4 compute_normal(vec4 point) override {
+    virtual vec4 compute_normal(vec4 point) const override {
         return normal;
     }
 

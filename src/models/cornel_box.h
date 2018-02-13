@@ -18,7 +18,7 @@ using std::vector;
 // 			-1 <= x <= +1
 // 			-1 <= y <= +1
 // 			-1 <= z <= +1
-vector<Triangle> cornel_box_triangles() {
+vector<Primitive*> cornel_box_triangles() {
 	using glm::vec3;
 	using glm::vec4;
 
@@ -48,7 +48,7 @@ vector<Triangle> cornel_box_triangles() {
 	// const Shader *purple_diffuse = new Diffuse(purple);
 	// const Shader *white_diffuse = new Diffuse(white);
 
-	vector<Triangle> triangles;
+	vector<Primitive*> triangles;
 	triangles.clear();
 	triangles.reserve(5*2*3);
 
@@ -68,24 +68,24 @@ vector<Triangle> cornel_box_triangles() {
 	vec4 H(0,L,L,1);
 
 	// Floor:
-	triangles.push_back(Triangle(C, B, A, green_diffuse));
-	triangles.push_back(Triangle(C, D, B, green_diffuse));
+	triangles.push_back(new Triangle(C, B, A, green_diffuse));
+	triangles.push_back(new Triangle(C, D, B, green_diffuse));
 
 	// Left wall
-	triangles.push_back(Triangle(A, E, C, purple_diffuse));
-	triangles.push_back(Triangle(C, E, G, purple_diffuse));
+	triangles.push_back(new Triangle(A, E, C, purple_diffuse));
+	triangles.push_back(new Triangle(C, E, G, purple_diffuse));
 
 	// Right wall
-	triangles.push_back(Triangle(F, B, D, yellow_diffuse));
-	triangles.push_back(Triangle(H, F, D, yellow_diffuse));
+	triangles.push_back(new Triangle(F, B, D, yellow_diffuse));
+	triangles.push_back(new Triangle(H, F, D, yellow_diffuse));
 
 	// Ceiling
-	triangles.push_back(Triangle(E, F, G, cyan_diffuse));
-	triangles.push_back(Triangle(F, H, G, cyan_diffuse));
+	triangles.push_back(new Triangle(E, F, G, cyan_diffuse));
+	triangles.push_back(new Triangle(F, H, G, cyan_diffuse));
 
 	// Back wall
-	triangles.push_back(Triangle(G, D, C, white_diffuse));
-	triangles.push_back(Triangle(G, H, D, white_diffuse));
+	triangles.push_back(new Triangle(G, D, C, white_diffuse));
+	triangles.push_back(new Triangle(G, H, D, white_diffuse));
 
 	// ---------------------------------------------------------------------------
 	// Short block
@@ -101,24 +101,24 @@ vector<Triangle> cornel_box_triangles() {
 	H = vec4(82,165,225,1);
 
 	// Front
-	triangles.push_back(Triangle(E,B,A,red_diffuse));
-	triangles.push_back(Triangle(E,F,B,red_diffuse));
+	triangles.push_back(new Triangle(E,B,A,red_diffuse));
+	triangles.push_back(new Triangle(E,F,B,red_diffuse));
 
 	// Front
-	triangles.push_back(Triangle(F,D,B,red_diffuse));
-	triangles.push_back(Triangle(F,H,D,red_diffuse));
+	triangles.push_back(new Triangle(F,D,B,red_diffuse));
+	triangles.push_back(new Triangle(F,H,D,red_diffuse));
 
 	// BACK
-	triangles.push_back(Triangle(H,C,D,red_diffuse));
-	triangles.push_back(Triangle(H,G,C,red_diffuse));
+	triangles.push_back(new Triangle(H,C,D,red_diffuse));
+	triangles.push_back(new Triangle(H,G,C,red_diffuse));
 
 	// LEFT
-	triangles.push_back(Triangle(G,E,C,red_diffuse));
-	triangles.push_back(Triangle(E,A,C,red_diffuse));
+	triangles.push_back(new Triangle(G,E,C,red_diffuse));
+	triangles.push_back(new Triangle(E,A,C,red_diffuse));
 
 	// TOP
-	triangles.push_back(Triangle(G,F,E,red_diffuse));
-	triangles.push_back(Triangle(G,H,F,red_diffuse));
+	triangles.push_back(new Triangle(G,F,E,red_diffuse));
+	triangles.push_back(new Triangle(G,H,F,red_diffuse));
 
 	// ---------------------------------------------------------------------------
 	// Tall block
@@ -134,33 +134,34 @@ vector<Triangle> cornel_box_triangles() {
 	H = vec4(314,330,456,1);
 
 	// Front
-	triangles.push_back(Triangle(E,B,A,blue_diffuse));
-	triangles.push_back(Triangle(E,F,B,blue_diffuse));
+	triangles.push_back(new Triangle(E,B,A,blue_diffuse));
+	triangles.push_back(new Triangle(E,F,B,blue_diffuse));
 
 	// Front
-	triangles.push_back(Triangle(F,D,B,blue_diffuse));
-	triangles.push_back(Triangle(F,H,D,blue_diffuse));
+	triangles.push_back(new Triangle(F,D,B,blue_diffuse));
+	triangles.push_back(new Triangle(F,H,D,blue_diffuse));
 
 	// BACK
-	triangles.push_back(Triangle(H,C,D,blue_diffuse));
-	triangles.push_back(Triangle(H,G,C,blue_diffuse));
+	triangles.push_back(new Triangle(H,C,D,blue_diffuse));
+	triangles.push_back(new Triangle(H,G,C,blue_diffuse));
 
 	// LEFT
-	triangles.push_back(Triangle(G,E,C,blue_diffuse));
-	triangles.push_back(Triangle(E,A,C,blue_diffuse));
+	triangles.push_back(new Triangle(G,E,C,blue_diffuse));
+	triangles.push_back(new Triangle(E,A,C,blue_diffuse));
 
 	// TOP
-	triangles.push_back(Triangle(G,F,E,blue_diffuse));
-	triangles.push_back(Triangle(G,H,F,blue_diffuse));
+	triangles.push_back(new Triangle(G,F,E,blue_diffuse));
+	triangles.push_back(new Triangle(G,H,F,blue_diffuse));
 
 	// ----------------------------------------------
 	// Scale to the volume [-1,1]^3
-	vector<Triangle> new_triangles;
+	vector<Primitive*> new_triangles;
 
 	for(int i=0; i<triangles.size(); i++) {
-		vec4 new_v0 = triangles[i].v0;
-		vec4 new_v1 = triangles[i].v1;
-		vec4 new_v2 = triangles[i].v2;
+		Triangle* triangle = static_cast<Triangle*>(triangles[i]);
+		vec4 new_v0 = triangle->v0;
+		vec4 new_v1 = triangle->v1;
+		vec4 new_v2 = triangle->v2;
 
 		new_v0 *= 2/L;
 		new_v1 *= 2/L;
@@ -182,7 +183,7 @@ vector<Triangle> cornel_box_triangles() {
 		new_v1.w = 1.0;
 		new_v2.w = 1.0;
 
-		new_triangles.push_back(Triangle(new_v0, new_v1, new_v2, triangles[i].shader));
+		new_triangles.push_back(new Triangle(new_v0, new_v1, new_v2, triangle->shader));
 	}
 
 	return new_triangles;
