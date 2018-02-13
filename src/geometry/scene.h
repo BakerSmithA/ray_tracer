@@ -29,7 +29,7 @@ public:
     //                          This can be useful to avoid self-intersection.
     // return:                  The closest intersection to the start of the ray,
     //                          or null if no intersection was found.
-    unique_ptr<Intersection> closest_intersection(Ray &ray, const Primitive *excluded_prim = nullptr) const {
+    unique_ptr<Intersection> closest_intersection(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
         float closest_distance = std::numeric_limits<float>::max();
         int closest_primitive_idx = -1;
         // The intersection point in the scene's coordinate system.
@@ -69,14 +69,14 @@ public:
     //                     This is useful for avoiding self-intersections.
     // return:             whether the ray is obstructed by geometry between its
     //                     start and start + direction.
-    bool is_obstructed(const Ray &ray, bool (Shader::*is_transparent)() const, const Primitive &excluded_prim) const {
+    bool is_obstructed(const Ray &shadow_ray, bool (Shader::*is_transparent)() const, const Primitive &excluded_prim) const {
         bool obstructed = false;
 
         for (int i=0; i<this->primitives.size() && !obstructed; i++) {
 
 
             // The intersection in the triangle's coordinate system.
-            unique_ptr<vec4> intersection = primitives[i]->intersection(ray);
+            unique_ptr<vec4> intersection = primitives[i]->intersection(shadow_ray);
             // The proportion (scalar multiple) of the ray diection that the
             // triangle intersection is from the start of the ray.
             //float t = length(*intersection - ray.start);
@@ -84,7 +84,7 @@ public:
             obstructed = &excluded_prim != primitives[i]
                       && !(primitives[i]->shader->*is_transparent)()
                       && (intersection != nullptr)
-                      && length(*intersection - ray.start) <= 1.0f; // The intersection occurred before the end of the ray.
+                      && length(*intersection - shadow_ray.start) < length(shadow_ray.dir); // The intersection occurred before the end of the ray.
         }
 
         return obstructed;

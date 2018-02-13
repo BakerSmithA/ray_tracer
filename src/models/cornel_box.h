@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "../geometry/triangle.h"
+#include "../geometry/sphere.h"
 #include "../lights/point_light.h"
 #include "../lights/ambient_light.h"
 #include "../shaders/diffuse.h"
@@ -31,22 +32,22 @@ vector<Primitive*> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	float prop = 0.6;
-	const Shader *red_diffuse = new Fresnel(new Refraction(0.66), new Mirror());// new Mix(new Mirror(), new Diffuse(red), prop); // new Refraction(0.66);//
-	const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
-	const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
-	const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
-	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
-	const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
-	const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
+	// float prop = 0.6;
+	// const Shader *red_diffuse = new Fresnel(new Refraction(0.66), new Mirror());// new Mix(new Mirror(), new Diffuse(red), prop); // new Refraction(0.66);//
+	// const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
+	// const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
+	// const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
+	// const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
+	// const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
+	// const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
 
-	// const Shader *red_diffuse = new Diffuse(red);
-	// const Shader *yellow_diffuse = new Diffuse(yellow);
-	// const Shader *green_diffuse = new Diffuse(green);
-	// const Shader *cyan_diffuse = new Diffuse(cyan);
-	// const Shader *blue_diffuse = new Fresnel(new Refraction(0.66), new Mirror());//new Diffuse(blue);
-	// const Shader *purple_diffuse = new Diffuse(purple);
-	// const Shader *white_diffuse = new Diffuse(white);
+	const Shader *red_diffuse = new Diffuse(red);
+	const Shader *yellow_diffuse = new Diffuse(yellow);
+	const Shader *green_diffuse = new Diffuse(green);
+	const Shader *cyan_diffuse = new Diffuse(cyan);
+	const Shader *blue_diffuse = new Diffuse(blue);
+	const Shader *purple_diffuse = new Diffuse(purple);
+	const Shader *white_diffuse = new Diffuse(white);
 
 	vector<Primitive*> triangles;
 	triangles.clear();
@@ -194,6 +195,7 @@ vector<Light*> cornel_box_lights() {
 	vector<Light*> lights;
 
 	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0)));
+	//lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, 0.3, -0.7, 1.0)));
 	lights.push_back(new AmbientLight(vec3(0.3, 0.2, 0.2)));
 
 	return lights;
@@ -201,7 +203,9 @@ vector<Light*> cornel_box_lights() {
 
 // return: a cornel box scene.
 Scene cornel_box() {
-	return Scene(cornel_box_triangles(), cornel_box_lights());
+	vector<Primitive*> triangles = cornel_box_triangles();
+	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Fresnel(new Refraction(0.66), new Mirror())));
+	return Scene(triangles, cornel_box_lights());
 }
 
 #endif // CORNEL_BOX_H
