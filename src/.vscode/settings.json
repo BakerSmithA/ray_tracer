@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "__locale": "cpp",
+        "__string": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ios": "cpp",
+        "__split_buffer": "cpp",
+        "vector": "cpp",
+        "memory": "cpp",
+        "__functional_base": "cpp",
+        "functional": "cpp",
+        "algorithm": "cpp",
+        "type_traits": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "exception": "cpp",
+        "initializer_list": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "typeinfo": "cpp"
+    }
+}

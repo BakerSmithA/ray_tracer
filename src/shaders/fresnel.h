@@ -18,8 +18,8 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const override {
-        vec4 normal = normalize(tri.normal);
+    vec3 color(const vec4 position, const Primitive &prim, const Ray &incoming, const Scene &scene, const Light &light) const override {
+        vec4 normal = normalize(prim.compute_normal(position));
         vec4 incoming_dir = normalize(incoming.dir);
         float kr;
         float cosi = dot(normal, incoming_dir);
@@ -39,8 +39,8 @@ public:
             kr = (Rs * Rs + Rp * Rp) / 2;
         }
 
-        vec3 color1 = this->s1->color(position, tri, incoming, scene, light);
-        vec3 color2 = this->s2->color(position, tri, incoming, scene, light);
+        vec3 color1 = this->s1->color(position, prim, incoming, scene, light);
+        vec3 color2 = this->s2->color(position, prim, incoming, scene, light);
 
         return mix(color1, color2, kr);
     }

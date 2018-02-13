@@ -19,9 +19,9 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Triangle &tri, const Ray &incoming, const Scene &scene, const Light &light) const override {
-        vec3 color1 = this->s1->color(position, tri, incoming, scene, light);
-        vec3 color2 = this->s2->color(position, tri, incoming, scene, light);
+    vec3 color(vec4 position, const Primitive &prim, const Ray &incoming, const Scene &scene, const Light &light) const override {
+        vec3 color1 = this->s1->color(position, prim, incoming, scene, light);
+        vec3 color2 = this->s2->color(position, prim, incoming, scene, light);
 
         return mix(color1, color2, this->proportion);
     }
