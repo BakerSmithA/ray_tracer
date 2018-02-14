@@ -9,6 +9,7 @@
 #include "../shaders/mix.h"
 #include "../shaders/refraction.h"
 #include "../shaders/fresnel.h"
+#include "../shaders/glass.h"
 
 using std::vector;
 
@@ -204,7 +205,7 @@ vector<Light*> cornel_box_lights() {
 // return: a cornel box scene.
 Scene cornel_box() {
 	vector<Primitive*> triangles = cornel_box_triangles();
-	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Fresnel(new Refraction(0.66), new Mirror(), 0.3f)));
+	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Glass()));
 	return Scene(triangles, cornel_box_lights());
 }
 
