@@ -11,8 +11,6 @@ using std::unique_ptr;
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-
-
 class Triangle : public Primitive {
 public:
     // The vertices of the triangle.
@@ -37,7 +35,7 @@ public:
         vec3 b = vec3(ray.start - v0);
         mat3 A = mat3(-vec3(ray.dir), e1, e2);
 		vec3 intersection_in_plane_coordinates = inverse(A) * b;
-		if(!is_inside(intersection_in_plane_coordinates)) return nullptr; 
+		if(!is_inside(intersection_in_plane_coordinates)) return nullptr;
 		else {
 			vec4 intersection_in_world_coordinates = in_scene_coordinates(intersection_in_plane_coordinates);
         	return unique_ptr<vec4>(new vec4(intersection_in_world_coordinates));

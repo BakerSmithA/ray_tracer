@@ -13,7 +13,6 @@ using glm::dot;
 
 class Sphere : public Primitive {
 public:
-
     vec4 center;
     float radius;
 

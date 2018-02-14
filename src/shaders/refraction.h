@@ -56,7 +56,7 @@ public:
     }
 
     bool is_transparent() const override {
-        return true;
+        return false;
     }
 };
 
