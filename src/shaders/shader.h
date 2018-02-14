@@ -11,12 +11,14 @@ public:
 
     // return: the proportion by which light is blocked from going through the
     //         material. E.g. a value of 1 totally blocks light.
-    virtual float opacity() const = 0;
+    virtual float opacity() const {
+        return 1.0;
+    }
 
     // return: the color of the intersected surface, taking shadows from the
     //         light into account. If the position is in shadow, black is
     //         returned, otherwise the shader is used to calculate color.
-    vec3 shadowed_color(vec4 position, const Primitive &prim, const Ray &incoming, const Scene &scene, const Light &light) const {
+    virtual vec3 shadowed_color(vec4 position, const Primitive &prim, const Ray &incoming, const Scene &scene, const Light &light) const {
         const vec3 col = this->color(position, prim, incoming, scene, light);
 
         // Work out whether we cast shadows, and if we do, whether the intersection

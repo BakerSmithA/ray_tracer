@@ -16,11 +16,6 @@ public:
         vec4 normal = prim.compute_normal(position);
         return 2.0f * dot(incident_ray, normal) * normal - incident_ray;
     }
-
-    float opacity() const override {
-        // Diffuse surfaces are totally opaque.
-        return 1.0f;
-    }
 };
 
 #endif // MIRROR_H
