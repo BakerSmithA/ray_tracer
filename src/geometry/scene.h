@@ -24,11 +24,11 @@ public:
     {
     }
 
-    // param ray:               A ray, in scene coordinates, check intersection with.
-    // param excluded_triangle: the triangle to discount intersections with.
-    //                          This can be useful to avoid self-intersection.
-    // return:                  The closest intersection to the start of the ray,
-    //                          or null if no intersection was found.
+    // param ray:           A ray, in scene coordinates, check intersection with.
+    // param excluded_prim: The triangle to discount intersections with.
+    //                      This can be useful to avoid self-intersection.
+    // return:              The closest intersection to the start of the ray,
+    //                      or null if no intersection was found.
     unique_ptr<Intersection> closest_intersection(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
         float closest_distance = std::numeric_limits<float>::max();
         int closest_primitive_idx = -1;
@@ -63,6 +63,15 @@ public:
         }
 
         return unique_ptr<Intersection>(new Intersection(intersection_pos, *primitives[closest_primitive_idx]));
+    }
+
+    // param ray:           A ray, in scene coordinates, check intersection with.
+    // param excluded_prim: The primitive to discount intersections with.
+    //                      This can be useful to avoid self-intersection.
+    // return:              All intersections along a ray.
+    vector<Intersection> all_intersections(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
+        // TODO:
+        return vector<Intersection>();
     }
 };
 
