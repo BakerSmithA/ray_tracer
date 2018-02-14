@@ -13,8 +13,10 @@ class Fresnel: public Shader {
 public:
     const Shader *s1;
     const Shader *s2;
+    const float base_opacity;
 
-    Fresnel(const Shader *s1, const Shader *s2): s1(s1), s2(s2) {
+    Fresnel(const Shader *s1, const Shader *s2, float opacity):
+        s1(s1), s2(s2), base_opacity(opacity) {
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
@@ -45,8 +47,8 @@ public:
         return mix(color1, color2, kr);
     }
 
-    bool is_transparent() const override {
-        return this->s1->is_transparent() || this->s2->is_transparent();
+    float opacity() const override {
+        return this->base_opacity;
     }
 };
 

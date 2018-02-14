@@ -55,8 +55,9 @@ public:
         return project_to_4D(g);
     }
 
-    bool is_transparent() const override {
-        return false;
+    // return: an opacity of zero, as all light is allowed to pass through.
+    float opacity() const override {
+        return 0.0f;
     }
 };
 

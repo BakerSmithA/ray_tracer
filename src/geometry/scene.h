@@ -64,26 +64,6 @@ public:
 
         return unique_ptr<Intersection>(new Intersection(intersection_pos, *primitives[closest_primitive_idx]));
     }
-
-    // param excluded_tri: obstructions by this triangle will not be included.
-    //                     This is useful for avoiding self-intersections.
-    // return:             whether the ray is obstructed by geometry between its
-    //                     start and start + direction.
-    bool is_obstructed(const Ray &shadow_ray, bool (Shader::*is_transparent)() const, const Primitive &excluded_prim) const {
-        bool obstructed = false;
-
-        for (size_t i=0; i<this->primitives.size() && !obstructed; i++) {
-            // The intersection in the triangle's coordinate system.
-            unique_ptr<vec4> intersection = primitives[i]->intersection(shadow_ray);
-
-            obstructed = &excluded_prim != primitives[i]
-                      && !(primitives[i]->shader->*is_transparent)()
-                      && (intersection != nullptr)
-                      && length(*intersection - shadow_ray.start) < length(shadow_ray.dir); // The intersection occurred before the end of the ray.
-        }
-
-        return obstructed;
-    }
 };
 
 #endif // SCENE_H

@@ -204,7 +204,7 @@ vector<Light*> cornel_box_lights() {
 // return: a cornel box scene.
 Scene cornel_box() {
 	vector<Primitive*> triangles = cornel_box_triangles();
-	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Fresnel(new Refraction(0.66), new Mirror())));
+	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Fresnel(new Refraction(0.66), new Mirror(), 0.3f)));
 	return Scene(triangles, cornel_box_lights());
 }
 

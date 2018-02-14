@@ -17,8 +17,9 @@ public:
         return 2.0f * dot(incident_ray, normal) * normal - incident_ray;
     }
 
-    bool is_transparent() const override {
-        return false;
+    float opacity() const override {
+        // Diffuse surfaces are totally opaque.
+        return 1.0f;
     }
 };
 

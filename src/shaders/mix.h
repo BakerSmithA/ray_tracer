@@ -26,8 +26,9 @@ public:
         return mix(color1, color2, this->proportion);
     }
 
-    bool is_transparent() const override {
-        return this->s1->is_transparent() || this->s2->is_transparent();
+    // return: the opacity of each shader mixed in the specified proportion.
+    float opacity() const override {
+        return mix(s1->opacity(), s2->opacity(), this->proportion);
     }
 };
 
