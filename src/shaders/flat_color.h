@@ -3,12 +3,13 @@
 #ifndef COLOR_SHADER_H
 #define COLOR_SHADER_H
 
-// Surface which outputs the same color irrespective of lighting conditions.
-class Color: public Shader {
+// Surface which outputs the same color irrespective of lighting conditions,
+// therefore the surface does not respond to shadows either.
+class FlatColor: public Shader {
 public:
     const vec3 base_color;
 
-    Color(vec3 base_color): base_color(base_color) {
+    FlatColor(vec3 base_color): base_color(base_color) {
     }
 
     // return: the base color of the surface irrespective of lighting.
