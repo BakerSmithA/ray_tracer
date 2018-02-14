@@ -27,8 +27,8 @@ public:
     }
 
     // return: the opacity of each shader mixed in the specified proportion.
-    float opacity() const override {
-        return mix(s1->opacity(), s2->opacity(), this->proportion);
+    float transparency() const override {
+        return mix(s1->transparency(), s2->transparency(), this->proportion);
     }
 };
 

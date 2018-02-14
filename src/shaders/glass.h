@@ -12,7 +12,7 @@ private:
     const Shader *glass_shader;
 
 public:
-    Glass(): glass_shader(new Fresnel(new Refraction(0.45), new Mirror(), 0.3f)) {
+    Glass(): glass_shader(new Fresnel(new Refraction(0.45), new Mirror(), 0.7f)) {
     }
 
     // return: the color of the intersected surface, taking shadows from the
@@ -21,8 +21,8 @@ public:
         return this->glass_shader->color(position, prim, incoming, scene, light);
     }
 
-    float opacity() const override {
-        return this->glass_shader->opacity();
+    float transparency() const override {
+        return this->glass_shader->transparency();
     }
 };
 

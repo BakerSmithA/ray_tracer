@@ -9,10 +9,11 @@ public:
     // return: the color of the intersected surface, as illuminated by a specific light.
     virtual vec3 color(const vec4 position, const Primitive &primitive, const Ray &incoming, const Scene &scene, const Light &light) const = 0;
 
-    // return: the proportion by which light is blocked from going through the
-    //         material. E.g. a value of 1 totally blocks light.
-    virtual float opacity() const {
-        return 1.0;
+    // return: the proportion by which light is let through the
+    //         material. E.g. a value of 1 is totally transparent, and a value
+    //         of 0 is totally opaque.
+    virtual float transparency() const {
+        return 0.0f;
     }
 
     // return: the color of the intersected surface, taking shadows from the
@@ -33,7 +34,7 @@ public:
             unique_ptr<Intersection> intersected = scene.closest_intersection(shadow_ray, &prim);
             // The intersection must occur in front of the light.
             if (intersected != nullptr && length(intersected->pos - shadow_ray.start) < length(shadow_ray.dir)) {
-                return (1 - intersected->primitive.shader->opacity()) * col;
+                return intersected->primitive.shader->transparency() * col;
             }
         }
 
