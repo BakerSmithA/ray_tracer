@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include <stdexcept>
 
 using glm::vec4;
 using std::runtime_error;
@@ -20,7 +21,7 @@ public:
         start(start), dir(dir), bounces_remaining(bounces_remaining)
     {
         if (bounces_remaining < 0) {
-            throw runtime_error("Rays should not have negative bounces");
+            throw std::runtime_error("Rays should not have negative bounces");
         }
     }
 

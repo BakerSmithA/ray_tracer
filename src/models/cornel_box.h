@@ -32,22 +32,22 @@ vector<Primitive*> cornel_box_triangles() {
 	const vec3 purple = vec3(0.75f, 0.15f, 0.75f);
 	const vec3 white = vec3(0.75f, 0.75f, 0.75f);
 
-	// float prop = 0.6;
-	// const Shader *red_diffuse = new Fresnel(new Refraction(0.66), new Mirror());// new Mix(new Mirror(), new Diffuse(red), prop); // new Refraction(0.66);//
-	// const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
-	// const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
-	// const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
-	// const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
-	// const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
-	// const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
+	float prop = 0.6;
+	const Shader *red_diffuse = new Mix(new Mirror(), new Diffuse(red), prop); // new Refraction(0.66); //new Fresnel(new Refraction(0.66), new Mirror());
+	const Shader *yellow_diffuse = new Mix(new Mirror(), new Diffuse(yellow), prop);
+	const Shader *green_diffuse = new Mix(new Mirror(), new Diffuse(green), prop);
+	const Shader *cyan_diffuse = new Mix(new Mirror(), new Diffuse(cyan), prop);
+	const Shader *blue_diffuse = new Mix(new Mirror(), new Diffuse(blue), prop);
+	const Shader *purple_diffuse = new Mix(new Mirror(), new Diffuse(purple), prop);
+	const Shader *white_diffuse = new Mix(new Mirror(), new Diffuse(white), prop);
 
-	const Shader *red_diffuse = new Diffuse(red);
-	const Shader *yellow_diffuse = new Diffuse(yellow);
-	const Shader *green_diffuse = new Diffuse(green);
-	const Shader *cyan_diffuse = new Diffuse(cyan);
-	const Shader *blue_diffuse = new Diffuse(blue);
-	const Shader *purple_diffuse = new Diffuse(purple);
-	const Shader *white_diffuse = new Diffuse(white);
+	// const Shader *red_diffuse = new Diffuse(red);
+	// const Shader *yellow_diffuse = new Diffuse(yellow);
+	// const Shader *green_diffuse = new Diffuse(green);
+	// const Shader *cyan_diffuse = new Diffuse(cyan);
+	// const Shader *blue_diffuse = new Diffuse(blue);
+	// const Shader *purple_diffuse = new Diffuse(purple);
+	// const Shader *white_diffuse = new Diffuse(white);
 
 	vector<Primitive*> triangles;
 	triangles.clear();

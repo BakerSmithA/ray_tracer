@@ -46,7 +46,7 @@ public:
         if (t0 < 0) { 
             t0 = t1; // if t0 is negative, let's use t1 instead 
             if (t0 < 0) {
-                printf("points outside scene\n");
+                //printf("points outside scene\n");
                 return nullptr; // both t0 and t1 are negative 
             }
         }

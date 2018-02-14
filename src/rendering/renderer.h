@@ -3,6 +3,7 @@
 #include "../shaders/shader.h"
 #include "camera.h"
 #include "SDLauxiliary.h"
+#include "omp.h"
 
 using std::unique_ptr;
 
@@ -28,6 +29,8 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
 
 // effect: renders the scene to the screen buffer using the camera.
 void render(Scene &scene, Camera &camera, screen* screen) {
+
+    #pragma omp parallel for
     for (int y=0; y<screen->height; y++) {
         for (int x=0; x<screen->width; x++) {
             Ray ray = camera.primary_ray(x, y, screen->width, screen->height);

@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include <memory>
 #include "projection.h"
 
 using glm::vec3;

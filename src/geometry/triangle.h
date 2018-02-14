@@ -6,6 +6,7 @@ using glm::vec4;
 using glm::normalize;
 using glm::cross;
 using glm::mat3;
+using std::unique_ptr;
 
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
