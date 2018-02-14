@@ -19,7 +19,7 @@ class RaySpawner: public Shader {
         Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
 
         unique_ptr<Intersection> i = scene.closest_intersection(outgoing_ray, &prim);
-        if (!i) {
+        if (i == nullptr) {
             return vec3(0, 0, 0);
         }
 
