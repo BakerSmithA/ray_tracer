@@ -158,7 +158,7 @@ vector<Primitive*> cornel_box_triangles() {
 	// Scale to the volume [-1,1]^3
 	vector<Primitive*> new_triangles;
 
-	for(int i=0; i<triangles.size(); i++) {
+	for(size_t i=0; i<triangles.size(); i++) {
 		Triangle* triangle = static_cast<Triangle*>(triangles[i]);
 		vec4 new_v0 = triangle->v0;
 		vec4 new_v1 = triangle->v1;

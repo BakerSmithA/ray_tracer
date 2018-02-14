@@ -35,7 +35,7 @@ public:
         // The intersection point in the scene's coordinate system.
         vec4 intersection_pos;
 
-        for (int i=0; i<this->primitives.size(); i++) {
+        for (size_t i=0; i<this->primitives.size(); i++) {
             if (this->primitives[i] == excluded_prim) {
                 continue;
             }
@@ -72,7 +72,7 @@ public:
     bool is_obstructed(const Ray &shadow_ray, bool (Shader::*is_transparent)() const, const Primitive &excluded_prim) const {
         bool obstructed = false;
 
-        for (int i=0; i<this->primitives.size() && !obstructed; i++) {
+        for (size_t i=0; i<this->primitives.size() && !obstructed; i++) {
 
 
             // The intersection in the triangle's coordinate system.
