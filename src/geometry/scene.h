@@ -73,8 +73,6 @@ public:
         bool obstructed = false;
 
         for (size_t i=0; i<this->primitives.size() && !obstructed; i++) {
-
-
             // The intersection in the triangle's coordinate system.
             unique_ptr<vec4> intersection = primitives[i]->intersection(shadow_ray);
             // The proportion (scalar multiple) of the ray diection that the

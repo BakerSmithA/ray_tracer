@@ -17,40 +17,40 @@ public:
     vec4 center;
     float radius;
 
-    Sphere(vec4 center, float radius, Shader* shader) 
+    Sphere(vec4 center, float radius, Shader* shader)
         : Primitive(shader), center(center), radius(radius) {};
 
 	virtual unique_ptr<vec4> intersection(const Ray &ray) const override {
-        vec3 orig = vec3(ray.start); 
+        vec3 orig = vec3(ray.start);
         vec3 dir = normalize(vec3(ray.dir));
         float radius2 = radius * radius;
 
         //Computing inside of sqrt
         vec3 L = vec3(center) - orig;
         float tca = dot(L,dir);
-        float d2 = dot(L,L) - tca * tca; 
+        float d2 = dot(L,L) - tca * tca;
         if (d2 > radius2) { //cannot compute sqrt of negative number
-            return nullptr; 
+            return nullptr;
         }
 
         //Computing intersection points
-        float thc = sqrt(radius2 - d2); 
-        float t0 = tca - thc; 
-        float t1 = tca + thc; 
-        
+        float thc = sqrt(radius2 - d2);
+        float t0 = tca - thc;
+        float t1 = tca + thc;
+
         //Selecting closest intersecting point not beyond the boundary of the cornels box
         if (t0 > t1) {
             std::swap(t0, t1); //pick the closer intersection
         }
 
-        if (t0 < 0) { 
-            t0 = t1; // if t0 is negative, let's use t1 instead 
+        if (t0 < 0) {
+            t0 = t1; // if t0 is negative, let's use t1 instead
             if (t0 < 0) {
                 //printf("points outside scene\n");
-                return nullptr; // both t0 and t1 are negative 
+                return nullptr; // both t0 and t1 are negative
             }
         }
-        float t = t0; 
+        float t = t0;
 
         return unique_ptr<vec4>(new vec4(project_to_4D(vec3(ray.start) + (t * dir))));
     }
@@ -61,12 +61,3 @@ public:
 };
 
 #endif // SPHERE_H
-
-
-    //  //Geometric solution
-    //     vec3 L = vec3(center - ray.start);
-    //     vec3 dir = normalize(vec3(ray.dir));
-    //     float tca = glm::dot(L, dir);
-    //     float d2 = glm::dot(L, L) - tca * tca;
-    //     float radius2 = radius * radius;
-    //     float thc = radius2 - d2;
