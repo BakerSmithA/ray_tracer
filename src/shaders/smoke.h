@@ -18,10 +18,6 @@ public:
     // return: a color depending on how far the ray has to travel before
     //         exiting the smoke.
     vec3 color(const vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
-        if (!incoming.can_bounce()) {
-            return vec3(0, 0, 0);
-        }
-
         // Offset into the shape as the excluded primitive on scene.closest_intersection
         // cannot be used here. This is because the smoke may be made of one
         // primitive (e.g. sphere) and we need to check for self-intersections.
@@ -49,6 +45,10 @@ public:
     //         light into account. If no light makes it from the light to the
     //         position, the color of the position is black.
     virtual vec3 shadowed_color(vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
+        if (!incoming.can_bounce()) {
+            return vec3(0, 0, 0);
+        }
+
         Ray shadow_ray = light.shadow_ray_to(position).offset(smoke_prim->compute_normal(position), -0.001);
 
         float smoke_dist_to_light = this->distance_in_smoke(position, smoke_prim->obj_tag, shadow_ray, scene);
