@@ -77,7 +77,7 @@ private:
     // return: the transparency of the smoke, which is a function of the
     //         distance the ray travels in the smoke.
     float smoke_transparency(float smoke_dist) const {
-        return clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
+        return sin(smoke_dist);//clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
     }
 
     // param position: the position of the first intersection with the smoke.
