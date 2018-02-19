@@ -17,8 +17,8 @@ public:
     }
 
     // return: the color of the intersected surface, taking shadows from the
-    //         light into account. If the position is in shadow, black is
-    //         returned, otherwise the shader is used to calculate color.
+    //         light into account. If no light makes it from the light to the
+    //         position, the color of the position is black.
     virtual vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
         // If the shadow ray between the intersection and the light is
         // obstructed, no light from this light reaches the intersection.

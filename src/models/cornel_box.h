@@ -113,24 +113,24 @@ vector<Primitive*> cornel_box_triangles() {
 	H = vec4(82,165,225,1);
 
 	// Front
-	triangles.push_back(new Triangle(E,B,A,red_diffuse, short_block_tag));
-	triangles.push_back(new Triangle(E,F,B,red_diffuse, short_block_tag));
-
-	// Front
-	triangles.push_back(new Triangle(F,D,B,red_diffuse, short_block_tag));
-	triangles.push_back(new Triangle(F,H,D,red_diffuse, short_block_tag));
-
-	// BACK
-	triangles.push_back(new Triangle(H,C,D,red_diffuse, short_block_tag));
-	triangles.push_back(new Triangle(H,G,C,red_diffuse, short_block_tag));
-
-	// LEFT
-	triangles.push_back(new Triangle(G,E,C,red_diffuse, short_block_tag));
-	triangles.push_back(new Triangle(E,A,C,red_diffuse, short_block_tag));
-
-	// TOP
-	triangles.push_back(new Triangle(G,F,E,red_diffuse, short_block_tag));
-	triangles.push_back(new Triangle(G,H,F,red_diffuse, short_block_tag));
+	// triangles.push_back(new Triangle(E,B,A,red_diffuse, short_block_tag));
+	// triangles.push_back(new Triangle(E,F,B,red_diffuse, short_block_tag));
+	//
+	// // Front
+	// triangles.push_back(new Triangle(F,D,B,red_diffuse, short_block_tag));
+	// triangles.push_back(new Triangle(F,H,D,red_diffuse, short_block_tag));
+	//
+	// // BACK
+	// triangles.push_back(new Triangle(H,C,D,red_diffuse, short_block_tag));
+	// triangles.push_back(new Triangle(H,G,C,red_diffuse, short_block_tag));
+	//
+	// // LEFT
+	// triangles.push_back(new Triangle(G,E,C,red_diffuse, short_block_tag));
+	// triangles.push_back(new Triangle(E,A,C,red_diffuse, short_block_tag));
+	//
+	// // TOP
+	// triangles.push_back(new Triangle(G,F,E,red_diffuse, short_block_tag));
+	// triangles.push_back(new Triangle(G,H,F,red_diffuse, short_block_tag));
 
 	// ---------------------------------------------------------------------------
 	// Tall block
@@ -148,24 +148,24 @@ vector<Primitive*> cornel_box_triangles() {
 	H = vec4(314,330,456,1);
 
 	// Front
-	triangles.push_back(new Triangle(E,B,A,blue_diffuse, tall_block_tag));
-	triangles.push_back(new Triangle(E,F,B,blue_diffuse, tall_block_tag));
-
-	// Front
-	triangles.push_back(new Triangle(F,D,B,blue_diffuse, tall_block_tag));
-	triangles.push_back(new Triangle(F,H,D,blue_diffuse, tall_block_tag));
-
-	// BACK
-	triangles.push_back(new Triangle(H,C,D,blue_diffuse, tall_block_tag));
-	triangles.push_back(new Triangle(H,G,C,blue_diffuse, tall_block_tag));
-
-	// LEFT
-	triangles.push_back(new Triangle(G,E,C,blue_diffuse, tall_block_tag));
-	triangles.push_back(new Triangle(E,A,C,blue_diffuse, tall_block_tag));
-
-	// TOP
-	triangles.push_back(new Triangle(G,F,E,blue_diffuse, tall_block_tag));
-	triangles.push_back(new Triangle(G,H,F,blue_diffuse, tall_block_tag));
+	// triangles.push_back(new Triangle(E,B,A,blue_diffuse, tall_block_tag));
+	// triangles.push_back(new Triangle(E,F,B,blue_diffuse, tall_block_tag));
+	//
+	// // Front
+	// triangles.push_back(new Triangle(F,D,B,blue_diffuse, tall_block_tag));
+	// triangles.push_back(new Triangle(F,H,D,blue_diffuse, tall_block_tag));
+	//
+	// // BACK
+	// triangles.push_back(new Triangle(H,C,D,blue_diffuse, tall_block_tag));
+	// triangles.push_back(new Triangle(H,G,C,blue_diffuse, tall_block_tag));
+	//
+	// // LEFT
+	// triangles.push_back(new Triangle(G,E,C,blue_diffuse, tall_block_tag));
+	// triangles.push_back(new Triangle(E,A,C,blue_diffuse, tall_block_tag));
+	//
+	// // TOP
+	// triangles.push_back(new Triangle(G,F,E,blue_diffuse, tall_block_tag));
+	// triangles.push_back(new Triangle(G,H,F,blue_diffuse, tall_block_tag));
 
 	// ----------------------------------------------
 	// Scale to the volume [-1,1]^3
@@ -220,8 +220,8 @@ Scene cornel_box() {
 	//const int sphere2_tag = 8;
 	const vec3 red = vec3(0.75f, 0.15f, 0.15f);
 	Shader* shader = new PhongSpecular(red); //new BlinnSpecular(red);
-	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, shader, sphere1_tag));
-	//triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Smoke(vec3(1,0,0)), sphere1_tag));
+	//triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, shader, sphere1_tag));
+	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Smoke(vec3(1,0,0)), sphere1_tag));
 	//triangles.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, s, sphere2_tag));
 	return Scene(triangles, cornel_box_lights());
 }

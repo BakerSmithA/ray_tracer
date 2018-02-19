@@ -29,6 +29,11 @@ public:
     bool can_bounce() const {
         return bounces_remaining != 0;
     }
+
+    // return: this ray, where the start position is offset by a small amount.
+    Ray offset(vec4 offset_dir, float offset_scalar) {
+        return Ray(this->start + offset_scalar * offset_dir, this->dir, this->bounces_remaining);
+    }
 };
 
 #endif // RAY_H
