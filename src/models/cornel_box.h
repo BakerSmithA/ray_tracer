@@ -197,7 +197,6 @@ vector<Light*> cornel_box_lights() {
 	vector<Light*> lights;
 
 	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0)));
-	//lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, 0.3, -0.7, 1.0)));
 	lights.push_back(new AmbientLight(vec3(0.35, 0.2, 0.2)));
 
 	return lights;

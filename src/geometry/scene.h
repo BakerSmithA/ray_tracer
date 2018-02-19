@@ -1,8 +1,9 @@
 #include <glm/glm.hpp>
 #include <limits.h>
 #include <vector>
-#include "intersection.h"
-#include "primitive.h"
+// #include "intersection.h"
+// #include "primitive.h"
+#include "object.h"
 #include "projection.h"
 #include "../lights/light.h"
 
@@ -62,7 +63,7 @@ public:
             return nullptr;
         }
 
-        return unique_ptr<Intersection>(new Intersection(intersection_pos, *primitives[closest_primitive_idx]));
+        return unique_ptr<Intersection>(new Intersection(intersection_pos, primitives[closest_primitive_idx]));
     }
 
     // param ray:           A ray, in scene coordinates, check intersection with.
@@ -80,7 +81,7 @@ public:
             unique_ptr<vec4> intersection_pos = primitives[i]->intersection(ray);
 
             if (intersection_pos != nullptr) {
-                intersections.push_back(Intersection(*intersection_pos, *this->primitives[i]));
+                intersections.push_back(Intersection(*intersection_pos, this->primitives[i]));
             }
         }
 

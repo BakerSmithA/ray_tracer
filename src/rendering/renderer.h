@@ -21,7 +21,7 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
     vec3 acc_colour = vec3(0, 0, 0);
     // Colour is addative for all lights.
     for (const Light *light: scene.lights) {
-        acc_colour += i->primitive.shader->shadowed_color(i->pos, i->primitive, ray, scene, *light);
+        acc_colour += i->primitive->shader->shadowed_color(i->pos, i->primitive, ray, scene, *light);
     }
 
     return acc_colour;
