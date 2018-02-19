@@ -14,6 +14,7 @@
 #include "../shaders/glass.h"
 #include "../shaders/flat_color.h"
 #include "../shaders/smoke.h"
+#include "../shaders/texture.h"
 
 using std::vector;
 using glm::vec3;
@@ -49,7 +50,7 @@ Object *left_wall() {
 // return: the right wall of the box.
 Object *right_wall() {
 	const vec3 col = vec3(0.75f, 0.75f, 0.15f);
-	const Shader *shader = cornel_shader(col);
+	const Shader *shader = new Diffuse(col);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(F, B, D, shader, 0));
@@ -61,7 +62,7 @@ Object *right_wall() {
 // return: the back wall of the box.
 Object *back_wall() {
 	const vec3 col = vec3(0.75f, 0.75f, 0.75f);
-	const Shader *shader = new Diffuse(col);
+	const Shader *shader = new Texture("../textures/test_wall_tex.bmp");//new Diffuse(col);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(G, D, C, shader, 0));
@@ -86,11 +87,11 @@ Object *ceiling() {
 vector<Object*> objects() {
 	vector<Object*> objects;
 
-	objects.push_back(floor());
+	// objects.push_back(floor());
 	objects.push_back(left_wall());
 	objects.push_back(right_wall());
 	objects.push_back(back_wall());
-	objects.push_back(ceiling());
+	// objects.push_back(ceiling());
 
 	return objects;
 }

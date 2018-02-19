@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 
 using glm::vec4;
+using glm::mat4;
 
 #ifndef BOUNDING_CUBE_H
 #define BOUNDING_CUBE_H
