@@ -208,7 +208,7 @@ void update(Camera &camera) {
     float dt = float(t2-t);
     t = t2;
 
-    std::cout << "Render time: " << dt << " ms" << std::endl;
+    //std::cout << "Render time: " << dt << " ms" << std::endl;
 
     //Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);

@@ -1,4 +1,5 @@
 #include "primitive.h"
+#include <iostream>
 
 using std::vector;
 
