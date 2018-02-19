@@ -46,6 +46,13 @@ public:
         return mix(behind_obj_col, this->base_color, smoke_transparency);
     }
 
+    // // return: the color of the intersected surface, taking shadows from the
+    // //         light into account. If the position is in shadow, black is
+    // //         returned, otherwise the shader is used to calculate color.
+    // virtual vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
+    //
+    // }
+
     virtual float transparency() const {
         return 0.8f;
     }
