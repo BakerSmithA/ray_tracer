@@ -1,6 +1,8 @@
 #include <glm/glm.hpp>
+#include <math.h>
 
 using glm::mix;
+using glm::clamp;
 
 #ifndef SMOKE_H
 #define SMOKE_H
@@ -25,16 +27,7 @@ public:
         vec4 offset = smoke->compute_normal(position) * 0.001f;
         Ray outgoing = Ray(position - offset, incoming.dir, incoming.bounces_remaining - 1);
 
-        // Only consider primitives that are also part of the smoke object.
-        auto is_excluded_prim = [&](const Primitive *testing_prim) {
-            return testing_prim->obj_tag != smoke->obj_tag;
-        };
-        unique_ptr<Intersection> smoke_exit = scene.closest_intersection(outgoing, is_excluded_prim);
-
-        // If the ray never exited the smoke, this shouldn't happen.
-        if (smoke_exit == nullptr) {
-            return vec3(0, 0, 0);
-        }
+        float smoke_dist = distance_in_smoke(position, smoke->obj_tag, outgoing, scene);
 
         // The object behind the smoke.
         unique_ptr<Intersection> behind_obj_i = scene.closest_intersection_excluding_obj(outgoing, smoke->obj_tag);
@@ -47,13 +40,33 @@ public:
         }
 
         // The distance travelled in the smoke.
-        float smoke_dist = length(position - smoke_exit->pos);
+        // float smoke_dist = length(position - smoke_exit->pos);
+        float smoke_transparency = clamp(pow(smoke_dist, 2) * 2 - 0.1, 0.0, 1.0);
 
-        return mix(behind_obj_col, this->base_color, smoke_dist * smoke_dist * smoke_dist * 5);
+        return mix(behind_obj_col, this->base_color, smoke_transparency);
     }
 
     virtual float transparency() const {
-        return 1.0f;
+        return 0.8f;
+    }
+
+private:
+    // param position: the position of the first intersection with the smoke.
+    // param outgoing: the ray generated after the first intersection.
+    // param smoke_tag: the tag accociated with the smoke object.
+    // return: The distance the ray travels in the smoke before exiting.
+    float distance_in_smoke(const vec4 position, const int smoke_tag, const Ray &outgoing, const Scene &scene) const {
+        // Only consider primitives that are also part of the smoke object.
+        auto is_excluded_prim = [=](const Primitive *testing_prim) {
+            return testing_prim->obj_tag != smoke_tag;
+        };
+        unique_ptr<Intersection> smoke_exit = scene.closest_intersection(outgoing, is_excluded_prim);
+
+        if (smoke_exit == nullptr) {
+            throw std::runtime_error("Ray must exit smoke");
+        }
+
+        return length(position - smoke_exit->pos);
     }
 };
 
