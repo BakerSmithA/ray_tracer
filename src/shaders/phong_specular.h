@@ -20,7 +20,7 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light) const override {
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
          
          //Calculate reflection ray direction
         vec3 l = vec3(light.shadow_ray_to(position).dir);

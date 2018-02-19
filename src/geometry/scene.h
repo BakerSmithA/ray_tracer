@@ -5,7 +5,7 @@
 #include "intersection.h"
 #include "primitive.h"
 #include "projection.h"
-#include "../lights/light.h"
+#include "../lights/point_light.h"
 
 using glm::length;
 using std::vector;
@@ -19,10 +19,10 @@ using std::function;
 class Scene {
 public:
     const vector<Primitive*> primitives;
-    const vector<Light*> lights;
+    const vector<PointLight*> lights;
     const vec3 ambient_lighting = vec3(0.35, 0.2, 0.2);
 
-    Scene(const vector<Primitive*> primitives, const vector<Light*> lights):
+    Scene(const vector<Primitive*> primitives, const vector<PointLight*> lights):
         primitives(primitives), lights(lights)
     {
     }

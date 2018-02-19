@@ -219,7 +219,7 @@ void update(Camera &camera) {
     if(scancodes[SDL_SCANCODE_D]) camera.pos.y += 0.01;
 
     //
-    // //Translate Light Source
+    // //Translate PointLight Source
     // else if(scancodes[SDL_SCANCODE_A]) light_pos.x -= 0.01;
     // else if(scancodes[SDL_SCANCODE_D]) light_pos.x += 0.01;
     // else if(scancodes[SDL_SCANCODE_Q]) light_pos.y -= 0.01;

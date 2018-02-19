@@ -17,7 +17,7 @@ public:
 
     // return: a color depending on how far the ray has to travel before
     //         exiting the smoke.
-    vec3 color(const vec4 position, const Primitive *smoke, const Ray &incoming, const Scene &scene, const Light &light) const override {
+    vec3 color(const vec4 position, const Primitive *smoke, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }
