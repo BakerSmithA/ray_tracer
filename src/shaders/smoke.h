@@ -1,6 +1,8 @@
 #include <glm/glm.hpp>
+#include <math.h>
 
 using glm::mix;
+using glm::clamp;
 
 #ifndef SMOKE_H
 #define SMOKE_H
@@ -48,12 +50,14 @@ public:
 
         // The distance travelled in the smoke.
         float smoke_dist = length(position - smoke_exit->pos);
+        float smoke_transparency = clamp(pow(smoke_dist, 2) * 2 - 0.1, 0.0, 1.0);
+        // printf("%f -> %f\n", smoke_dist, smoke_transparency);
 
-        return mix(behind_obj_col, this->base_color, smoke_dist * smoke_dist * smoke_dist * 5);
+        return mix(behind_obj_col, this->base_color, smoke_transparency);
     }
 
     virtual float transparency() const {
-        return 1.0f;
+        return 0.8f;
     }
 };
 
