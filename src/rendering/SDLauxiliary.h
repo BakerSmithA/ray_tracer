@@ -50,7 +50,7 @@ void SDL_SaveImage(screen *s, const char* filename)
 		<< SDL_GetError() << std::endl;
       exit(1);
     }
-  
+
 }
 
 void KillSDL(screen* s)
@@ -78,13 +78,13 @@ screen* InitializeSDL(int width,int height, bool fullscreen)
 		<< SDL_GetError() << std::endl;
       exit(1);
     }
-  
+
   screen *s = new screen;
   s->width = width;
   s->height = height;
   s->buffer = new uint32_t[width*height];
   memset(s->buffer, 0, width*height*sizeof(uint32_t));
-  
+
   uint32_t flags = SDL_WINDOW_OPENGL;
   if(fullscreen)
     {
@@ -122,7 +122,7 @@ screen* InitializeSDL(int width,int height, bool fullscreen)
 	     << SDL_GetError() << std::endl;
       exit(1);
     }
-  
+
   return s;
 }
 
@@ -160,5 +160,45 @@ void PutPixelSDL(screen* s, int x, int y, glm::vec3 colour)
   s->buffer[y*s->width+x] = (128<<24) + (r<<16) + (g<<8) + b;
 }
 
+Uint32 get_pixel_uint(SDL_Surface *surface, int x, int y)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to retrieve */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    switch(bpp) {
+    case 1:
+        return *p;
+        break;
+
+    case 2:
+        return *(Uint16 *)p;
+        break;
+
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+        break;
+
+    case 4:
+        return *(Uint32 *)p;
+        break;
+
+    default:
+        return 0;       /* shouldn't happen, but avoids warnings */
+    }
+}
+
+vec3 get_pixel(SDL_Surface *surface, int x, int y) {
+    Uint32 pixel = get_pixel_uint(surface, x, y);
+
+    uint8_t b = pixel & 0xFF;
+    uint8_t g = (pixel >> 8) & 0xFF;
+    uint8_t r = (pixel >> 16) & 0xFF;
+
+    return vec3(r / 255.0f, g / 255.0f, b / 255.0f);
+}
 
 #endif
