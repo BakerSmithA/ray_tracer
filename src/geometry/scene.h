@@ -20,6 +20,7 @@ class Scene {
 public:
     const vector<Primitive*> primitives;
     const vector<Light*> lights;
+    const vec3 ambient_lighting = vec3(0.35, 0.2, 0.2);
 
     Scene(const vector<Primitive*> primitives, const vector<Light*> lights):
         primitives(primitives), lights(lights)

@@ -23,6 +23,7 @@ vec3 colour_in_scene(Scene &scene, Ray &ray) {
     for (const Light *light: scene.lights) {
         acc_colour += i->primitive->shader->shadowed_color(i->pos, i->primitive, ray, scene, *light);
     }
+    acc_colour += scene.ambient_lighting;
 
     return acc_colour;
 }
