@@ -22,7 +22,17 @@ public:
     Primitive(const Shader *shader, const int obj_tag): shader(shader), obj_tag(obj_tag) {
 	};
 
+	// return: whether this primitive and the given primitive belong to the
+	//		   same object.
+	bool is_same_object(const Primitive *prim) const {
+		return this->obj_tag == prim->obj_tag;
+	}
+
+	// return: the position of the intersection with the primitive, or nullptr
+	//		   if no intersection occurred.
 	virtual unique_ptr<vec4> intersection(const Ray &ray) const = 0;
+
+	// return: the normal to the primtive at the given point on the primitive.
     virtual vec4 compute_normal(vec4 point) const = 0;
 };
 

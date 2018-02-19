@@ -11,6 +11,7 @@
 #include "../shaders/fresnel.h"
 #include "../shaders/glass.h"
 #include "../shaders/flat_color.h"
+#include "../shaders/smoke.h"
 
 using std::vector;
 
@@ -216,9 +217,9 @@ Scene cornel_box() {
 	vector<Primitive*> triangles = cornel_box_triangles();
 	Shader *s = new Glass();
 	const int sphere1_tag = 7;
-	const int sphere2_tag = 8;
-	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, s, sphere1_tag));
-	triangles.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, s, sphere2_tag));
+	//const int sphere2_tag = 8;
+	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Smoke(vec3(0,0,0)), sphere1_tag));
+	//triangles.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, s, sphere2_tag));
 	return Scene(triangles, cornel_box_lights());
 }
 
