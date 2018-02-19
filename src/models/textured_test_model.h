@@ -87,11 +87,11 @@ Object *ceiling() {
 vector<Object*> objects() {
 	vector<Object*> objects;
 
-	// objects.push_back(floor());
+	objects.push_back(floor());
 	objects.push_back(left_wall());
 	objects.push_back(right_wall());
 	objects.push_back(back_wall());
-	// objects.push_back(ceiling());
+	objects.push_back(ceiling());
 
 	return objects;
 }
