@@ -73,7 +73,7 @@ vector<Primitive*> scaled_triangles(vector<Triangle*> triangles) {
 // return: the shader to be used for an object in the cornel box.
 Shader *cornel_shader(vec3 col) {
 	float mix_prop = 0.8;
-	return new Mix(new Mirror(), new Diffuse(col), mix_prop);
+	return Mix::ratio(new Mirror(), new Diffuse(col), mix_prop);
 }
 
 // return: the floor of the cornel box.

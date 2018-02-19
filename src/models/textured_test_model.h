@@ -61,8 +61,11 @@ Object *right_wall() {
 
 // return: the back wall of the box.
 Object *back_wall() {
-	const vec3 col = vec3(0.75f, 0.75f, 0.75f);
-	const Shader *shader = new Texture("../textures/test_wall_tex.bmp");//new Diffuse(col);
+	const vec3 col = vec3(1, 1, 1);//vec3(0.75f, 0.75f, 0.75f);
+
+	const Shader *diffuse_shader = new Diffuse(col);
+	const Shader *tex_shader = new Texture("../textures/test_wall_tex.bmp");
+	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(G, D, C, shader, 0));
@@ -100,7 +103,7 @@ vector<Object*> objects() {
 vector<PointLight*> lights() {
 	vector<PointLight*> lights;
 
-	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, -0.7, 1.0)));
+	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, 0, 1.0)));
 
 	return lights;
 }
