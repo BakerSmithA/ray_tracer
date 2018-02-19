@@ -15,7 +15,7 @@ public:
     const vec3 base_color;
     int dropoff;
 
-    PhongSpecular(vec3 base_color, int dropoff = 3): base_color(base_color), dropoff(dropoff) 
+    PhongSpecular(vec3 base_color, int dropoff = 10): base_color(base_color), dropoff(dropoff) 
     {
     }
 
@@ -23,7 +23,7 @@ public:
     vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
          
          //Calculate reflection ray direction
-        vec3 l = vec3(light.shadow_ray_to(position).dir);
+        vec3 l = -vec3(light.shadow_ray_to(position).dir);
         vec3 surface_normal = normalize(vec3(prim->compute_normal(position)));
         vec3 reflected_dir = 2.0f * dot(l, surface_normal) * surface_normal - l;
 

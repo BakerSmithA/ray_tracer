@@ -219,8 +219,8 @@ Scene cornel_box() {
 	const int sphere1_tag = 7;
 	//const int sphere2_tag = 8;
 	const vec3 red = vec3(0.75f, 0.15f, 0.15f);
-	Shader* shader = new PhongSpecular(red); //new BlinnSpecular(red);
-	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, shader, sphere1_tag));
+	Shader* shader = new BlinnSpecular(red);
+	triangles.push_back(new Sphere(vec4(0.4, 0.3, 0.5, 1.0), 0.3, shader, sphere1_tag));
 	//triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Smoke(vec3(1,0,0)), sphere1_tag));
 	//triangles.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, s, sphere2_tag));
 	return Scene(triangles, cornel_box_lights());
