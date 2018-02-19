@@ -1,9 +1,8 @@
 #include <glm/glm.hpp>
 #include <limits.h>
 #include <vector>
-// #include "intersection.h"
-// #include "primitive.h"
-#include "object.h"
+#include "intersection.h"
+#include "primitive.h"
 #include "projection.h"
 #include "../lights/light.h"
 

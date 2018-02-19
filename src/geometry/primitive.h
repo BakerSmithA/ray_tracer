@@ -16,8 +16,11 @@ class Primitive {
 public:
 	// Used to tell the color of the triangle.
 	const Shader *shader;
+	// Used to indicate primitives that are part of the same object.
+	const int obj_tag;
 
-    Primitive(const Shader *shader) : shader(shader) {};
+    Primitive(const Shader *shader, const int obj_tag): shader(shader), obj_tag(obj_tag) {
+	};
 
 	virtual unique_ptr<vec4> intersection(const Ray &ray) const = 0;
     virtual vec4 compute_normal(vec4 point) const = 0;

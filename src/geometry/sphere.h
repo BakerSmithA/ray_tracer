@@ -16,8 +16,8 @@ public:
     vec4 center;
     float radius;
 
-    Sphere(vec4 center, float radius, Shader* shader)
-        : Primitive(shader), center(center), radius(radius) {};
+    Sphere(vec4 center, float radius, Shader* shader, const int obj_tag)
+        : Primitive(shader, obj_tag), center(center), radius(radius) {};
 
 	virtual unique_ptr<vec4> intersection(const Ray &ray) const override {
         vec3 orig = vec3(ray.start);
