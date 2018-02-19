@@ -16,8 +16,12 @@ public:
     vec4 center;
     float radius;
 
-    Sphere(vec4 center, float radius, Shader* shader, const int obj_tag)
-        : Primitive(shader, obj_tag), center(center), radius(radius) {};
+    Sphere(vec4 center, float radius, Shader* shader, const int obj_tag):
+        Primitive(shader, Sphere::make_bounding_cube(center, radius), obj_tag),
+        center(center),
+        radius(radius)
+    {
+    }
 
 	virtual unique_ptr<vec4> intersection(const Ray &ray) const override {
         vec3 orig = vec3(ray.start);
@@ -56,6 +60,12 @@ public:
 
     virtual vec4 compute_normal(vec4 point) const override {
         return normalize(point - center);
+    }
+
+    // return: the minimum and maximum corners of bounding box around the
+    //         sphere.
+    static BoundingCube make_bounding_cube(vec4 center, float radius) {
+        throw std::runtime_error("Not implemented yet - circle bounding cube");
     }
 };
 
