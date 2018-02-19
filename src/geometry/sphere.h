@@ -62,6 +62,7 @@ public:
         return normalize(point - center);
     }
 
+private:
     // return: the minimum and maximum corners of bounding box around the
     //         sphere.
     static BoundingCube make_bounding_cube(vec4 center, float radius) {

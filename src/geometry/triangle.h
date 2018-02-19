@@ -65,6 +65,7 @@ private:
         return project_to_4D(vec3(v0) + u * e1 + v * e2);
 	}
 
+private:
 	// return: the minimum and maximum corners of bounding cube around the
 	//		   triangle.
 	static BoundingCube make_bounding_cube(vec4 v0, vec4 v1, vec4 v2) {
