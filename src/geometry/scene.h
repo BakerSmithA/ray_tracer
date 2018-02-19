@@ -70,8 +70,21 @@ public:
     //                      This can be useful to avoid self-intersection.
     // return:              All intersections along a ray.
     vector<Intersection> all_intersections(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
-        // TODO:
-        return vector<Intersection>();
+        vector<Intersection> intersections;
+
+        for (size_t i=0; i<this->primitives.size(); i++) {
+            if (this->primitives[i] == excluded_prim) {
+                continue;
+            }
+
+            unique_ptr<vec4> intersection_pos = primitives[i]->intersection(ray);
+
+            if (intersection_pos != nullptr) {
+                intersections.push_back(Intersection(*intersection_pos, *this->primitives[i]));
+            }
+        }
+
+        return intersections;
     }
 };
 

@@ -208,6 +208,7 @@ Scene cornel_box() {
 	vector<Primitive*> triangles = cornel_box_triangles();
 	Shader *s = new Glass();
 	triangles.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, s));
+	triangles.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, s));
 	return Scene(triangles, cornel_box_lights());
 }
 

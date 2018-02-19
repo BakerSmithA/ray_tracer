@@ -28,14 +28,23 @@ public:
             // If the shadow ray between the intersection and the light is
             // obstructed, no light from this light reaches the intersection.
             Ray shadow_ray = light.shadow_ray_to(position);
+            const float shadow_len = length(shadow_ray.dir);
 
-            // The opacity of the object that was intersected determines how
-            // much light hits this surface.
-            unique_ptr<Intersection> intersected = scene.closest_intersection(shadow_ray, &prim);
-            // The intersection must occur in front of the light.
-            if (intersected != nullptr && length(intersected->pos - shadow_ray.start) < length(shadow_ray.dir)) {
-                return intersected->primitive.shader->transparency() * col;
+            // The opacity of all objects on the way to the light determines
+            // how much light gets through to this object.
+            vector<Intersection> all_intersections = scene.all_intersections(shadow_ray, &prim);
+            // The multiplication of all transparencies of all objects (before
+            // the light) along the ray.
+            float acc_transparency = 1.0f;
+
+            for (size_t i=0; i<all_intersections.size() && acc_transparency >= 0.001; i++) {
+                // If the intersection occurs between the light and this object.
+                if (length(all_intersections[i].pos - shadow_ray.start) < shadow_len) {
+                    acc_transparency *= all_intersections[i].primitive.shader->transparency();
+                }
             }
+
+            return acc_transparency * col;
         }
 
         return col;

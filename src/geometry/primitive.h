@@ -14,7 +14,6 @@ class Shader;
 
 class Primitive {
 public:
-
 	// Used to tell the color of the triangle.
 	const Shader *shader;
 
