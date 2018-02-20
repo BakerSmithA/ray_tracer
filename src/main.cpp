@@ -20,8 +20,8 @@
 // using glm::mat4;
 
 //
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 256
+#define SCREEN_WIDTH 320 * 2
+#define SCREEN_HEIGHT 256 * 2
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
 //

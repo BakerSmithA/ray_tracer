@@ -68,9 +68,6 @@ public:
 
         vec4 proj = vec4(proj_x, proj_y, proj_z, 1.0f);
 
-        float u = proj_x * image->w; // from 0 to image width
-        float v = proj_y * image->h; // from 0 to image height
-
         vec2 uv = planar_projected(proj, this->projection_dir, this->image->w, this->image->h);
 
         return get_pixel(this->image, (int)uv.x, (int)uv.y);
