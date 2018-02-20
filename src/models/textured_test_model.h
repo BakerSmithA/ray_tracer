@@ -25,8 +25,11 @@ using glm::vec4;
 
 // return: the floor of the box.
 Object *floor() {
-	const vec3 col = vec3(0.75f, 0.75f, 0.75f);
-	const Shader *shader = new Diffuse(col);
+	const vec3 col = vec3(1, 1, 1);
+
+	const Shader *diffuse_shader = new Diffuse(col);
+	const Shader *tex_shader = new Texture("../textures/metal.bmp", planar_y);
+	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(C, B, A, shader, 0));
@@ -37,8 +40,11 @@ Object *floor() {
 
 // return: the left wall of the box.
 Object *left_wall() {
-	const vec3 col = vec3(0.75f, 0.15f, 0.75f);
-	const Shader *shader = new Diffuse(col);
+	const vec3 col = vec3(1, 1, 1);
+
+	const Shader *diffuse_shader = new Diffuse(col);
+	const Shader *tex_shader = new Texture("../textures/bricks.bmp", planar_x);
+	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(A, E, C, shader, 0));
@@ -49,8 +55,11 @@ Object *left_wall() {
 
 // return: the right wall of the box.
 Object *right_wall() {
-	const vec3 col = vec3(0.75f, 0.75f, 0.15f);
-	const Shader *shader = new Diffuse(col);
+	const vec3 col = vec3(1, 1, 1);
+
+	const Shader *diffuse_shader = new Diffuse(col);
+	const Shader *tex_shader = new Texture("../textures/bricks.bmp", planar_x);
+	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(F, B, D, shader, 0));
@@ -61,10 +70,10 @@ Object *right_wall() {
 
 // return: the back wall of the box.
 Object *back_wall() {
-	const vec3 col = vec3(1, 1, 1);//vec3(0.75f, 0.75f, 0.75f);
+	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = new Texture("../textures/test_wall_tex.bmp");
+	const Shader *tex_shader = new Texture("../textures/bricks.bmp", planar_z);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
@@ -76,7 +85,7 @@ Object *back_wall() {
 
 // return: the ceiling of the cornel box.
 Object *ceiling() {
-	const vec3 col = vec3(0.15f, 0.75f, 0.75f);
+	const vec3 col = vec3(0.75f, 0.75f, 0.75f);
 	const Shader *shader = new Diffuse(col);
 
 	vector<Triangle*> triangles;
