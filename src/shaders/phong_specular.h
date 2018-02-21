@@ -16,7 +16,7 @@ public:
     int specular_exponent;
     Diffuse* diffuse_shader;
     float Kd = 0.8; // diffuse weight 
-    float Ks = 0.2; // specular weight 
+    float Ks = 0.3; // specular weight 
 
     PhongSpecular(vec3 base_color, int specular_exponent = 250): base_color(base_color), specular_exponent(specular_exponent) 
     {
