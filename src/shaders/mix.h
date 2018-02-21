@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
+#include <functional>
 
-using glm::mix;
+using std::function;
 
 #ifndef MIX_SHADER_H
 #define MIX_SHADER_H
@@ -10,11 +11,10 @@ class Mix: public Shader {
 public:
     const Shader *s1;
     const Shader *s2;
-    // The proportion to show of s2. The proportion to show of s1 is 1-proportion.
-    const float proportion;
+    const function<vec3(vec3, vec3)> combine_colors;
 
-    Mix(const Shader *s1, const Shader *s2, const float proportion):
-        s1(s1), s2(s2), proportion(proportion)
+    Mix(const Shader *s1, const Shader *s2, function<vec3(vec3, vec3)> combine_colors):
+        s1(s1), s2(s2), combine_colors(combine_colors)
     {
     }
 
@@ -23,12 +23,37 @@ public:
         vec3 color1 = this->s1->color(position, prim, incoming, scene, light);
         vec3 color2 = this->s2->color(position, prim, incoming, scene, light);
 
-        return mix(color1, color2, this->proportion);
+        return this->combine_colors(color1, color2);
     }
 
     // return: the opacity of each shader mixed in the specified proportion.
     float transparency() const override {
-        return mix(s1->transparency(), s2->transparency(), this->proportion);
+        // TODO: This is a bit of a hack, is there a better way?
+        vec3 a = vec3(s1->transparency(), 0, 0);
+        vec3 b = vec3(s2->transparency(), 0, 0);
+        return this->combine_colors(a, b).x;
+    }
+
+    /*
+     ** Convenience functions for creating mix shaders using different functions.
+     */
+
+    // return: a mix shader that mixes both shaders with the given ratio.
+    //         Shader s2 recieves proportion, and s1 recieves (1 - proportion).
+    //
+    static Mix *ratio(const Shader *s1, const Shader *s2, float proportion) {
+        auto combine_colors = [=](vec3 col1, vec3 col2) {
+            return glm::mix(col1, col2, proportion);
+        };
+        return new Mix(s1, s2, combine_colors);
+    }
+
+    // return: a shader that multiplies both shaders together.
+    static Mix *multiply(const Shader *s1, const Shader *s2) {
+        auto combine_colors = [=](vec3 col1, vec3 col2) {
+            return col1 * col2;
+        };
+        return new Mix(s1, s2, combine_colors);
     }
 };
 

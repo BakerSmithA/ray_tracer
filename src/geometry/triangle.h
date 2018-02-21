@@ -23,7 +23,7 @@ public:
     const vec4 normal;
 
 	Triangle(vec4 v0, vec4 v1, vec4 v2, const Shader *shader, const int obj_tag):
-		Primitive(shader, obj_tag),
+		Primitive(shader, Triangle::make_bounding_cube(v0, v1, v2), obj_tag),
 		v0(v0), v1(v1), v2(v2),
 		e1(vec3(v1 - v0)),
 		e2(vec3(v2 - v0)),
@@ -63,6 +63,27 @@ private:
         float u = point.y;
         float v = point.z;
         return project_to_4D(vec3(v0) + u * e1 + v * e2);
+	}
+
+private:
+	// return: the minimum and maximum corners of bounding cube around the
+	//		   triangle.
+	static BoundingCube make_bounding_cube(vec4 v0, vec4 v1, vec4 v2) {
+		vec4 vertices[3] = { v0, v1, v2 };
+
+		vec4 min = vertices[0];
+		vec4 max = vertices[0];
+
+		for (int i=1; i<3; i++) {
+			if (vertices[i].x < min.x) min.x = vertices[i].x;
+			if (vertices[i].y < min.y) min.y = vertices[i].y;
+			if (vertices[i].z < min.z) min.z = vertices[i].z;
+			if (vertices[i].x > max.x) max.x = vertices[i].x;
+			if (vertices[i].y > max.y) max.y = vertices[i].y;
+			if (vertices[i].z > max.z) max.z = vertices[i].z;
+		}
+
+		return BoundingCube(min, max);
 	}
 };
 

@@ -1,10 +1,13 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include "projection.h"
+#include "bounding_cube.h"
 
 using glm::vec3;
 using glm::vec4;
+using glm::mat4;
 using std::unique_ptr;
+using std::array;
 
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
@@ -16,10 +19,13 @@ class Primitive {
 public:
 	// Used to tell the color of the triangle.
 	const Shader *shader;
+	// The smallest cube that encloses the primtitive.
+	const BoundingCube bounding_cube;
 	// Used to indicate primitives that are part of the same object.
 	const int obj_tag;
 
-    Primitive(const Shader *shader, const int obj_tag): shader(shader), obj_tag(obj_tag) {
+    Primitive(const Shader *shader, BoundingCube bounding_cube, const int obj_tag):
+		shader(shader), bounding_cube(bounding_cube), obj_tag(obj_tag) {
 	};
 
 	// return: whether this primitive and the given primitive belong to the
