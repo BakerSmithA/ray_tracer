@@ -22,10 +22,10 @@ public:
     //         space as of this object, as defined by the bounding box.
     // vec4 converted_world_to_obj(vec4 world_point) const {
     //     // Align the point with the start of the bounding cube.
-    //     vec4 a = world_point + bounding_cube.min;
+    //     vec4 a = world_point - bounding_cube.min;
     //     // Scale the point so it is in terms of the basis vectors of the
     //     // bounding cube.
-    //     vec4 b = a *
+    //     vec4 b =
     // }
 
 private:
