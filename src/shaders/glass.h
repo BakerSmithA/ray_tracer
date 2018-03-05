@@ -3,6 +3,7 @@
 #include "mirror.h"
 #include "refraction.h"
 #include "blinn_specular.h"
+#include "mix.h"
 
 #ifndef GLASS_SHADER_H
 #define GLASS_SHADER_H
@@ -18,7 +19,9 @@ public:
         Shader *refraction = new Refraction(0.45);
         Shader *mirror = new Mirror();
         Shader *transparent = new Fresnel(refraction, mirror, 0.7f);
-        this->glass_shader = transparent;
+        Shader *specular = new BlinnSpecular(vec3(0, 0, 0), 250);
+        Shader *add = Mix::ratio(specular, transparent, 0.7);
+        this->glass_shader = add;
     }
 
     // return: the color of the intersected surface, taking shadows from the

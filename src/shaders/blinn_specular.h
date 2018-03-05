@@ -16,10 +16,10 @@ public:
     const vec3 base_color;
     int specular_exponent;
     Diffuse* diffuse_shader;
-    float Kd = 0.8; // diffuse weight 
-    float Ks = 0.3; // specular weight 
+    float Kd = 0.8; // diffuse weight
+    float Ks = 0.3; // specular weight
 
-    BlinnSpecular(vec3 base_color, int specular_exponent = 250): base_color(base_color), specular_exponent(specular_exponent) 
+    BlinnSpecular(vec3 base_color, int specular_exponent = 250): base_color(base_color), specular_exponent(specular_exponent)
     {
         this->diffuse_shader = new Diffuse(base_color);
     }
