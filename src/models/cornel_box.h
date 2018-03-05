@@ -75,8 +75,6 @@ vector<Primitive*> scaled_triangles(vector<Triangle*> triangles) {
 Shader *cornel_shader(vec3 col) {
 	float mix_prop = 0.8;
 	Shader *material = Mix::ratio(new Mirror(), new Diffuse(col), mix_prop);
-	//Shader *lighting = new Diffuse(col);
-	//return Mix::multiply(material, lighting);
 	return material;
 }
 
