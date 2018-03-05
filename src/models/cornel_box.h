@@ -118,7 +118,7 @@ Object *cornel_right_wall() {
 Object *cornel_back_wall() {
 	const vec3 col = vec3(1, 1, 1);
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = new Texture("../textures/bricks.bmp", planar_z);
+	const Shader *tex_shader = Texture::planar("../textures/bricks.bmp", planar_z);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;

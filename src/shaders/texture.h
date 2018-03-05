@@ -3,11 +3,12 @@
 #include "../rendering/SDLauxiliary.h"
 #include "shader.h"
 #include <math.h>
-#include "../debugging.h"
+#include <functional>
 
 using glm::vec2;
 using glm::normalize;
 using glm::length;
+using std::function;
 
 #ifndef TEXTURE_H
 #define TEXTURE_H
@@ -52,13 +53,20 @@ vec2 spherical_projected(vec4 object_space_point) {
 
     // The object space point is in the range 0-1, therefore the center of the
     // sphere is at (0.5, 0.5, 0.5).
-    vec3 p = vec3(object_space_point);
+    vec3 p = vec3(object_space_point) - vec3(0.5, 0.5, 0.5);
 
     // Conversion to angles was done using the formula here:
     //  https://www.opengl.org/discussion_boards/showthread.php/159883-converting-a-3D-vector-into-three-euler-angles
     float radius = length(p);
-    float u = atan2(p.y, p.x);
-    float v = atan2(p.z, radius);
+
+    // Angles describing the point on the circle.
+    // Both are in the range 0 to 2pi
+    float angle1 = atan2(p.z, p.x) + (M_PI);
+    float angle2 = acos(p.y / radius);
+
+    // Change into the range 0-1.
+    float u = angle1 / (2 * M_PI);
+    float v = angle2 / (2 * M_PI);
 
     return vec2(u, v);
 }
@@ -68,10 +76,12 @@ private:
     SDL_Surface *image = NULL;
 
 public:
-    const PlanarProjectionDirection projection_dir;
+    //const PlanarProjectionDirection projection_dir;
+    // Takes a point in 4d object coordinates to a point 2d uv coordinate.
+    const function<vec2(vec4)> project_to_uv;
 
-    Texture(const char *image_name, PlanarProjectionDirection dir):
-        image(SDL_LoadBMP(image_name)), projection_dir(dir)
+    Texture(const char *image_name, const function<vec2(vec4)> project_to_uv):
+        image(SDL_LoadBMP(image_name)), project_to_uv(project_to_uv)
     {
         if (image == NULL) {
             printf("Unable to load bitmap: %s\n", SDL_GetError());
@@ -89,11 +99,30 @@ public:
         // space for planar mapping).
         vec4 proj = prim->parent_obj->converted_world_to_obj(position);
         // uv is in the range 0-1.
-        vec2 uv = planar_projected(proj, this->projection_dir);
+        vec2 uv = this->project_to_uv(proj);
         // image_uv is in the range 0-image size.
         vec2 image_uv = vec2(uv.x * this->image->w, uv.y * this->image->h);
 
         return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
+    }
+
+    /*
+     ** Convenience functions.
+     */
+
+    // return: a texture shader which maps the texture using planar mapping
+    //         in the given direction.
+    static Texture *planar(const char *image_name, PlanarProjectionDirection dir) {
+        const auto project_to_uv = [=](vec4 object_coordinate) {
+            return planar_projected(object_coordinate, dir);
+        };
+
+        return new Texture(image_name, project_to_uv);
+    }
+
+    // return: a texture shader which maps the texture using a spherical projection.
+    static Texture *spherical(const char *image_name) {
+        return new Texture(image_name, spherical_projected);
     }
 };
 

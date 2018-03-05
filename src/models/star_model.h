@@ -5,7 +5,7 @@
 Object *star_model() {
 	vector<Primitive*> primitives;
 
-    Shader *shader = new Texture("../textures/bricks.bmp", planar_z);
+    Shader *shader = Texture::spherical("../textures/sun.bmp");
 	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 0.3, shader));
 
 	return new Object(primitives);
