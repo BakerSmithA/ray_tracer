@@ -16,8 +16,8 @@ public:
     vec4 center;
     float radius;
 
-    Sphere(vec4 center, float radius, Shader* shader, const int obj_tag):
-        Primitive(shader, Sphere::make_bounding_cube(center, radius), obj_tag),
+    Sphere(vec4 center, float radius, Shader* shader):
+        Primitive(shader, Sphere::make_bounding_cube(center, radius)),
         center(center),
         radius(radius)
     {

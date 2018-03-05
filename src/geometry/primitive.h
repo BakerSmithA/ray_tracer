@@ -12,8 +12,9 @@ using std::array;
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
 
-// Forward declaration of the shader class;
+// Forward declarations.
 class Shader;
+class Object;
 
 class Primitive {
 public:
@@ -21,17 +22,18 @@ public:
 	const Shader *shader;
 	// The smallest cube that encloses the primtitive.
 	const BoundingCube bounding_cube;
-	// Used to indicate primitives that are part of the same object.
-	const int obj_tag;
+	// The object that the primitive belongs to. This is set by the object
+	// when the object is initialised.
+	Object *parent_obj = NULL;
 
-    Primitive(const Shader *shader, BoundingCube bounding_cube, const int obj_tag):
-		shader(shader), bounding_cube(bounding_cube), obj_tag(obj_tag) {
+    Primitive(const Shader *shader, BoundingCube bounding_cube):
+		shader(shader), bounding_cube(bounding_cube) {
 	};
 
 	// return: whether this primitive and the given primitive belong to the
 	//		   same object.
 	bool is_same_object(const Primitive *prim) const {
-		return this->obj_tag == prim->obj_tag;
+		return this->parent_obj == prim->parent_obj;
 	}
 
 	// return: the position of the intersection with the primitive, or nullptr

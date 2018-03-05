@@ -32,8 +32,8 @@ Object *floor() {
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(C, B, A, shader, 0));
-	triangles.push_back(new Triangle(C, D, B, shader, 0));
+	triangles.push_back(new Triangle(C, B, A, shader));
+	triangles.push_back(new Triangle(C, D, B, shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -47,8 +47,8 @@ Object *left_wall() {
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(A, E, C, shader, 0));
-	triangles.push_back(new Triangle(C, E, G, shader, 0));
+	triangles.push_back(new Triangle(A, E, C, shader));
+	triangles.push_back(new Triangle(C, E, G, shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -62,8 +62,8 @@ Object *right_wall() {
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(F, B, D, shader, 0));
-	triangles.push_back(new Triangle(H, F, D, shader, 0));
+	triangles.push_back(new Triangle(F, B, D, shader));
+	triangles.push_back(new Triangle(H, F, D, shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -77,8 +77,8 @@ Object *back_wall() {
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(G, D, C, shader, 0));
-	triangles.push_back(new Triangle(G, H, D, shader, 0));
+	triangles.push_back(new Triangle(G, D, C, shader));
+	triangles.push_back(new Triangle(G, H, D, shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -89,8 +89,8 @@ Object *ceiling() {
 	const Shader *shader = new Diffuse(col);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(E, F, G, shader, 0));
-	triangles.push_back(new Triangle(F, H, G, shader, 0));
+	triangles.push_back(new Triangle(E, F, G, shader));
+	triangles.push_back(new Triangle(F, H, G, shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -113,24 +113,24 @@ Object *short_block() {
 	vector<Triangle*> triangles;
 
 	// Front
-	triangles.push_back(new Triangle(E,B,A,shader, 0));
-	triangles.push_back(new Triangle(E,F,B,shader, 0));
+	triangles.push_back(new Triangle(E,B,A,shader));
+	triangles.push_back(new Triangle(E,F,B,shader));
 
 	// Front
-	triangles.push_back(new Triangle(F,D,B,shader, 0));
-	triangles.push_back(new Triangle(F,H,D,shader, 0));
+	triangles.push_back(new Triangle(F,D,B,shader));
+	triangles.push_back(new Triangle(F,H,D,shader));
 
 	// BACK
-	triangles.push_back(new Triangle(H,C,D,shader, 0));
-	triangles.push_back(new Triangle(H,G,C,shader, 0));
+	triangles.push_back(new Triangle(H,C,D,shader));
+	triangles.push_back(new Triangle(H,G,C,shader));
 
 	// LEFT
-	triangles.push_back(new Triangle(G,E,C,shader, 0));
-	triangles.push_back(new Triangle(E,A,C,shader, 0));
+	triangles.push_back(new Triangle(G,E,C,shader));
+	triangles.push_back(new Triangle(E,A,C,shader));
 
 	// TOP
-	triangles.push_back(new Triangle(G,F,E,shader, 0));
-	triangles.push_back(new Triangle(G,H,F,shader, 0));
+	triangles.push_back(new Triangle(G,F,E,shader));
+	triangles.push_back(new Triangle(G,H,F,shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -153,24 +153,24 @@ Object *tall_block() {
 	vector<Triangle*> triangles;
 
 	// Front
-	triangles.push_back(new Triangle(E,B,A,shader, 0));
-	triangles.push_back(new Triangle(E,F,B,shader, 0));
+	triangles.push_back(new Triangle(E,B,A,shader));
+	triangles.push_back(new Triangle(E,F,B,shader));
 
 	// Front
-	triangles.push_back(new Triangle(F,D,B,shader, 0));
-	triangles.push_back(new Triangle(F,H,D,shader, 0));
+	triangles.push_back(new Triangle(F,D,B,shader));
+	triangles.push_back(new Triangle(F,H,D,shader));
 
 	// BACK
-	triangles.push_back(new Triangle(H,C,D,shader, 0));
-	triangles.push_back(new Triangle(H,G,C,shader, 0));
+	triangles.push_back(new Triangle(H,C,D,shader));
+	triangles.push_back(new Triangle(H,G,C,shader));
 
 	// LEFT
-	triangles.push_back(new Triangle(G,E,C,shader, 0));
-	triangles.push_back(new Triangle(E,A,C,shader, 0));
+	triangles.push_back(new Triangle(G,E,C,shader));
+	triangles.push_back(new Triangle(E,A,C,shader));
 
 	// TOP
-	triangles.push_back(new Triangle(G,F,E,shader, 0));
-	triangles.push_back(new Triangle(G,H,F,shader, 0));
+	triangles.push_back(new Triangle(G,F,E,shader));
+	triangles.push_back(new Triangle(G,H,F,shader));
 
 	return new Object(scaled_triangles(triangles));
 }
@@ -178,14 +178,14 @@ Object *tall_block() {
 // return: a glass sphere.
 Object *large_sphere() {
 	vector<Primitive*> primitives;
-	primitives.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Glass(), 0));
+	primitives.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Glass()));
 
 	return new Object(primitives);
 }
 
 Object *small_sphere() {
 	vector<Primitive*> primitives;
-	primitives.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, new Glass(), 0));
+	primitives.push_back(new Sphere(vec4(-0, -0.2, -0.8, 1.0), 0.2, new Glass()));
 
 	return new Object(primitives);
 }

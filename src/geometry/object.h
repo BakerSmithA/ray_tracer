@@ -16,6 +16,9 @@ public:
         primitives(primitives),
         bounding_cube(Object::make_bounding_cube(primitives))
     {
+        for (Primitive *prim: this->primitives) {
+            prim->parent_obj = this;
+        }
     }
 
     // return: the world_point converted to in the axis aligned coordinate
@@ -24,7 +27,7 @@ public:
     //     // Align the point with the start of the bounding cube.
     //     vec4 a = world_point - bounding_cube.min;
     //     // Scale the point so it is in terms of the basis vectors of the
-    //     // boundingg cube.
+    //     // bounding cube (which is aligned with the world axis).
     //     vec4 b =
     // }
 

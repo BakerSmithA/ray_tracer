@@ -22,8 +22,8 @@ public:
     // Precomputed properties of the triangle.
     const vec4 normal;
 
-	Triangle(vec4 v0, vec4 v1, vec4 v2, const Shader *shader, const int obj_tag):
-		Primitive(shader, Triangle::make_bounding_cube(v0, v1, v2), obj_tag),
+	Triangle(vec4 v0, vec4 v1, vec4 v2, const Shader *shader):
+		Primitive(shader, Triangle::make_bounding_cube(v0, v1, v2)),
 		v0(v0), v1(v1), v2(v2),
 		e1(vec3(v1 - v0)),
 		e2(vec3(v2 - v0)),
