@@ -1,5 +1,6 @@
 #include "primitive.h"
 #include <iostream>
+#include "../debugging.h"
 
 using std::vector;
 
@@ -23,17 +24,26 @@ public:
 
     // return: the world_point converted to in the axis aligned coordinate
     //         space as of this object, as defined by the bounding box.
-    // vec4 converted_world_to_obj(vec4 world_point) const {
-    //     // Align the point with the start of the bounding cube.
-    //     vec4 a = world_point - bounding_cube.min;
-    //     // Scale the point so it is in terms of the basis vectors of the
-    //     // bounding cube (which is aligned with the world axis).
-    //     vec4 b =
-    // }
+    vec4 converted_world_to_obj(vec4 world_point) const {
+        vec4 min = this->bounding_cube.min;
+        vec4 max = this->bounding_cube.max;
+
+        // Multipliers to convert from world coordinates to object coordinates.
+        float mx = 1 / (max.x - min.x);
+        float my = 1 / (max.y - min.y);
+        float mz = 1 / (max.z - min.z);
+
+        vec4 m = vec4(mx, my, mz, 1.0f);
+
+        vec4 p = m * (world_point - this->bounding_cube.min);
+        p.w = 1.0f;
+        return p;
+    }
 
 private:
     // return: a bounding box around all the primtives.
     static BoundingCube make_bounding_cube(std::vector<Primitive*> primitives) {
+        // Initialise the min and max, these will be updated below.
 		vec4 min = primitives[0]->bounding_cube.min;
 		vec4 max = primitives[0]->bounding_cube.max;
 

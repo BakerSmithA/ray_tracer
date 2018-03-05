@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "../rendering/SDLauxiliary.h"
 #include "shader.h"
+#include "../debugging.h"
 
 using glm::vec2;
 
@@ -62,12 +63,7 @@ public:
     virtual vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
         // Convert the position u,v coordinate (i.e. in the object's coordinate
         // space for planar mapping).
-        float proj_x = (position.x + 1) / 2; // from 0 to 1
-        float proj_y = (position.y + 1) / 2; // from 0 to 1
-        float proj_z = (position.z + 1) / 2; // from 0 to 1
-
-        vec4 proj = vec4(proj_x, proj_y, proj_z, 1.0f);
-
+        vec4 proj = prim->parent_obj->converted_world_to_obj(position);
         vec2 uv = planar_projected(proj, this->projection_dir, this->image->w, this->image->h);
 
         return get_pixel(this->image, (int)uv.x, (int)uv.y);
