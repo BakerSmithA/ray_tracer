@@ -66,8 +66,14 @@ private:
     // return: the minimum and maximum corners of bounding box around the
     //         sphere.
     static BoundingCube make_bounding_cube(vec4 center, float radius) {
-        //throw std::runtime_error("Not implemented yet - circle bounding cube");
-        return BoundingCube(vec4(), vec4());
+        // Init 3D min an max.
+        vec3 min_3d, max_3d;
+        for (int i=0; i<3; i++) {
+            min_3d[i] = center[i] - radius;
+            max_3d[i] = center[i] + radius;
+        }
+
+        return BoundingCube(project_to_4D(min_3d), project_to_4D(max_3d));
     }
 };
 

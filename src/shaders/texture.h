@@ -2,9 +2,12 @@
 #include <SDL.h>
 #include "../rendering/SDLauxiliary.h"
 #include "shader.h"
+#include <math.h>
 #include "../debugging.h"
 
 using glm::vec2;
+using glm::normalize;
+using glm::length;
 
 #ifndef TEXTURE_H
 #define TEXTURE_H
@@ -14,8 +17,11 @@ enum PlanarProjectionDirection {
     planar_x, planar_y, planar_z
 };
 
-// return: the point (in object space) projected to u, v coordinates.
-vec2 planar_projected(vec4 object_space_point, PlanarProjectionDirection dir, int img_width, int img_height) {
+// return: the point (in object space) projected to uv texture coordinates.
+vec2 planar_projected(vec4 object_space_point, PlanarProjectionDirection dir) {
+    // Uses the planar mapping described in:
+    //  http://cs-people.bu.edu/sbargal/Fall%202016/lecture_notes/Dec_5_Advanced_Texture_Mapping_And_Ray_Tracing.pdf
+
     float u = 0, v = 0;
 
     switch (dir) {
@@ -36,7 +42,25 @@ vec2 planar_projected(vec4 object_space_point, PlanarProjectionDirection dir, in
             break;
     }
 
-    return vec2(u * img_width, v * img_height);
+    return vec2(u, v);
+}
+
+// return: the point (in object space) projected onto uv texture coordinates.
+vec2 spherical_projected(vec4 object_space_point) {
+    // Uses the spherical mapping described in:
+    //  http://cs-people.bu.edu/sbargal/Fall%202016/lecture_notes/Dec_5_Advanced_Texture_Mapping_And_Ray_Tracing.pdf
+
+    // The object space point is in the range 0-1, therefore the center of the
+    // sphere is at (0.5, 0.5, 0.5).
+    vec3 p = vec3(object_space_point);
+
+    // Conversion to angles was done using the formula here:
+    //  https://www.opengl.org/discussion_boards/showthread.php/159883-converting-a-3D-vector-into-three-euler-angles
+    float radius = length(p);
+    float u = atan2(p.y, p.x);
+    float v = atan2(p.z, radius);
+
+    return vec2(u, v);
 }
 
 class Texture: public Shader {
@@ -64,9 +88,12 @@ public:
         // Convert the position u,v coordinate (i.e. in the object's coordinate
         // space for planar mapping).
         vec4 proj = prim->parent_obj->converted_world_to_obj(position);
-        vec2 uv = planar_projected(proj, this->projection_dir, this->image->w, this->image->h);
+        // uv is in the range 0-1.
+        vec2 uv = planar_projected(proj, this->projection_dir);
+        // image_uv is in the range 0-image size.
+        vec2 image_uv = vec2(uv.x * this->image->w, uv.y * this->image->h);
 
-        return get_pixel(this->image, (int)uv.x, (int)uv.y);
+        return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
     }
 };
 

@@ -10,6 +10,7 @@
 #include "rendering/renderer.h"
 #include "models/cornel_box.h"
 #include "models/textured_test_model.h"
+#include "models/star_model.h"
 #include <glm/glm.hpp>
 #include <SDL.h>
 
@@ -251,8 +252,9 @@ int main(int argc, char* argv[]) {
     // KillSDL(screen);
     // return 0;
 
+    Scene scene = star_scene();
     //Scene scene = cornel_box();
-    Scene scene = textured_test_scene();
+    //Scene scene = textured_test_scene();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 

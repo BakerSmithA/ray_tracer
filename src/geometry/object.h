@@ -24,6 +24,7 @@ public:
 
     // return: the world_point converted to in the axis aligned coordinate
     //         space as of this object, as defined by the bounding box.
+    //         The returned vector in therefore in the bounds 0-1.
     vec4 converted_world_to_obj(vec4 world_point) const {
         vec4 min = this->bounding_cube.min;
         vec4 max = this->bounding_cube.max;
