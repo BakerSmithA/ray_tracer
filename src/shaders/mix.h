@@ -55,6 +55,14 @@ public:
         };
         return new Mix(s1, s2, combine_colors);
     }
+
+    // return: a shader that adds both shaders together.
+    static Mix *add(const Shader *s1, const Shader *s2) {
+        auto combine_colors = [=](vec3 col1, vec3 col2) {
+            return col1 + col2;
+        };
+        return new Mix(s1, s2, combine_colors);
+    }
 };
 
 #endif // MIX_SHADER_H

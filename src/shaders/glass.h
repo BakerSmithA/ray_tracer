@@ -2,6 +2,7 @@
 #include "fresnel.h"
 #include "mirror.h"
 #include "refraction.h"
+#include "blinn_specular.h"
 
 #ifndef GLASS_SHADER_H
 #define GLASS_SHADER_H
@@ -9,10 +10,15 @@
 // Models a transparent glass surface.
 class Glass: public Shader {
 private:
-    const Shader *glass_shader;
+    Shader *glass_shader;
 
 public:
-    Glass(): glass_shader(new Fresnel(new Refraction(0.45), new Mirror(), 0.7f)) {
+    Glass() {
+        // TODO: Clean up this
+        Shader *refraction = new Refraction(0.45);
+        Shader *mirror = new Mirror();
+        Shader *transparent = new Fresnel(refraction, mirror, 0.7f);
+        this->glass_shader = transparent;
     }
 
     // return: the color of the intersected surface, taking shadows from the

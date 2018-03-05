@@ -20,8 +20,8 @@
 // using glm::mat4;
 
 //
-#define SCREEN_WIDTH 320 * 2
-#define SCREEN_HEIGHT 256 * 2
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 256
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
 //
@@ -251,8 +251,8 @@ int main(int argc, char* argv[]) {
     // KillSDL(screen);
     // return 0;
 
-    //Scene scene = cornel_box();
-    Scene scene = textured_test_scene();
+    Scene scene = cornel_box();
+    //Scene scene = textured_test_scene();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 

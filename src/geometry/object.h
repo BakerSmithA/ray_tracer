@@ -24,7 +24,7 @@ public:
     //     // Align the point with the start of the bounding cube.
     //     vec4 a = world_point - bounding_cube.min;
     //     // Scale the point so it is in terms of the basis vectors of the
-    //     // bounding cube.
+    //     // boundingg cube.
     //     vec4 b =
     // }
 
