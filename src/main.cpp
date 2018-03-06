@@ -20,12 +20,14 @@
 // using glm::vec4;
 // using glm::mat4;
 
-//
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 256
+
+#define SCREEN_WIDTH 320 * 2
+#define SCREEN_HEIGHT 256 * 2
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
 #define NUM_SHADOW_RAYS 4
+#define NUM_SAMPLES 8
+
 //
 // typedef struct Intersection {
 //     // The 4D position of an intersection.
@@ -261,7 +263,7 @@ int main(int argc, char* argv[]) {
 
     while (NoQuitMessageSDL()) {
         update(cam);
-        render(scene, cam, screen, NUM_SHADOW_RAYS);
+        render(scene, cam, screen, NUM_SAMPLES, NUM_SHADOW_RAYS);
         SDL_Renderframe(screen);
     }
 }

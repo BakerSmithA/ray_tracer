@@ -261,7 +261,7 @@ vector<PointLight*> cornel_lights() {
 
 	vec4 pos = vec4(0, -0.5, -0.7, 1.0);
 	vec3 col = vec3(18, 18, 18);
-	float radius = 0.2;
+	float radius = 0.3;
 
 	PointLight *light = new PointLight(col, pos, radius);
 
