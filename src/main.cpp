@@ -25,6 +25,7 @@
 #define SCREEN_HEIGHT 256
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
+#define NUM_SHADOW_RAYS 4
 //
 // typedef struct Intersection {
 //     // The 4D position of an intersection.
@@ -252,15 +253,15 @@ int main(int argc, char* argv[]) {
     // KillSDL(screen);
     // return 0;
 
-    Scene scene = star_scene();
-    //Scene scene = cornel_box();
+    //Scene scene = star_scene();
+    Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {
         update(cam);
-        render(scene, cam, screen);
+        render(scene, cam, screen, NUM_SHADOW_RAYS);
         SDL_Renderframe(screen);
     }
 }

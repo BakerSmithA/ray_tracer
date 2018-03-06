@@ -94,7 +94,7 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    virtual vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
+    virtual vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
         // Convert the position u,v coordinate (i.e. in the object's coordinate
         // space for planar mapping).
         vec4 proj = prim->parent_obj->converted_world_to_obj(position);

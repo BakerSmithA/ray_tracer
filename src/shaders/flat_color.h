@@ -13,12 +13,13 @@ public:
     }
 
     // return: the base color of the surface irrespective of lighting.
-    vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
+    vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
         return this->base_color;
     }
 
-    vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
-        return this->color(position, prim, incoming, scene, light);
+    vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
+        // We don't want to compute any shadows.
+        return this->color(position, prim, incoming, scene, light, num_shadow_rays);
     }
 };
 

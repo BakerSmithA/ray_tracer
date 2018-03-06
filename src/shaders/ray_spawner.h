@@ -9,7 +9,7 @@ class RaySpawner: public Shader {
 
     // return: the color of the shader, determined by shooting another ray into
     //         the scene. Or, black if the incoming ray cannot bounce anymore.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const {
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }
@@ -23,7 +23,7 @@ class RaySpawner: public Shader {
             return vec3(0, 0, 0);
         }
 
-        return i->primitive->shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light);
+        return i->primitive->shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light, num_shadow_rays);
     }
 };
 

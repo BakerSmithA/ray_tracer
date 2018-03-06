@@ -1,4 +1,6 @@
 #include <math.h>
+#include "../geometry/random.h"
+#include "../geometry/projection.h"
 
 #ifndef POINT_LIGHT_H
 #define POINT_LIGHT_H
@@ -8,8 +10,12 @@ class PointLight {
 public:
     const vec3 color;
     const vec4 pos;
+    // Used to determine how blurry shadows from the light should be.
+    // A larger radius will produce blurrier shadows.
+    const float radius;
 
-    PointLight(vec3 color, vec4 pos): color(color), pos(pos) {
+    PointLight(vec3 color, vec4 pos, float radius):
+        color(color), pos(pos), radius(radius) {
     }
 
     // param point: the point to be illuminated.
@@ -32,6 +38,23 @@ public:
         // The ray can only be used to check obstructions between the point and
         // light. Therefore it cannot bounce.
         return Ray(point, this->pos - point, 0);
+    }
+
+    // return: the given number of rays to points within the radius of the light.
+    vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
+        // The ray can only be used to check obstructions between the point and
+        // light. Therefore it cannot bounce.
+        vec3 center_3d = vec3(this->pos);
+
+        vector<Ray> rays;
+        for (int i=0; i<num; i++) {
+            vec3 point_in_sphere_3d = random_in_sphere(center_3d, this->radius);
+            vec4 point_in_sphere = project_to_4D(point_in_sphere_3d);
+
+            rays.push_back(Ray(point, point_in_sphere - point, 0));
+        }
+
+        return rays;
     }
 };
 

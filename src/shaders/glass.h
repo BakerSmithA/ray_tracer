@@ -26,8 +26,8 @@ public:
 
     // return: the color of the intersected surface, taking shadows from the
     //         light into account.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
-        return this->glass_shader->color(position, prim, incoming, scene, light);
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
+        return this->glass_shader->color(position, prim, incoming, scene, light, num_shadow_rays);
     }
 
     float transparency() const override {

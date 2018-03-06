@@ -22,7 +22,13 @@ vector<Object*> star_objects() {
 vector<PointLight*> star_lights() {
 	vector<PointLight*> lights;
 
-	lights.push_back(new PointLight(vec3(18, 18, 18), vec4(0, -0.5, 0, 1.0)));
+	vec4 pos = vec4(0, -0.5, 0, 1.0);
+	vec3 col = vec3(18, 18, 18);
+	float radius = 0.1;
+
+	PointLight *light = new PointLight(col, pos, radius);
+
+	lights.push_back(light);
 
 	return lights;
 }

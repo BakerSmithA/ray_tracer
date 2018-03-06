@@ -25,7 +25,7 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
         //Calculate attenuated light intensity at point
         vec3 intensity = light.intensity(position, prim->compute_normal(position));
 
@@ -44,7 +44,7 @@ public:
         vec3 specular_component = new_specular_highlight * intensity * vec3(1,1,1);
 
         /* Calculating Diffuse Component */
-        vec3 diffuse_component = diffuse_shader->color(position, prim, incoming, scene, light);
+        vec3 diffuse_component = diffuse_shader->color(position, prim, incoming, scene, light, num_shadow_rays);
 
         return specular_component * Ks +  diffuse_component * Kd;
     }

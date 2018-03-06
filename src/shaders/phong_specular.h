@@ -15,18 +15,18 @@ public:
     const vec3 base_color;
     int specular_exponent;
     Diffuse* diffuse_shader;
-    float Kd = 0.8; // diffuse weight 
-    float Ks = 0.3; // specular weight 
+    float Kd = 0.8; // diffuse weight
+    float Ks = 0.3; // specular weight
 
-    PhongSpecular(vec3 base_color, int specular_exponent = 250): base_color(base_color), specular_exponent(specular_exponent) 
+    PhongSpecular(vec3 base_color, int specular_exponent = 250): base_color(base_color), specular_exponent(specular_exponent)
     {
         this->diffuse_shader = new Diffuse(base_color);
     }
 
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light) const override {
-         
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
+
          //Calculate reflection ray direction
         vec3 l = vec3(light.shadow_ray_to(position).dir);
         vec3 surface_normal = normalize(vec3(prim->compute_normal(position)));
@@ -45,7 +45,7 @@ public:
         vec3 specular_component = new_specular_highlight * intensity * vec3(1,1,1);
 
         /* Calculating Diffuse Component */
-        vec3 diffuse_component = diffuse_shader->color(position, prim, incoming, scene, light);
+        vec3 diffuse_component = diffuse_shader->color(position, prim, incoming, scene, light, num_shadow_rays);
 
         return specular_component * Ks +  diffuse_component * Kd;
     }
