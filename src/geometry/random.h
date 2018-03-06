@@ -20,17 +20,8 @@ vec2 random_in_box(vec2 center, float width, float height) {
 
 // return: a random point in or on the sphere.
 vec3 random_in_sphere(vec3 center, float max_radius) {
-    float pi = (float)M_PI;
-
-    float theta = glm::linearRand(0.0f, 2 * pi);
-    float phi   = glm::linearRand(-pi / 2, pi / 2);
-    float r     = glm::linearRand(0.0f, max_radius);
-
-    float x = r * cos(theta) * cos(phi);
-    float y = r * sin(phi);
-    float z = r * sin(theta) * cos(phi);
-
-    return vec3(x + center.x, y + center.y, z + center.z);
+    vec3 p = glm::ballRand(max_radius);
+    return vec3(p.x + center.x, p.y + center.y, p.z+ center.z);
 }
 
 #endif // RANDOM_H

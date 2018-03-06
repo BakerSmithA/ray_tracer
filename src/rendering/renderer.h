@@ -28,7 +28,14 @@ vec3 colour_in_scene(Scene &scene, Ray &ray, const int num_shadow_rays) {
     return acc_colour;
 }
 
-// return: a number of rays in the pixel with center at (x, y)
+// return: a vector containing a single target (x, y). Useful for testing.
+vector<vec2> single_target(int x, int y) {
+    vector<vec2> targets;
+    targets.push_back(vec2(x, y));
+    return targets;
+}
+
+// return: a number of random points to sample for the pixel with center (x, y).
 vector<vec2> random_screen_targets(int x, int y, int num_rays) {
     vector<vec2> targets;
     for (int i=0; i<num_rays; i++) {
@@ -40,21 +47,32 @@ vector<vec2> random_screen_targets(int x, int y, int num_rays) {
     return targets;
 }
 
-vector<Ray> grid_primary_rays(Camera &camera, int x, int y, screen *screen, int num_rays) {
-    float ray_step = 1.0f / (float)num_rays;
-
-    for (int i=0; i<num_rays; i++) {
-        for (int j=0; j<num_rays; j++) {
-
-        }
-    }
-}
+// // return: a number of points in a grid to sample for the pixel with center (x, y).
+// vector<vec2> grid_primary_rays(int x, int y, int num_rays) {
+//     num_rays = 4;
+//
+//     float pixel_size = 1.5f; // Sample outside the pixel.
+//     float ray_step = pixel_size / (float)num_rays;
+//
+//     vector<vec2> targets;
+//     for (int i=0; i<num_rays; i++) {
+//         for (int j=0; j<num_rays; j++) {
+//             float tx = i * ray_step - pixel_size / 2;
+//             float ty = j * ray_step - pixel_size / 2;
+//
+//             targets.push_back(vec2(tx + x, ty + y));
+//         }
+//     }
+//
+//     return targets;
+// }
 
 // return: fires a number of primary rays randomly into the pixel, and computes
 //         the mean color. Therefore performing anti-aliasing.
 vec3 mean_pixel_color(Scene &scene, Camera &camera, screen *screen, const int x, const int y, int num_primary_rays, int num_shadow_rays) {
-    //vector<Ray> rays = random_primary_rays(camera, x, y, screen, num_primary_rays);
     vector<vec2> targets = random_screen_targets(x, y, num_primary_rays);
+    //vector<vec2> targets = grid_primary_rays(x, y, num_primary_rays);
+    //vector<vec2> targets = single_target(x, y);
 
     // Used to total up the color of all the pixels so it can be averaged.
     vec3 acc_color = vec3(0, 0, 0);

@@ -93,7 +93,7 @@ screen* InitializeSDL(int width,int height, bool fullscreen)
   s->window = SDL_CreateWindow("COMS30115",
 				      SDL_WINDOWPOS_UNDEFINED,
 				      SDL_WINDOWPOS_UNDEFINED,
-				      width, height,flags);
+				      s->width, s->height,flags);
   if(s->window == 0)
     {
       std::cout << "Could not set video mode: "
@@ -110,7 +110,7 @@ screen* InitializeSDL(int width,int height, bool fullscreen)
       exit(1);
     }
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-  SDL_RenderSetLogicalSize(s->renderer, width,height);
+  SDL_RenderSetLogicalSize(s->renderer, s->width, s->height);
 
   s->texture = SDL_CreateTexture(s->renderer,
 				 SDL_PIXELFORMAT_ARGB8888,
