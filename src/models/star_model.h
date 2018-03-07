@@ -6,7 +6,7 @@ Object *star_model() {
 	vector<Primitive*> primitives;
 
     Shader *shader = Texture::spherical("../textures/sun_large.bmp");
-	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 0.3, shader));
+	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3, shader));
 
 	return new Object(primitives);
 }
@@ -16,7 +16,17 @@ Object *star_atmosphere() {
 	vector<Primitive*> primitives;
 
     Shader *shader = new Smoke(vec3(1, 0, 0));
-	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 0.39, shader));
+	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.39, shader));
+
+	return new Object(primitives);
+}
+
+// return: a spherical star map.
+Object *star_map() {
+	vector<Primitive*> primitives;
+
+	Shader *shader = Texture::spherical("../textures/star_sphere_map.bmp");
+	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 2.3, shader));
 
 	return new Object(primitives);
 }
@@ -26,6 +36,7 @@ vector<Object*> star_objects() {
 	vector<Object*> objects;
 	objects.push_back(star_model());
 	objects.push_back(star_atmosphere());
+	objects.push_back(star_map());
 	return objects;
 }
 

@@ -106,7 +106,6 @@ public:
         return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
     }
 
-
     /*
      ** Convenience functions.
      */
