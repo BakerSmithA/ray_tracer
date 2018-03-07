@@ -4,6 +4,8 @@
 #include "refraction.h"
 #include "blinn_specular.h"
 #include "mix.h"
+#include "flat_color.h"
+#include "scale.h"
 
 #ifndef GLASS_SHADER_H
 #define GLASS_SHADER_H
@@ -15,13 +17,31 @@ private:
 
 public:
     Glass() {
-        // TODO: Clean up this
+        // ==== Material ====
         Shader *refraction = new Refraction(0.45);
         Shader *mirror = new Mirror();
         Shader *transparent = new Fresnel(refraction, mirror, 0.7f);
+
+        // ==== Lighting ===
+        // Specular is used to add a bright spot.
         Shader *specular = new BlinnSpecular(vec3(0, 0, 0), 250);
-        Shader *add = Mix::ratio(specular, transparent, 0.7);
-        this->glass_shader = add;
+        // Clamp the specular to make the bright spot slightly less bright,
+        // since we are adding the specular.
+        Shader *scaled_spec = new ScaleShader(specular, 0.0f, 0.6f);
+
+        // A small amount of diffuse light is used to apply shading. This
+        // allows the viewer to more easily tell the shape of the object.
+        Shader *diffuse = new Diffuse(vec3(1, 1, 1));
+        // Scale the lighting of the diffuse to be between a min and max
+        // to stop the glass from appearing opaque, as we are multiplying
+        // by the diffuse shader.
+        Shader *scaled_diffuse = new ScaleShader(diffuse, 0.7f, 1.0f);
+
+        // ==== Mixing ====
+        Shader *mix_diffuse = Mix::multiply(transparent, scaled_diffuse);
+        Shader *mix_specular = Mix::add(scaled_spec, mix_diffuse);
+
+        this->glass_shader = mix_specular;
     }
 
     // return: the color of the intersected surface, taking shadows from the
@@ -31,7 +51,7 @@ public:
     }
 
     float transparency() const override {
-        return this->glass_shader->transparency();
+        return 0.7f;
     }
 };
 

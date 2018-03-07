@@ -25,7 +25,7 @@
 #define SCREEN_HEIGHT 256 * 2
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
-#define NUM_SHADOW_RAYS 4
+#define NUM_SHADOW_RAYS 20 //4
 #define NUM_SAMPLES 8
 
 //

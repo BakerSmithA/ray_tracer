@@ -230,7 +230,7 @@ Object *cornel_large_sphere() {
 
 Object *cornel_small_sphere() {
 	const vec3 col = vec3(0.75f, 0.15f, 0.15f);
-	Shader* shader = new BlinnSpecular(col);
+	Shader* shader = new Glass();//new BlinnSpecular(col);
 
 	vector<Primitive*> primitives;
 	primitives.push_back(new Sphere(vec4(0.3, -0.2, 0, 1.0), 0.2, shader));
