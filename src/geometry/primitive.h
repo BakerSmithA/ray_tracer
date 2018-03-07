@@ -30,12 +30,6 @@ public:
 		shader(shader), bounding_cube(bounding_cube) {
 	};
 
-	// return: whether this primitive and the given primitive belong to the
-	//		   same object.
-	bool is_same_object(const Primitive *prim) const {
-		return this->parent_obj == prim->parent_obj;
-	}
-
 	// return: the position of the intersection with the primitive, or nullptr
 	//		   if no intersection occurred.
 	virtual unique_ptr<vec4> intersection(const Ray &ray) const = 0;

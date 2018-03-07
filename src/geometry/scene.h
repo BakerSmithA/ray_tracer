@@ -90,12 +90,12 @@ public:
     // param excluded_obj_tag: The object to discount intersections with.
     // return:                 The closest intersection to the start of the ray,
     //                         or null if no intersection was found.
-    // unique_ptr<Intersection> closest_intersection_excluding_obj(const Ray &ray, const int excluded_obj_tag = -1) const {
-    //     auto is_excluded_prim = [&](const Primitive *prim) {
-    //         return prim->obj_tag == excluded_obj_tag;
-    //     };
-    //     return this->closest_intersection(ray, is_excluded_prim);
-    // }
+    unique_ptr<Intersection> closest_intersection_excluding_obj(const Ray &ray, const Object *excluded_obj) const {
+        auto is_excluded_prim = [&](const Primitive *prim) {
+            return prim->parent_obj == excluded_obj;
+        };
+        return this->closest_intersection(ray, is_excluded_prim);
+    }
 
 
     // param ray:           A ray, in scene coordinates, check intersection with.
