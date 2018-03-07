@@ -16,7 +16,7 @@ Object *star_atmosphere() {
 	vector<Primitive*> primitives;
 
     Shader *shader = new Smoke(vec3(1, 0, 0));
-	primitives.push_back(new Sphere(vec4(-0.1, 0.5, -0.2, 1.0), 0.35, shader));
+	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 0.39, shader));
 
 	return new Object(primitives);
 }
@@ -24,9 +24,8 @@ Object *star_atmosphere() {
 // return: all the objects in the cornel box.
 vector<Object*> star_objects() {
 	vector<Object*> objects;
-	// objects.push_back(star_model());
+	objects.push_back(star_model());
 	objects.push_back(star_atmosphere());
-	objects.push_back(cornel_short_block());
 	return objects;
 }
 
