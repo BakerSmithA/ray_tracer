@@ -41,31 +41,38 @@ vector<vec2> random_screen_targets(int x, int y, int num_rays) {
     for (int i=0; i<num_rays; i++) {
         vec2 pixel_center = vec2((float)x, (float)y);
         // We sample an area around the pixel too, hence the 1.5
-        vec2 target = random_in_box(pixel_center, 1.5, 1.5);
+        vec2 target = random_in_box(pixel_center, 0.02, 0.02);
         targets.push_back(target);
     }
     return targets;
 }
 
-// // return: a number of points in a grid to sample for the pixel with center (x, y).
-// vector<vec2> grid_primary_rays(int x, int y, int num_rays) {
-//     num_rays = 4;
-//
-//     float pixel_size = 1.5f; // Sample outside the pixel.
-//     float ray_step = pixel_size / (float)num_rays;
-//
-//     vector<vec2> targets;
-//     for (int i=0; i<num_rays; i++) {
-//         for (int j=0; j<num_rays; j++) {
-//             float tx = i * ray_step - pixel_size / 2;
-//             float ty = j * ray_step - pixel_size / 2;
-//
-//             targets.push_back(vec2(tx + x, ty + y));
-//         }
-//     }
-//
-//     return targets;
-// }
+// return: a number of points in a grid to sample for the pixel with center (x, y).
+vector<vec2> grid_primary_rays(int x, int y, int num_rays) {
+    // num_rays = 4;
+    //
+    // float pixel_size = 5.0f; // Sample outside the pixel.
+    // float ray_step = pixel_size / (float)num_rays;
+    //
+    // vector<vec2> targets;
+    // for (int i=0; i<num_rays; i++) {
+    //     for (int j=0; j<num_rays; j++) {
+    //         float tx = i * ray_step - pixel_size / 2;
+    //         float ty = j * ray_step - pixel_size / 2;
+    //
+            // targets.push_back(vec2(tx + x, ty + y));
+    //     }
+    // }
+
+    vector<vec2> targets;
+    for (float i=-0.02; i<=0.02; i+=0.01) {
+        for (float j=-0.02; j<=0.02; j+=0.01) {
+            targets.push_back(vec2(x + i, y + j));
+        }
+    }
+
+    return targets;
+}
 
 // return: fires a number of primary rays randomly into the pixel, and computes
 //         the mean color. Therefore performing anti-aliasing.
