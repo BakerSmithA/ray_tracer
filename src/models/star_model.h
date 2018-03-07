@@ -5,8 +5,18 @@
 Object *star_model() {
 	vector<Primitive*> primitives;
 
-    Shader *shader = new Smoke(vec3(1, 0, 0));//Texture::spherical("../textures/sun.bmp");
+    Shader *shader = Texture::spherical("../textures/sun.bmp");
 	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 0.3, shader));
+
+	return new Object(primitives);
+}
+
+// return: a star model.
+Object *star_atmosphere() {
+	vector<Primitive*> primitives;
+
+    Shader *shader = new Smoke(vec3(1, 0, 0));
+	primitives.push_back(new Sphere(vec4(-0.1, 0.5, -0.2, 1.0), 0.35, shader));
 
 	return new Object(primitives);
 }
@@ -14,7 +24,9 @@ Object *star_model() {
 // return: all the objects in the cornel box.
 vector<Object*> star_objects() {
 	vector<Object*> objects;
-	objects.push_back(star_model());
+	// objects.push_back(star_model());
+	objects.push_back(star_atmosphere());
+	objects.push_back(cornel_short_block());
 	return objects;
 }
 

@@ -29,14 +29,21 @@ public:
 
         // The color of the object behind the smoke, or black if there is no
         // object behind.
+        float dist_to_obj = std::numeric_limits<float>::max();
         vec3 behind_obj_col = vec3(0, 0, 0);
         if (behind_obj_i) {
             behind_obj_col = behind_obj_i->primitive->shader->shadowed_color(behind_obj_i->pos, behind_obj_i->primitive, outgoing, scene, light, num_shadow_rays);
+            dist_to_obj = length(behind_obj_i->pos - position);
         }
 
         // How much of the behind object shows through depends on how much
         // smoke the ray had to travel through.
-        float smoke_dist = this->distance_in_smoke(position, smoke_prim->parent_obj, outgoing, scene);
+
+        // The maximum distance the ray can travel in the smoke.
+        float max_smoke_dist = this->distance_in_smoke(position, smoke_prim->parent_obj, outgoing, scene);
+        // The object may or may not be inside the smoke. If it is inside then
+        // less smoke has been travelled through.
+        float smoke_dist = std::min(dist_to_obj, max_smoke_dist);
         float t = this->smoke_transparency(smoke_dist);
         return mix(behind_obj_col, this->base_color, t);
     }
@@ -45,34 +52,14 @@ public:
     //         light into account. If no light makes it from the light to the
     //         position, the color of the position is black.
     virtual vec3 shadowed_color(vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
+        if (!incoming.can_bounce()) {
+            return vec3(0, 0, 0);
+        }
         return this->color(position, smoke_prim, incoming, scene, light, num_shadow_rays);
-
-        // if (!incoming.can_bounce()) {
-        //     return vec3(0, 0, 0);
-        // }
-        //
-        // Ray shadow_ray = light.shadow_ray_to(position).offset(smoke_prim->compute_normal(position), -0.001);
-        //
-        // float smoke_dist_to_light = this->distance_in_smoke(position, smoke_prim->obj_tag, shadow_ray, scene);
-        // float t_light = this->smoke_transparency(smoke_dist_to_light);
-        //
-        // // The shadow also depends on the proportion of light that passes through
-        // // with the primary ray.
-        // Ray outgoing = Ray(position, incoming.dir, incoming.bounces_remaining - 1)
-        //               .offset(smoke_prim->compute_normal(position), -0.001);
-        // float smoke_dist_to_obj = this->distance_in_smoke(position, smoke_prim->obj_tag, outgoing, scene);
-        // float t_obj = this->smoke_transparency(smoke_dist_to_obj);
-        //
-        // // For shorter distances in the smoke, more light makes it through.
-        // // Therefore do 1 minus.
-        // float m = 1 - (3.2 * (t_obj * t_light));
-        //
-        // vec3 col = this->color(position, smoke_prim, incoming, scene, light);
-        // return mix(vec3(0, 0, 0), col, m);
     }
 
     virtual float transparency() const {
-        return 0.8f;
+        return 1.0f;
     }
 
 private:
