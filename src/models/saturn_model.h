@@ -5,7 +5,12 @@
 Object *saturn_model() {
 	vector<Primitive*> primitives;
 
-    Shader *smoke = new Smoke(vec3(1, 1, 1));
+    // The transparency of the smoke for the distance a ray travelled through.
+	auto smoke_transparency = [=](float smoke_dist) {
+		return clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
+	};
+
+    Shader *smoke = new Smoke(vec3(1, 1, 1), smoke_transparency);
     Shader *texture = Texture::spherical("../textures/jupiter.bmp");
     Shader *lighting = new Diffuse(vec3(1, 1, 1));
 
@@ -13,16 +18,6 @@ Object *saturn_model() {
     Shader *shader = Mix::multiply(combine, lighting);
 
 	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3, shader));
-
-	return new Object(primitives);
-}
-
-// return: a star model.
-Object *saturn_atmosphere() {
-	vector<Primitive*> primitives;
-
-    Shader *shader = new Smoke(vec3(1, 0, 0));
-	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.39, shader));
 
 	return new Object(primitives);
 }

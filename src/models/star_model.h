@@ -15,7 +15,12 @@ Object *star_model() {
 Object *star_atmosphere() {
 	vector<Primitive*> primitives;
 
-    Shader *shader = new Smoke(vec3(1, 0, 0));
+	// The transparency of the smoke for the distance a ray travelled through.
+	auto smoke_transparency = [=](float smoke_dist) {
+		return clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
+	};
+
+    Shader *shader = new Smoke(vec3(1, 0, 0), smoke_transparency);
 	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.39, shader));
 
 	return new Object(primitives);

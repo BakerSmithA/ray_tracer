@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <math.h>
+#include <functional>
 
 using glm::mix;
 using glm::clamp;
@@ -11,8 +12,12 @@ using glm::clamp;
 class Smoke: public Shader {
 public:
     const vec3 base_color;
+    // returns the transparency of the smoke for the distance a light ray
+    // travelled through it.
+    const function<float(float)> transparency_for_dist;
 
-    Smoke(vec3 base_color): base_color(base_color) {
+    Smoke(vec3 base_color, function<float(float)> transparency_for_dist):
+        base_color(base_color), transparency_for_dist(transparency_for_dist) {
     }
 
     // return: a color depending on how far the ray has to travel before
@@ -44,7 +49,7 @@ public:
         // The object may or may not be inside the smoke. If it is inside then
         // less smoke has been travelled through.
         float smoke_dist = std::min(dist_to_obj, max_smoke_dist);
-        float t = this->smoke_transparency(smoke_dist);
+        float t = this->transparency_for_dist(smoke_dist);
         return mix(behind_obj_col, this->base_color, t);
     }
 
@@ -63,12 +68,6 @@ public:
     }
 
 private:
-    // return: the transparency of the smoke, which is a function of the
-    //         distance the ray travels in the smoke.
-    float smoke_transparency(float smoke_dist) const {
-        return clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
-    }
-
     // param position: the position of the first intersection with the smoke.
     // param outgoing: the ray generated after the first intersection.
     // param smoke_obj: the smoke object.
