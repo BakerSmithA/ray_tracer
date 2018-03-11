@@ -2,11 +2,12 @@
 #include "models/cornel_box.h"
 #include "models/textured_test_model.h"
 #include "models/star_model.h"
+#include "models/saturn_model.h"
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 256
+#define SCREEN_WIDTH 320 * 2
+#define SCREEN_HEIGHT 256 * 2
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
 #define NUM_SHADOW_RAYS 1//4
@@ -34,8 +35,9 @@ void update(Camera &camera) {
 
 int main(int argc, char* argv[]) {
     //Scene scene = star_scene();
-    Scene scene = cornel_box();
+    //Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
+    Scene scene = saturn_scene();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 

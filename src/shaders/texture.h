@@ -60,15 +60,17 @@ vec2 spherical_projected(vec4 object_space_point) {
     float radius = length(p);
 
     // Angles describing the point on the circle.
-    // Both are in the range 0 to 2pi
+    // Add pi to make in the range 0-2pi
     float angle1 = atan2(p.z, p.x) + (M_PI);
-    float angle2 = acos(p.y / radius);
+    // Multiply by 2 to make in range 0-2pi
+    float angle2 = acos(p.y / radius) * 2;
 
     // Change into the range 0-1.
     float u = angle1 / (2 * M_PI);
     float v = angle2 / (2 * M_PI);
 
-    return vec2(u, v);
+    // 1-v to correctly inverert the y-axis
+    return vec2(u, 1-v);
 }
 
 class Texture: public Shader {
