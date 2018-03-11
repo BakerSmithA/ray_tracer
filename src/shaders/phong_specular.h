@@ -23,11 +23,10 @@ public:
         this->diffuse_shader = new Diffuse(base_color);
     }
 
-
     // return: the color of the intersected surface, as illuminated by a specific light.
     vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
 
-         //Calculate reflection ray direction
+        //Calculate reflection ray direction
         vec3 l = vec3(light.shadow_ray_to(position).dir);
         vec3 surface_normal = normalize(vec3(prim->compute_normal(position)));
         vec3 reflected_dir = normalize(2.0f * dot(l, surface_normal) * surface_normal - l);
