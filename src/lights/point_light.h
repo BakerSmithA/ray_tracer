@@ -1,6 +1,8 @@
 #include <math.h>
 #include "../geometry/random.h"
 #include "../geometry/projection.h"
+#include "light.h"
+#include "ambient_light.h"
 
 #ifndef POINT_LIGHT_H
 #define POINT_LIGHT_H
