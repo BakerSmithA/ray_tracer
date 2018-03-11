@@ -50,7 +50,7 @@ public:
         // less smoke has been travelled through.
         float smoke_dist = std::min(dist_to_obj, max_smoke_dist);
         float t = this->transparency_for_dist(smoke_dist);
-        return mix(behind_obj_col, this->base_color, t);
+        return mix(this->base_color, behind_obj_col, t);
     }
 
     // return: the color of the intersected surface, taking shadows from the

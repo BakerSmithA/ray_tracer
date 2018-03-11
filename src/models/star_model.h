@@ -17,7 +17,7 @@ Object *star_atmosphere() {
 
 	// The transparency of the smoke for the distance a ray travelled through.
 	auto smoke_transparency = [=](float smoke_dist) {
-		return clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
+		return 1 - clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
 	};
 
     Shader *shader = new Smoke(vec3(1, 0, 0), smoke_transparency);

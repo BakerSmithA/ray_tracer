@@ -6,15 +6,22 @@ Object *saturn_model() {
 	vector<Primitive*> primitives;
 
     // The transparency of the smoke for the distance a ray travelled through.
-	auto smoke_transparency = [=](float smoke_dist) {
-		return clamp(pow(smoke_dist, 3) * 5, 0.0, 1.0);
-	};
+    auto atmosphere_transparency = [=](float smoke_dist) {
+        // The maximum distance a ray can travel through the atmosphere before
+        // not emerging the other side.
+        const float max_dist = 0.3f;
 
-    Shader *smoke = new Smoke(vec3(1, 1, 1), smoke_transparency);
+        if (smoke_dist <= max_dist) {
+            return 1 - (smoke_dist / max_dist);
+        }
+        return 0.0f;
+    };
+
+    Shader *atmosphere = new Smoke(vec3(1, 1, 1), atmosphere_transparency);
     Shader *texture = Texture::spherical("../textures/jupiter.bmp");
     Shader *lighting = new Diffuse(vec3(1, 1, 1));
 
-    Shader *combine = Mix::multiply(smoke, texture);
+    Shader *combine = Mix::multiply(atmosphere, texture);
     Shader *shader = Mix::multiply(combine, lighting);
 
 	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3, shader));
