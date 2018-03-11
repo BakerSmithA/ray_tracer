@@ -5,17 +5,18 @@
 #include "SDLauxiliary.h"
 #include "omp.h"
 #include "../geometry/random.h"
+#include <optional>
 
-using std::unique_ptr;
+using std::optional;
 
 #ifndef RENDERER_H
 #define RENDERER_H
 
 // return: the color in the scene at the point where the ray intersects the scene.
 vec3 colour_in_scene(Scene &scene, Ray &ray, const int num_shadow_rays) {
-    unique_ptr<Intersection> i = scene.closest_intersection(ray);
+    optional<Intersection> i = scene.closest_intersection(ray);
 
-    if (!i) {
+    if (!i.has_value()) {
         return vec3(0, 0, 0);
     }
 

@@ -7,6 +7,8 @@ using glm::vec3;
 using glm::vec4;
 using glm::normalize;
 using glm::dot;
+using std::optional;
+using std::nullopt;
 
 #ifndef SPHERE_H
 #define SPHERE_H
@@ -23,7 +25,7 @@ public:
     {
     }
 
-	virtual unique_ptr<vec4> intersection(const Ray &ray) const override {
+	virtual optional<vec4> intersection(const Ray &ray) const override {
         vec3 orig = vec3(ray.start);
         vec3 dir = normalize(vec3(ray.dir));
         float radius2 = radius * radius;
@@ -33,7 +35,7 @@ public:
         float tca = dot(L,dir);
         float d2 = dot(L,L) - tca * tca;
         if (d2 > radius2) { //cannot compute sqrt of negative number
-            return nullptr;
+            return nullopt;
         }
 
         //Computing intersection points
@@ -50,12 +52,12 @@ public:
             t0 = t1; // if t0 is negative, let's use t1 instead
             if (t0 < 0) {
                 //printf("points outside scene\n");
-                return nullptr; // both t0 and t1 are negative
+                return nullopt; // both t0 and t1 are negative
             }
         }
         float t = t0;
 
-        return unique_ptr<vec4>(new vec4(project_to_4D(vec3(ray.start) + (t * dir))));
+        return vec4(project_to_4D(vec3(ray.start) + (t * dir)));
     }
 
     virtual vec4 compute_normal(vec4 point) const override {

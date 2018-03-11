@@ -2,11 +2,12 @@
 #include <memory>
 #include "projection.h"
 #include "bounding_cube.h"
+#include <optional>
 
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
-using std::unique_ptr;
+using std::optional;
 using std::array;
 
 #ifndef PRIMITIVE_H
@@ -32,7 +33,7 @@ public:
 
 	// return: the position of the intersection with the primitive, or nullptr
 	//		   if no intersection occurred.
-	virtual unique_ptr<vec4> intersection(const Ray &ray) const = 0;
+	virtual optional<vec4> intersection(const Ray &ray) const = 0;
 
 	// return: the normal to the primtive at the given point on the primitive.
     virtual vec4 compute_normal(vec4 point) const = 0;

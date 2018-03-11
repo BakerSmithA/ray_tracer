@@ -1,9 +1,11 @@
 #include <glm/glm.hpp>
 #include <math.h>
 #include <functional>
+#include <optional>
 
 using glm::mix;
 using glm::clamp;
+using std::optional;
 
 #ifndef SMOKE_H
 #define SMOKE_H
@@ -30,7 +32,7 @@ public:
                       .offset(smoke_prim->compute_normal(position), -0.001);
 
         // The object behind the smoke.
-        unique_ptr<Intersection> behind_obj_i = scene.closest_intersection_excluding_obj(outgoing, smoke_prim->parent_obj);
+        optional<Intersection> behind_obj_i = scene.closest_intersection_excluding_obj(outgoing, smoke_prim->parent_obj);
 
         // The color of the object behind the smoke, or black if there is no
         // object behind.
@@ -77,9 +79,9 @@ private:
         auto is_excluded_prim = [=](const Primitive *testing_prim) {
             return testing_prim->parent_obj != smoke_obj;
         };
-        unique_ptr<Intersection> smoke_exit = scene.closest_intersection(outgoing, is_excluded_prim);
+        optional<Intersection> smoke_exit = scene.closest_intersection(outgoing, is_excluded_prim);
 
-        if (smoke_exit == nullptr) {
+        if (!smoke_exit.has_value()) {
             throw std::runtime_error("Ray must exit smoke");
         }
 

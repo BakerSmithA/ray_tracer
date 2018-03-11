@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <vector>
 #include <functional>
+#include <optional>
 #include "intersection.h"
 #include "object.h"
 #include "projection.h"
@@ -9,8 +10,9 @@
 
 using glm::length;
 using std::vector;
-using std::unique_ptr;
 using std::function;
+using std::optional;
+using std::nullopt;
 
 #ifndef SCENE_H
 #define SCENE_H
@@ -30,8 +32,8 @@ public:
     // param is_excluded_prim: Returns whether to discount intersections with
     //                         the given primtive.
     // return:                 The closest intersection to the start of the ray,
-    //                         or null if no intersection was found.
-    unique_ptr<Intersection> closest_intersection(const Ray &ray, const function<bool(const Primitive*)> is_excluded_prim) const {
+    //                         or nothing if no intersection was found.
+    optional<Intersection> closest_intersection(const Ray &ray, const function<bool(const Primitive*)> is_excluded_prim) const {
         float closest_distance = std::numeric_limits<float>::max();
         int closest_obj_idx = -1;
         int closest_primitive_idx = -1;
@@ -53,9 +55,9 @@ public:
                 }
 
                 // The intersection in the scene coordinate system.
-                unique_ptr<vec4> intersection = primitives[i]->intersection(ray);
+                optional<vec4> intersection = primitives[i]->intersection(ray);
 
-                if (intersection == nullptr) {
+                if (!intersection.has_value()) {
                     continue;
                 }
 
@@ -73,11 +75,11 @@ public:
         }
 
         if (closest_primitive_idx == -1) {
-            return nullptr;
+            return nullopt;
         }
 
         Primitive *prim = this->objects[closest_obj_idx]->primitives[closest_primitive_idx];
-        return unique_ptr<Intersection>(new Intersection(intersection_pos, prim));
+        return Intersection(intersection_pos, prim);
     }
 
     // param ray:           A ray, in scene coordinates, check intersection with.
@@ -85,7 +87,7 @@ public:
     //                      This can be useful to avoid self-intersection.
     // return:              The closest intersection to the start of the ray,
     //                      or null if no intersection was found.
-    unique_ptr<Intersection> closest_intersection(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
+    optional<Intersection> closest_intersection(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
         auto is_excluded_prim = [&](const Primitive *prim) {
             return prim == excluded_prim;
         };
@@ -96,7 +98,7 @@ public:
     // param excluded_obj_tag: The object to discount intersections with.
     // return:                 The closest intersection to the start of the ray,
     //                         or null if no intersection was found.
-    unique_ptr<Intersection> closest_intersection_excluding_obj(const Ray &ray, const Object *excluded_obj) const {
+    optional<Intersection> closest_intersection_excluding_obj(const Ray &ray, const Object *excluded_obj) const {
         auto is_excluded_prim = [&](const Primitive *prim) {
             return prim->parent_obj == excluded_obj;
         };
@@ -119,9 +121,9 @@ public:
                     continue;
                 }
 
-                unique_ptr<vec4> intersection_pos = primitives[i]->intersection(ray);
+                optional<vec4> intersection_pos = primitives[i]->intersection(ray);
 
-                if (intersection_pos != nullptr) {
+                if (intersection_pos.has_value()) {
                     intersections.push_back(Intersection(*intersection_pos, primitives[i]));
                 }
             }

@@ -1,3 +1,7 @@
+#include <optional>
+
+using std::optional;
+
 #ifndef RAY_SPAWNER_H
 #define RAY_SPAWNER_H
 
@@ -18,8 +22,8 @@ class RaySpawner: public Shader {
         // The number of bounces is reduced due to this interaction.
         Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
 
-        unique_ptr<Intersection> i = scene.closest_intersection(outgoing_ray, prim);
-        if (i == nullptr) {
+        optional<Intersection> i = scene.closest_intersection(outgoing_ray, prim);
+        if (!i.has_value()) {
             return vec3(0, 0, 0);
         }
 
