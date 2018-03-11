@@ -13,12 +13,15 @@ public:
     const vec4 start;
     // The direction of the ray.
     const vec4 dir;
+    // The inverse of the direction ray, i.e. 1/dir. This is precalculated for
+    // the ray-bounding cube collision calculations.
+    const vec4 inv_dir;
     // The number of bounces the ray has remaining. Once this reaches zero the
     // ray should no longer be used.
     const int bounces_remaining;
 
     Ray(vec4 start, vec4 dir, int bounces_remaining):
-        start(start), dir(dir), bounces_remaining(bounces_remaining)
+        start(start), dir(dir), inv_dir(1.0f/dir), bounces_remaining(bounces_remaining)
     {
         if (bounces_remaining < 0) {
             throw std::runtime_error("Rays should not have negative bounces");

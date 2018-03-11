@@ -39,6 +39,12 @@ public:
         vec4 intersection_pos;
 
         for (size_t j=0; j<this->objects.size(); j++) {
+            // Ignore objects for which the ray does not intersect the bounding
+            // box of the object.
+            if (!this->objects[j]->bounding_cube.does_intersect_ray(ray)) {
+                continue;
+            }
+
             vector<Primitive*> primitives = this->objects[j]->primitives;
 
             for (size_t i=0; i<primitives.size(); i++) {
