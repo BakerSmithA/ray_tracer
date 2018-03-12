@@ -40,9 +40,7 @@ public:
 		if(!is_inside(intersection_in_plane_coordinates)) {
 			return nullopt;
 		}
-		else {
-        	return in_scene_coordinates(intersection_in_plane_coordinates);
-		}
+        return in_scene_coordinates(intersection_in_plane_coordinates);
     }
 
     virtual vec4 compute_normal(vec4 point) const override {

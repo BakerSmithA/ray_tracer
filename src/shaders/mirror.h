@@ -16,12 +16,6 @@ public:
         vec4 normal = prim->compute_normal(position);
         return 2.0f * dot(incident_ray, normal) * normal - incident_ray;
     }
-
-    // return: the color of the object in ambient lighting conditions, i.e.
-    //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
-        return light.color;
-    }
 };
 
 #endif // MIRROR_H

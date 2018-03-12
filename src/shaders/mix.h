@@ -22,7 +22,7 @@ public:
     //         with no shadows.
     vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
         vec3 color1 = this->s1->ambient_color(position, prim, light);
-        vec3 color2 = this->s1->ambient_color(position, prim, light);
+        vec3 color2 = this->s2->ambient_color(position, prim, light);
 
         return this->combine_colors(color1, color2);
     }

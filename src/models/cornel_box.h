@@ -74,15 +74,14 @@ vector<Primitive*> scaled_triangles(vector<Triangle*> triangles) {
 
 // return: the shader to be used for an object in the cornel box.
 Shader *cornel_shader(vec3 col) {
-	float mix_prop = 0.8;
+	float mix_prop = 0.7f;
 	Shader *material = Mix::ratio(new Mirror(), new Diffuse(col), mix_prop);
 	return material;
-	// return new Diffuse(col);
 }
 
 // return: the floor of the cornel box.
 Object *cornel_floor() {
-	const vec3 col = vec3(0.75f, 0.75f, 0.75f);
+	const vec3 col = vec3(1.0f, 1.0f, 1.0f);
 	const Shader *shader = cornel_shader(col);
 
 	vector<Triangle*> triangles;
@@ -94,7 +93,7 @@ Object *cornel_floor() {
 
 // return: the left wall of the cornel box.
 Object *cornel_left_wall() {
-	const vec3 col = vec3(0.75f, 0.15f, 0.75f);
+	const vec3 col = vec3(1.0f, 0.0f, 0.0f);
 	const Shader *shader = cornel_shader(col);
 
 	vector<Triangle*> triangles;
@@ -106,7 +105,7 @@ Object *cornel_left_wall() {
 
 // return: the right wall of the cornel box.
 Object *cornel_right_wall() {
-	const vec3 col = vec3(0.75f, 0.75f, 0.15f);
+	const vec3 col = vec3(0.0f, 1.0f, 0.0f);
 	const Shader *shader = cornel_shader(col);
 
 	vector<Triangle*> triangles;
@@ -118,21 +117,19 @@ Object *cornel_right_wall() {
 
 // return: the back wall of the cornel box.
 Object *cornel_back_wall() {
-	const vec3 col = vec3(1, 1, 1);
-	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Texture::planar("../textures/bricks.bmp", planar_z);
-	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
+	const vec3 col = vec3(1.0f, 1.0f, 1.0f);
+	const Shader *diffuse_shader = cornel_shader(col);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(G, D, C, shader));
-	triangles.push_back(new Triangle(G, H, D, shader));
+	triangles.push_back(new Triangle(G, D, C, diffuse_shader));
+	triangles.push_back(new Triangle(G, H, D, diffuse_shader));
 
 	return new Object(scaled_triangles(triangles));
 }
 
 // return: the ceiling of the cornel box.
 Object *cornel_ceiling() {
-	const vec3 col = vec3(0.15f, 0.75f, 0.75f);
+	const vec3 col = vec3(1.0f, 1.0f, 1.0f);//vec3(0.15f, 0.75f, 0.75f);
 	const Shader *shader = cornel_shader(col);
 
 	vector<Triangle*> triangles;
@@ -262,11 +259,13 @@ vector<Light*> cornel_lights() {
 	vector<Light*> lights;
 
 	vec4 pos = vec4(0, -0.5, -0.7, 1.0);
+	// vec3 col = vec3(18, 18, 18);
 	vec3 col = vec3(18, 18, 18);
 	float radius = 0.1;
 
 	PointLight *light = new PointLight(col, pos, radius);
-	AmbientLight *ambient = new AmbientLight(vec3(0.05, 0.05, 0.05));//new AmbientLight(vec3(0.2, 0.2, 0.2));
+	// AmbientLight *ambient = new AmbientLight(vec3(0.15f, 0.15f, 0.15f));
+	AmbientLight *ambient = new AmbientLight(vec3(0.7f, 0.7f, 0.7f));
 
 	lights.push_back(light);
 	lights.push_back(ambient);

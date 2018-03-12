@@ -23,7 +23,7 @@ void update(Camera &camera) {
 
     std::cout << "Render time: " << dt << " ms" << std::endl;
 
-    //Translate Camera Position
+    // Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
     if(scancodes[SDL_SCANCODE_DOWN]) camera.pos.z -= 0.01;
     if(scancodes[SDL_SCANCODE_UP]) camera.pos.z += 0.01;
@@ -34,10 +34,10 @@ void update(Camera &camera) {
 }
 
 int main(int argc, char* argv[]) {
-    //Scene scene = cornel_box();
+    Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
     //Scene scene = star_scene();
-    Scene scene = saturn_scene();
+    //Scene scene = saturn_scene();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 

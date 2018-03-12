@@ -55,12 +55,6 @@ public:
         return project_to_4D(g);
     }
 
-    // return: the color of the object in ambient lighting conditions, i.e.
-    //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
-        return vec3(0, 0, 0);
-    }
-
     // return: 1.0 as all light is allowed to pass through.
     float transparency() const override {
         return 1.0f;
