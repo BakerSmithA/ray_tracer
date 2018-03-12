@@ -1,4 +1,5 @@
 #include "../geometry/scene.h"
+#include "../lights/light.h"
 
 #ifndef SHADER_H
 #define SHADER_H
@@ -6,8 +7,6 @@
 // Used to model different types of surfaces, e.g. matte, glossy, etc.
 class Shader {
 public:
-    // return: the color of the intersected surface, as illuminated by a specific light.
-    virtual vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const = 0;
 
     // return: the proportion by which light is let through the
     //         material. E.g. a value of 1 is totally transparent, and a value
@@ -16,10 +15,17 @@ public:
         return 0.0f;
     }
 
-    // return: the color of the intersected surface, taking shadows from the
-    //         light into account. If no light makes it from the light to the
-    //         position, the color of the position is black.
-    virtual vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
+    // return: the color of the object in ambient lighting conditions, i.e.
+    //         with no shadows.
+    virtual vec3 ambient_color(vec4 position, const Primitive *prim) = 0;
+
+    // return: the color of the intersected surface, illuminated by a light
+    //         which can cast shadows.
+    virtual vec3 shadowed_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const = 0;
+
+    // return: the color of the intersected surface, taking shadows and
+    //         ambient lighting into account.
+    virtual vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
         // How much the light ray penetrates to the light source.
         // This is higher if it travels through transparent objects.
         float acc_transparency = this->mean_random_transparency(position, prim, scene, light, num_shadow_rays);
