@@ -1,23 +1,21 @@
 #include <math.h>
 #include "../geometry/random.h"
 #include "../geometry/projection.h"
-#include "light.h"
-#include "ambient_light.h"
+#include "shadow_light.h"
 
 #ifndef POINT_LIGHT_H
 #define POINT_LIGHT_H
 
 // Models a point light which radiates light outwards.
-class PointLight {
+class PointLight: public ShadowLight {
 public:
-    const vec3 color;
     const vec4 pos;
     // Used to determine how blurry shadows from the light should be.
     // A larger radius will produce blurrier shadows.
     const float radius;
 
     PointLight(vec3 color, vec4 pos, float radius):
-        color(color), pos(pos), radius(radius) {
+        ShadowLight(color), pos(pos), radius(radius) {
     }
 
     // param point: the point to be illuminated.
@@ -36,7 +34,7 @@ public:
 
     // return: a shadow ray from the point and the light source. This is
     //         only used if the light casts shadows.
-    Ray shadow_ray_to(vec4 point) const {
+    Ray shadow_ray_from(vec4 point) const {
         // The ray can only be used to check obstructions between the point and
         // light. Therefore it cannot bounce.
         return Ray(point, this->pos - point, 0);

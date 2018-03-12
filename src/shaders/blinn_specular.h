@@ -30,7 +30,7 @@ public:
         vec3 intensity = light.intensity(position, prim->compute_normal(position));
 
         //Calculate reflection ray direction
-        vec3 l = normalize(vec3((light.shadow_ray_to(position).dir)));
+        vec3 l = normalize(vec3((light.shadow_ray_from(position).dir)));
         vec3 v = normalize(vec3((-incoming.dir)));
         vec3 lplusv = vec3(l + v);
         vec3 h = normalize(lplusv); //unit vector
