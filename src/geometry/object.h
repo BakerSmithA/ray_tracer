@@ -1,4 +1,4 @@
-#include "primitive.h"
+#include "primitives/primitive.h"
 #include <iostream>
 #include "../debugging.h"
 

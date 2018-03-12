@@ -1,7 +1,6 @@
 #include <glm/glm.hpp>
-#include <memory>
-#include "projection.h"
-#include "bounding_cube.h"
+#include "../projection.h"
+#include "../bounding_cube.h"
 #include <optional>
 
 using glm::vec3;

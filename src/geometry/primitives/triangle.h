@@ -32,7 +32,7 @@ public:
 	{
 	}
 
-	virtual optional<vec4> intersection(const Ray &ray) const override {
+	optional<vec4> intersection(const Ray &ray) const override {
         vec3 b = vec3(ray.start - v0);
         mat3 A = mat3(-vec3(ray.dir), e1, e2);
 		vec3 intersection_in_plane_coordinates = inverse(A) * b;
@@ -43,7 +43,7 @@ public:
         return in_scene_coordinates(intersection_in_plane_coordinates);
     }
 
-    virtual vec4 normal_at(vec4 point) const override {
+    vec4 normal_at(vec4 point) const override {
         return normal;
     }
 

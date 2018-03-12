@@ -1,7 +1,7 @@
 #include <glm/glm.hpp>
 #include <vector>
-#include "../geometry/triangle.h"
-#include "../geometry/sphere.h"
+#include "../geometry/primitives/triangle.h"
+#include "../geometry/primitives/sphere.h"
 #include "../geometry/object.h"
 #include "../lights/point_light.h"
 #include "../lights/directional_light.h"

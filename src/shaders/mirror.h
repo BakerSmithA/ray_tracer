@@ -2,7 +2,6 @@
 #include "ray_spawner.h"
 
 using glm::dot;
-using std::unique_ptr;
 
 #ifndef MIRROR_H
 #define MIRROR_H

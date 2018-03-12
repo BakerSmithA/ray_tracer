@@ -56,14 +56,14 @@ public:
     }
 
     // return: the specular color, as smoke is not currently affected by shadows.
-    virtual vec3 shadowed_color(vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
+    vec3 shadowed_color(vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }
-        return this->shadowed_color(position, smoke_prim, incoming, scene, light, num_shadow_rays);
+        return this->color(position, smoke_prim, incoming, scene, light, num_shadow_rays);
     }
 
-    virtual float transparency() const {
+    float transparency() const {
         return 1.0f;
     }
 

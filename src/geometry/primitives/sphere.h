@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
 #include "primitive.h"
-#include "projection.h"
+#include "../projection.h"
 #include <math.h>
 
 using glm::vec3;

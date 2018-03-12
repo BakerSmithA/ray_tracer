@@ -1,3 +1,5 @@
+#include "../geometry/primitives/disc.h"
+
 #ifndef SATURN_MODEL_H
 #define SATURN_MODEL_H
 
@@ -27,10 +29,24 @@ Object *saturn_model() {
 	return new Object(primitives);
 }
 
+Object *saturn_rings() {
+	float inner_r = 0.45f;
+	float outer_r = 1.0f;
+	vec4 normal_dir = vec4(0.0f, 0.0f, -1.0f, 1.0f);
+	vec4 center = vec4(0.1, 0, -0.4, 1.0);
+
+	Disc *disc = new Disc(inner_r, outer_r, normal_dir, center, new Diffuse(vec3(0, 1, 0)));
+
+	vector<Primitive*> primitives;
+	primitives.push_back(disc);
+	return new Object(primitives);
+}
+
 // return: all the objects in the cornel box.
 vector<Object*> saturn_objects() {
 	vector<Object*> objects;
 	objects.push_back(saturn_model());
+	//objects.push_back(saturn_rings());
 	objects.push_back(star_map());
 	return objects;
 }
