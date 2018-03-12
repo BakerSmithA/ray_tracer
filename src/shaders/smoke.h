@@ -22,9 +22,15 @@ public:
         base_color(base_color), transparency_for_dist(transparency_for_dist) {
     }
 
+    // return: the color of the object in ambient lighting conditions, i.e.
+    //         with no shadows.
+    virtual vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+        return this->base_color;
+    }
+
     // return: a color depending on how far the ray has to travel before
     //         exiting the smoke.
-    vec3 color(const vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
+    vec3 specular_color(const vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
         // Offset into the shape as the excluded primitive on scene.closest_intersection
         // cannot be used here. This is because the smoke may be made of one
         // primitive (e.g. sphere) and we need to check for self-intersections.
@@ -55,14 +61,12 @@ public:
         return mix(this->base_color, behind_obj_col, t);
     }
 
-    // return: the color of the intersected surface, taking shadows from the
-    //         light into account. If no light makes it from the light to the
-    //         position, the color of the position is black.
-    virtual vec3 shadowed_color(vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
+    // return: the specular color, as smoke is not currently affected by shadows.
+    virtual vec3 shadowed_color(vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }
-        return this->color(position, smoke_prim, incoming, scene, light, num_shadow_rays);
+        return this->specular_color(position, smoke_prim, incoming, scene, light, num_shadow_rays);
     }
 
     virtual float transparency() const {

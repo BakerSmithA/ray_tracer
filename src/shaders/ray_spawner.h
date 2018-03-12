@@ -11,9 +11,15 @@ class RaySpawner: public Shader {
     //         reflected ray for a mirror.
     virtual vec4 outgoing_ray_dir(const vec4 Position, const Primitive *prim, const Ray &incoming) const = 0;
 
+    // return: the color of the object in ambient lighting conditions, i.e.
+    //         with no shadows.
+    vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+        return light.color;
+    }
+
     // return: the color of the shader, determined by shooting another ray into
     //         the scene. Or, black if the incoming ray cannot bounce anymore.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
+    vec3 specular_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const {
         if (!incoming.can_bounce()) {
             return vec3(0, 0, 0);
         }

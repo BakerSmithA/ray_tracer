@@ -36,8 +36,8 @@ vector<Object*> saturn_objects() {
 }
 
 // return: the lights in the cornel box.
-vector<PointLight*> saturn_lights() {
-	vector<PointLight*> lights;
+vector<Light*> saturn_lights() {
+	vector<Light*> lights;
 
 	vec4 pos = vec4(-1.0, -0.5, -0.7, 1.0);
 	vec3 col = vec3(20, 20, 20);

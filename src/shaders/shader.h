@@ -1,5 +1,6 @@
 #include "../geometry/scene.h"
-#include "../lights/light.h"
+#include "../lights/ambient_light.h"
+#include "../lights/specular_light.h"
 
 #ifndef SHADER_H
 #define SHADER_H
@@ -17,27 +18,27 @@ public:
 
     // return: the color of the object in ambient lighting conditions, i.e.
     //         with no shadows.
-    virtual vec3 ambient_color(vec4 position, const Primitive *prim) = 0;
+    virtual vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const = 0;
 
-    // return: the color of the intersected surface, illuminated by a light
-    //         which can cast shadows.
-    virtual vec3 shadowed_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const = 0;
+    // return: the color of the intersected surface, illuminated by a specular
+    //         light, i.e. a directional light, point light, etc.
+    virtual vec3 specular_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const = 0;
 
-    // return: the color of the intersected surface, taking shadows and
-    //         ambient lighting into account.
-    virtual vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
+    // return: the color of the intersected surface. Takes occulsion of the
+    //         light, by other objects, into account.
+    virtual vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const {
         // How much the light ray penetrates to the light source.
         // This is higher if it travels through transparent objects.
         float acc_transparency = this->mean_random_transparency(position, prim, scene, light, num_shadow_rays);
 
-        const vec3 col = this->color(position, prim, incoming, scene, light, num_shadow_rays);
+        const vec3 col = this->specular_color(position, prim, incoming, scene, light, num_shadow_rays);
         return acc_transparency * col;
     }
 
 private:
     // return: the mean transparency from the intersection position to the
     //         random points in the sphere of the light source.
-    float mean_random_transparency(vec4 pos, const Primitive *prim, const Scene &scene, const PointLight &light, const int num_shadow_rays) const {
+    float mean_random_transparency(vec4 pos, const Primitive *prim, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const {
         vector<Ray> shadow_rays = light.random_shadow_rays_from(pos, num_shadow_rays);
 
         // The addition of all transparencies of the different shadow rays.

@@ -24,13 +24,19 @@ public:
         this->diffuse_shader = new Diffuse(base_color);
     }
 
+    // return: the color of the object in ambient lighting conditions, i.e.
+    //         with no shadows.
+    vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+        return this->diffuse_shader->ambient_color(position, prim, light) * light.color;
+    }
+
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
+    vec3 specular_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
         //Calculate attenuated light intensity at point
         vec3 intensity = light.intensity(position, prim->compute_normal(position));
 
         //Calculate reflection ray direction
-        vec3 l = normalize(vec3((light.shadow_ray_from(position).dir)));
+        vec3 l = normalize(vec3((light.ray_from(position).dir)));
         vec3 v = normalize(vec3((-incoming.dir)));
         vec3 lplusv = vec3(l + v);
         vec3 h = normalize(lplusv); //unit vector
@@ -44,7 +50,7 @@ public:
         vec3 specular_component = new_specular_highlight * intensity * vec3(1,1,1);
 
         /* Calculating Diffuse Component */
-        vec3 diffuse_component = diffuse_shader->color(position, prim, incoming, scene, light, num_shadow_rays);
+        vec3 diffuse_component = diffuse_shader->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
 
         return specular_component * Ks +  diffuse_component * Kd;
     }

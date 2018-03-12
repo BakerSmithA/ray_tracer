@@ -44,10 +44,16 @@ public:
         this->glass_shader = mix_specular;
     }
 
+    // return: the color of the object in ambient lighting conditions, i.e.
+    //         with no shadows.
+    vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+        return light.color;
+    }
+
     // return: the color of the intersected surface, taking shadows from the
     //         light into account.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const PointLight &light, const int num_shadow_rays) const override {
-        return this->glass_shader->color(position, prim, incoming, scene, light, num_shadow_rays);
+    vec3 specular_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
+        return this->glass_shader->specular_color(position, prim, incoming, scene, light, num_shadow_rays);
     }
 
     float transparency() const override {

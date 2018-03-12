@@ -1,9 +1,9 @@
-#include "shadow_light.h"
+#include "specular_light.h"
 
 #ifndef DIRECTIONAL_LIGHT_H
 #define DIRECTIONAL_LIGHT_H
 
-class DirectionalLight: public Light {
+class DirectionalLight: public SpecularLight {
 public:
     // The direction of the parallel light rays.
     const vec4 dir;
@@ -33,7 +33,7 @@ public:
     //
     // return: a shadow ray from the point and the light source. Or, returns
     //         nothing if the light does not cast shadows.
-    virtual Ray shadow_ray_from(vec4 point) const {
+    virtual Ray ray_from(vec4 point) const {
         // TODO
         throw std::runtime_error("not implemented");
     }

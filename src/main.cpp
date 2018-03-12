@@ -34,9 +34,9 @@ void update(Camera &camera) {
 }
 
 int main(int argc, char* argv[]) {
-    //Scene scene = cornel_box();
+    Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
-    Scene scene = star_scene();
+    //Scene scene = star_scene();
     //Scene scene = saturn_scene();
     Camera cam = Camera(vec4(0, 0, -2.25, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);

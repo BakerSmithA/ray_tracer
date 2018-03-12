@@ -6,7 +6,7 @@
 #include "intersection.h"
 #include "object.h"
 #include "projection.h"
-#include "../lights/point_light.h"
+#include "../lights/light.h"
 
 using glm::length;
 using std::vector;
@@ -21,9 +21,9 @@ using std::nullopt;
 class Scene {
 public:
     const vector<Object*> objects;
-    const vector<PointLight*> lights;
+    const vector<Light*> lights;
 
-    Scene(const vector<Object*> objects, const vector<PointLight*> lights):
+    Scene(const vector<Object*> objects, const vector<Light*> lights):
         objects(objects), lights(lights)
     {
     }
