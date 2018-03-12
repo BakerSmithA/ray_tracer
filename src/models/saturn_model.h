@@ -13,12 +13,13 @@ Object *saturn_model() {
     // The transparency of the smoke for the distance a ray travelled through.
     auto atmosphere_transparency = [=](float smoke_dist) {
 		// The larger the number, the blurrier the edges of the planet will be.
-		float edge_blur = 0.6f;
+		// float edge_blur = 0.6f;
+		float edge_blur = 0.1f;
 		return 1 - (pow(smoke_dist, edge_blur) / pow(sphere_diameter, edge_blur));
     };
 
     Shader *atmosphere = new Smoke(vec3(1, 1, 1), atmosphere_transparency);
-    Shader *texture = Texture::spherical("../textures/jupiter.bmp");
+    Shader *texture = Texture::spherical("../textures/saturn.bmp");
     Shader *lighting = new Diffuse(vec3(1, 1, 1));
 
     Shader *combine = Mix::multiply(atmosphere, texture);
@@ -30,9 +31,9 @@ Object *saturn_model() {
 }
 
 Object *saturn_rings() {
-	float inner_r = 0.45f;
-	float outer_r = 1.0f;
-	vec4 normal_dir = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	float inner_r = 0.47f;
+	float outer_r = 0.63f;
+	vec4 normal_dir = vec4(0.0f, 1.0f, 0.2f, 1.0f);
 	vec4 center = vec4(0.1, 0, -0.4, 1.0);
 
 	Disc *disc = new Disc(inner_r, outer_r, normal_dir, center, new FlatColor(vec3(0, 1, 0)));
@@ -55,9 +56,9 @@ vector<Object*> saturn_objects() {
 vector<Light*> saturn_lights() {
 	vector<Light*> lights;
 
-	vec3 col = vec3(3, 3, 3);
-	vec4 dir = vec4(-0.5, -0.5, -0.8, 1);
-	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.1f);
+	vec3 col = vec3(6, 6, 6);
+	vec4 dir = vec4(-0.5, -0.1f, -0.1f, 1.0f);
+	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.01f);
 	lights.push_back(light);
 
 	return lights;

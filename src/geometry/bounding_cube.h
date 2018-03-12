@@ -32,9 +32,7 @@ public:
         tmin = std::max(tmin, std::min(ty1, ty2));
         tmax = std::min(tmax, std::max(ty1, ty2));
 
-        //return tmax >= tmin;
-        printf("WARNING: DISABLED BOUNDING BOXES\n");
-        return true;
+        return tmax >= tmin;
     }
 };
 
