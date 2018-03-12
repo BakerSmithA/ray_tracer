@@ -34,4 +34,4 @@ public:
     }
 };
 
-#endif // SPECULAR_H
+#endif // BLINN_H
