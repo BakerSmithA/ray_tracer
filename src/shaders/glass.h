@@ -18,7 +18,7 @@ private:
 public:
     Glass() {
         // ==== Material ====
-        Shader *refraction = new Refraction(0.45);
+        Shader *refraction = new Refraction(0.5);
         Shader *mirror = new Mirror();
         Shader *transparent = new Fresnel(refraction, mirror, 0.7f);
 
@@ -51,7 +51,7 @@ public:
     }
 
     float transparency() const override {
-        return 0.6f;
+        return 0.7f;
     }
 };
 

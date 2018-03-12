@@ -223,16 +223,19 @@ Object *cornel_tall_block() {
 // return: a glass sphere.
 Object *cornel_large_sphere() {
 	vector<Primitive*> primitives;
-	primitives.push_back(new Sphere(vec4(-0, 0.3, -0.9, 1.0), 0.3, new Glass()));
+
+	Shader *shader = new Glass();
+	// primitives.push_back(new Sphere(vec4(-0.4, 0.3, -0.75, 1.0), 0.3, shader));
+	primitives.push_back(new Sphere(vec4(0.0, 0.3, -0.9, 1.0), 0.3, shader));
 
 	return new Object(primitives);
 }
 
 Object *cornel_small_sphere() {
-	Shader* shader = new Glass();//new BlinnSpecular(col);
-
 	vector<Primitive*> primitives;
-	primitives.push_back(new Sphere(vec4(0.3, -0.2, 0, 1.0), 0.2, shader));
+
+	Shader* shader = Mix::ratio(new Mirror(), new Diffuse(vec3(1.0f, 0.97f, 0.45f)), 0.1f);
+	primitives.push_back(new Sphere(vec4(0.3, -0.2, -0.1, 1.0), 0.2, shader));
 
 	return new Object(primitives);
 }
