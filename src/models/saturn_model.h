@@ -5,16 +5,14 @@
 Object *saturn_model() {
 	vector<Primitive*> primitives;
 
+	const float sphere_radius = 0.3f;
+	const float sphere_diameter = 2 * sphere_radius;
+
     // The transparency of the smoke for the distance a ray travelled through.
     auto atmosphere_transparency = [=](float smoke_dist) {
-        // The maximum distance a ray can travel through the atmosphere before
-        // not emerging the other side.
-        const float max_dist = 0.3f;
-
-        if (smoke_dist <= max_dist) {
-            return 1 - (smoke_dist / max_dist);
-        }
-        return 0.0f;
+		// The larger the number, the blurrier the edges of the planet will be.
+		float edge_blur = 0.6f;
+		return 1 - (pow(smoke_dist, edge_blur) / pow(sphere_diameter, edge_blur));
     };
 
     Shader *atmosphere = new Smoke(vec3(1, 1, 1), atmosphere_transparency);
@@ -24,7 +22,7 @@ Object *saturn_model() {
     Shader *combine = Mix::multiply(atmosphere, texture);
     Shader *shader = Mix::multiply(combine, lighting);
 
-	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3, shader));
+	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), sphere_radius, shader));
 
 	return new Object(primitives);
 }
@@ -42,7 +40,7 @@ vector<PointLight*> saturn_lights() {
 	vector<PointLight*> lights;
 
 	vec4 pos = vec4(-1.0, -0.5, -0.7, 1.0);
-	vec3 col = vec3(18, 18, 18);
+	vec3 col = vec3(20, 20, 20);
 	float radius = 0.1;
 
 	PointLight *light = new PointLight(col, pos, radius);

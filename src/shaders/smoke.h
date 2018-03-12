@@ -47,11 +47,12 @@ public:
         // smoke the ray had to travel through.
 
         // The maximum distance the ray can travel in the smoke.
-        float max_smoke_dist = this->distance_in_smoke(position, smoke_prim->parent_obj, outgoing, scene);
+        float max_smoke_dist = this->max_distance_in_smoke(position, smoke_prim->parent_obj, outgoing, scene);
         // The object may or may not be inside the smoke. If it is inside then
         // less smoke has been travelled through.
         float smoke_dist = std::min(dist_to_obj, max_smoke_dist);
         float t = this->transparency_for_dist(smoke_dist);
+        printf("%f\n", smoke_dist);
         return mix(this->base_color, behind_obj_col, t);
     }
 
@@ -74,7 +75,7 @@ private:
     // param outgoing: the ray generated after the first intersection.
     // param smoke_obj: the smoke object.
     // return: The distance the ray travels in the smoke before exiting.
-    float distance_in_smoke(const vec4 position, const Object *smoke_obj, const Ray &outgoing, const Scene &scene) const {
+    float max_distance_in_smoke(const vec4 position, const Object *smoke_obj, const Ray &outgoing, const Scene &scene) const {
         // Only consider primitives that are also part of the smoke object.
         auto is_excluded_prim = [=](const Primitive *testing_prim) {
             return testing_prim->parent_obj != smoke_obj;
