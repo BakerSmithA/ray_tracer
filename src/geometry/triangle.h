@@ -43,7 +43,7 @@ public:
         return in_scene_coordinates(intersection_in_plane_coordinates);
     }
 
-    virtual vec4 compute_normal(vec4 point) const override {
+    virtual vec4 normal_at(vec4 point) const override {
         return normal;
     }
 

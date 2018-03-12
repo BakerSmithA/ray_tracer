@@ -36,7 +36,7 @@ public:
 	virtual optional<vec4> intersection(const Ray &ray) const = 0;
 
 	// return: the normal to the primtive at the given point on the primitive.
-    virtual vec4 compute_normal(vec4 point) const = 0;
+    virtual vec4 normal_at(vec4 point) const = 0;
 };
 
 #endif // PRIMITIVE_H

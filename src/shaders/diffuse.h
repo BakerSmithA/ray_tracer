@@ -27,13 +27,13 @@ public:
         }
 
         vec4 shadow_ray = ray.value().dir;
-        vec4 surface_normal = prim->compute_normal(position);
+        vec4 surface_normal = prim->normal_at(position);
         // The proportion of light hitting the surface.
         float prop = dot(normalize(surface_normal), normalize(shadow_ray));
         // Because negative light is not allowed.
         float projection_factor = std::max(prop, 0.0f);
 
-        return projection_factor * light.intensity(position, prim->compute_normal(position)) * this->base_color;
+        return projection_factor * light.intensity(position, surface_normal) * this->base_color;
     }
 };
 

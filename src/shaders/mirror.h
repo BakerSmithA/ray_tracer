@@ -13,7 +13,7 @@ public:
     // return: the direction of the reflected incoming ray.
     virtual vec4 outgoing_ray_dir(const vec4 position, const Primitive *prim, const Ray &incoming) const override {
         vec4 incident_ray = -incoming.dir;
-        vec4 normal = prim->compute_normal(position);
+        vec4 normal = prim->normal_at(position);
         return 2.0f * dot(incident_ray, normal) * normal - incident_ray;
     }
 };

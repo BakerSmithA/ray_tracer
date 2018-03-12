@@ -2,7 +2,7 @@
 #include "fresnel.h"
 #include "mirror.h"
 #include "refraction.h"
-#include "blinn_specular.h"
+#include "blinn.h"
 #include "mix.h"
 #include "flat_color.h"
 #include "scale.h"

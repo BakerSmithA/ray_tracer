@@ -60,7 +60,7 @@ public:
         return project_to_4D(vec3(ray.start) + (t * dir));
     }
 
-    virtual vec4 compute_normal(vec4 point) const override {
+    virtual vec4 normal_at(vec4 point) const override {
         return normalize(point - center);
     }
 

@@ -29,7 +29,7 @@ public:
         // cannot be used here. This is because the smoke may be made of one
         // primitive (e.g. sphere) and we need to check for self-intersections.
         Ray outgoing = Ray(position, incoming.dir, incoming.bounces_remaining - 1)
-                      .offset(smoke_prim->compute_normal(position), -0.001);
+                      .offset(smoke_prim->normal_at(position), -0.001);
 
         // The object behind the smoke.
         optional<Intersection> behind_obj_i = scene.closest_intersection_excluding_obj(outgoing, smoke_prim->parent_obj);
