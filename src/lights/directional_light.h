@@ -7,13 +7,16 @@ class DirectionalLight: public SpecularLight {
 public:
     // The direction of the parallel light rays.
     const vec4 normalised_dir;
+    // The length of the shadow rays from an intersection to the directional light.
+    // This is used since the light does not have a position.
+    const float shadow_ray_len;
     // Used to create soft shadows. There is no physical radius of the light,
     // however there is a radius to the sphere to which shadow rays rays will
     // be created.
     const float radius;
 
-    DirectionalLight(vec3 color, vec4 dir, float radius):
-        SpecularLight(color), normalised_dir(glm::normalize(dir)), radius(radius) {
+    DirectionalLight(vec3 color, vec4 dir, float shadow_ray_len, float radius):
+        SpecularLight(color), normalised_dir(glm::normalize(dir)), shadow_ray_len(shadow_ray_len), radius(radius) {
     }
 
     // The intensity of a directional light depends only on the angle of the
@@ -34,19 +37,44 @@ public:
     // return: a shadow ray from the point and the light source. Or, returns
     //         nothing if the light does not cast shadows.
     virtual Ray ray_from(vec4 point) const {
-        return Ray(point, this->normalised_dir, 0);
+        return Ray(point, this->normalised_dir * this->shadow_ray_len, 0);
     }
 
     // return: a number of randomly selected shadow rays from an area around
     //         the light to the point. Or, returns nothing if the light does
     //         not cast shadows.
     virtual vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
-        // TODO
-        //throw std::runtime_error("not implemented");
+        // The center of the sphere used to draw shadow rays to.
+        vec3 center_3d = vec3(point - this->normalised_dir);
+
         vector<Ray> rays;
-        rays.push_back(this->ray_from(point));
+        for (int i=0; i<num; i++) {
+            vec3 point_in_sphere_3d = random_in_sphere(center_3d, this->radius);
+            vec4 point_in_sphere = project_to_4D(point_in_sphere_3d);
+
+            vec4 dir = (point - point_in_sphere) * this->shadow_ray_len;
+            rays.push_back(Ray(point, dir, 0));
+        }
+
         return rays;
     }
+
+    // // return: the given number of rays to points within the radius of the light.
+    // vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
+    //     // The ray can only be used to check obstructions between the point and
+    //     // light. Therefore it cannot bounce.
+    //     vec3 center_3d = vec3(this->pos);
+    //
+        // vector<Ray> rays;
+        // for (int i=0; i<num; i++) {
+        //     vec3 point_in_sphere_3d = random_in_sphere(center_3d, this->radius);
+        //     vec4 point_in_sphere = project_to_4D(point_in_sphere_3d);
+        //
+        //     rays.push_back(Ray(point, point_in_sphere - point, 0));
+        // }
+    //
+    //     return rays;
+    // }
 };
 
 #endif // DIRECTIONAL_LIGHT_H

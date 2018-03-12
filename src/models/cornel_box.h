@@ -261,20 +261,15 @@ vector<Object*> cornel_objects() {
 vector<Light*> cornel_lights() {
 	vector<Light*> lights;
 
-	// vec4 pos = vec4(0, -0.5, -0.7, 1.0);
-	// vec3 col = vec3(18, 18, 18);
-	// float radius = 0.1;
-	//
-	// PointLight *light = new PointLight(col, pos, radius);
-	// AmbientLight *ambient = new AmbientLight(vec3(0.05, 0.05, 0.05));//new AmbientLight(vec3(0.2, 0.2, 0.2));
-	//
-	// lights.push_back(light);
-	// lights.push_back(ambient);
+	vec4 pos = vec4(0, -0.5, -0.7, 1.0);
+	vec3 col = vec3(18, 18, 18);
+	float radius = 0.1;
 
-	vec3 col = vec3(1, 1, 1);
-	vec4 dir = vec4(-0.2, -0.2, -1, 1);
-	DirectionalLight *light = new DirectionalLight(col, dir, 0.1f);
+	PointLight *light = new PointLight(col, pos, radius);
+	AmbientLight *ambient = new AmbientLight(vec3(0.05, 0.05, 0.05));//new AmbientLight(vec3(0.2, 0.2, 0.2));
+
 	lights.push_back(light);
+	lights.push_back(ambient);
 
 	return lights;
 }
