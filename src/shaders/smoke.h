@@ -52,7 +52,6 @@ public:
         // less smoke has been travelled through.
         float smoke_dist = std::min(dist_to_obj, max_smoke_dist);
         float t = this->transparency_for_dist(smoke_dist);
-        printf("%f\n", smoke_dist);
         return mix(this->base_color, behind_obj_col, t);
     }
 

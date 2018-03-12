@@ -42,7 +42,7 @@ vector<vec2> random_screen_targets(int x, int y, int num_rays) {
     for (int i=0; i<num_rays; i++) {
         vec2 pixel_center = vec2((float)x, (float)y);
         // We sample an area around the pixel too, hence the 1.5
-        vec2 target = random_in_box(pixel_center, 0.02, 0.02);
+        vec2 target = random_in_box(pixel_center, 0.5, 0.5);
         targets.push_back(target);
     }
     return targets;
@@ -66,8 +66,9 @@ vector<vec2> grid_primary_rays(int x, int y, int num_rays) {
     // }
 
     vector<vec2> targets;
-    for (float i=-0.02; i<=0.02; i+=0.01) {
-        for (float j=-0.02; j<=0.02; j+=0.01) {
+    float delta = 0.02f, step = 0.01f;
+    for (float i=-delta; i<=delta; i+=step) {
+        for (float j=-delta; j<=delta; j+=step) {
             targets.push_back(vec2(x + i, y + j));
         }
     }

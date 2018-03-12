@@ -3,7 +3,7 @@
 #ifndef DIRECTIONAL_LIGHT_H
 #define DIRECTIONAL_LIGHT_H
 
-class DirectionalLight: public ShadowLight {
+class DirectionalLight: public Light {
 public:
     // The direction of the parallel light rays.
     const vec4 dir;

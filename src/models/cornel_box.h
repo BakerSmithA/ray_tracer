@@ -260,7 +260,7 @@ vector<Object*> cornel_objects() {
 vector<PointLight*> cornel_lights() {
 	vector<PointLight*> lights;
 
-	vec4 pos = vec4(0, -0.5, -0.7, 1.0);
+	vec4 pos = vec4(0, -0.2, -1.0, 1.0);
 	vec3 col = vec3(18, 18, 18);
 	float radius = 0.3;
 

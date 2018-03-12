@@ -57,7 +57,7 @@ private:
 		float u = pos.y;
 		float v = pos.z;
 
-		return 0 < t && 0 <= u && 0 <= v && u + v <= 1;
+		return 0.0f < t && 0.0f <= u && 0.0f <= v && u + v <= 1.0f;
 	}
 
 	// return: a point [t u v], in the triangle's coordinate system (i.e. e1
