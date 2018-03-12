@@ -38,18 +38,8 @@ vector<Object*> saturn_objects() {
 // return: the lights in the cornel box.
 vector<Light*> saturn_lights() {
 	vector<Light*> lights;
-	//
-	// vec4 pos = vec4(-1.0, -0.5, -0.7, 1.0);
-	// vec3 col = vec3(20, 20, 20);
-	// float radius = 0.1;
-	//
-	// PointLight *light = new PointLight(col, pos, radius);
-	//
-	// lights.push_back(light);
-	//
-	// return lights;
 
-	vec3 col = vec3(2, 2, 2);
+	vec3 col = vec3(3, 3, 3);
 	vec4 dir = vec4(-0.5, -0.5, -0.8, 1);
 	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.1f);
 	lights.push_back(light);
