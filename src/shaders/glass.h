@@ -47,7 +47,7 @@ public:
     // return: the color of the object in ambient lighting conditions, i.e.
     //         with no shadows.
     vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
-        return light.color;
+        return this->glass_shader->ambient_color(position, prim, light);
     }
 
     // return: the color of the intersected surface, taking shadows from the
@@ -57,7 +57,7 @@ public:
     }
 
     float transparency() const override {
-        return 0.7f;
+        return 0.6f;
     }
 };
 

@@ -250,8 +250,8 @@ vector<Object*> cornel_objects() {
 	objects.push_back(cornel_ceiling());
 	objects.push_back(cornel_short_block());
 	objects.push_back(cornel_tall_block());
-	// objects.push_back(cornel_large_sphere());
-	// objects.push_back(cornel_small_sphere());
+	objects.push_back(cornel_large_sphere());
+	objects.push_back(cornel_small_sphere());
 
 	return objects;
 }

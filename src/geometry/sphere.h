@@ -57,7 +57,7 @@ public:
         }
         float t = t0;
 
-        return vec4(project_to_4D(vec3(ray.start) + (t * dir)));
+        return project_to_4D(vec3(ray.start) + (t * dir));
     }
 
     virtual vec4 compute_normal(vec4 point) const override {
