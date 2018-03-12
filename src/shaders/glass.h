@@ -24,10 +24,10 @@ public:
 
         // ==== Lighting ===
         // Specular is used to add a bright spot.
-        Shader *specular = new BlinnSpecular(vec3(0, 0, 0), 250);
+        Shader *specular = new Blinn(250);
         // Clamp the specular to make the bright spot slightly less bright,
         // since we are adding the specular.
-        Shader *scaled_spec = new ScaleShader(specular, 0.0f, 0.6f);
+        Shader *scaled_spec = new ScaleShader(specular, 0.0f, 0.2f);
 
         // A small amount of diffuse light is used to apply shading. This
         // allows the viewer to more easily tell the shape of the object.
