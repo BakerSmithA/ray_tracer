@@ -57,7 +57,7 @@ public:
 
     // return: the color of the object in ambient lighting conditions, i.e.
     //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
         return vec3(0, 0, 0);
     }
 

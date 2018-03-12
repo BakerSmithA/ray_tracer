@@ -46,7 +46,7 @@ public:
 
     // return: the color of the object in ambient lighting conditions, i.e.
     //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
         return this->glass_shader->ambient_color(position, prim, light);
     }
 

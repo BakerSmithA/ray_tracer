@@ -18,7 +18,7 @@ public:
 
     // return: the color of the object in ambient lighting conditions, i.e.
     //         with no shadows.
-    virtual vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const = 0;
+    virtual vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const = 0;
 
     // return: the color of the intersected surface, illuminated by a specular
     //         light, i.e. a directional light, point light, etc.

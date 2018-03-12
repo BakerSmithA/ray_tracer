@@ -30,8 +30,7 @@ vec3 colour_in_scene(Scene &scene, Ray &ray, const int num_shadow_rays) {
         if (specular != nullptr) {
             acc_colour += i->primitive->shader->shadowed_color(i->pos, i->primitive, ray, scene, *specular, num_shadow_rays);
         } else {
-            AmbientLight *ambient = (AmbientLight*)light;
-            acc_colour += i->primitive->shader->ambient_color(i->pos, i->primitive, *ambient);
+            acc_colour += i->primitive->shader->ambient_color(i->pos, i->primitive, *light);
         }
     }
 

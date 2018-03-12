@@ -4,6 +4,7 @@
 #include "../geometry/sphere.h"
 #include "../geometry/object.h"
 #include "../lights/point_light.h"
+#include "../lights/directional_light.h"
 #include "../shaders/diffuse.h"
 #include "../shaders/blinn_specular.h"
 #include "../shaders/phong_specular.h"
@@ -260,33 +261,22 @@ vector<Object*> cornel_objects() {
 vector<Light*> cornel_lights() {
 	vector<Light*> lights;
 
-	vec4 pos = vec4(0, -0.5, -0.7, 1.0);
-	vec3 col = vec3(18, 18, 18);
-	float radius = 0.1;
+	// vec4 pos = vec4(0, -0.5, -0.7, 1.0);
+	// vec3 col = vec3(18, 18, 18);
+	// float radius = 0.1;
+	//
+	// PointLight *light = new PointLight(col, pos, radius);
+	// AmbientLight *ambient = new AmbientLight(vec3(0.05, 0.05, 0.05));//new AmbientLight(vec3(0.2, 0.2, 0.2));
+	//
+	// lights.push_back(light);
+	// lights.push_back(ambient);
 
-	PointLight *light = new PointLight(col, pos, radius);
-	AmbientLight *ambient = new AmbientLight(vec3(0.05, 0.05, 0.05));//new AmbientLight(vec3(0.2, 0.2, 0.2));
-
+	vec3 col = vec3(1, 1, 1);
+	vec4 dir = vec4(-0.2, -0.2, -1, 1);
+	DirectionalLight *light = new DirectionalLight(col, dir, 0.1f);
 	lights.push_back(light);
-	lights.push_back(ambient);
 
 	return lights;
-
-	// vector<Light*> lights;
-	//
-	// vec4 point_pos = vec4(0, -0.2, -1.0, 1.0);
-	// vec3 point_col = vec3(18, 18, 18);
-	// float point_radius = 0.3;
-	//
-	// vec3 ambient_col = vec3(0.1, 0.1, 0.1);
-	//
-	// PointLight *point = new PointLight(point_pos, point_col, point_radius);
-	// //AmbientLight *ambient = new AmbientLight(ambient_col);
-	//
-	// lights.push_back(point);
-	// // lights.push_back(ambient);
-	//
-	// return lights;
 }
 
 // return: the cornel box scene.

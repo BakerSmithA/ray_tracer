@@ -24,7 +24,7 @@ public:
 
     // return: the color of the object in ambient lighting conditions, i.e.
     //         with no shadows.
-    virtual vec3 ambient_color(vec4 position, const Primitive *prim, const AmbientLight &light) const {
+    virtual vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
         return this->base_color;
     }
 

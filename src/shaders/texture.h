@@ -96,7 +96,7 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 ambient_color(const vec4 position, const Primitive *prim, const AmbientLight &light) const {
+    vec3 ambient_color(const vec4 position, const Primitive *prim, const Light &light) const {
         return this->color_at(position, prim) * light.color;
     }
 
