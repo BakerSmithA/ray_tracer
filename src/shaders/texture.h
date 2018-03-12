@@ -95,15 +95,18 @@ public:
         SDL_FreeSurface(this->image);
     }
 
-    // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 ambient_color(const vec4 position, const Primitive *prim, const Light &light) const {
-        return this->color_at(position, prim) * light.color;
-    }
-
     // return: the color of the intersected surface, illuminated by a specular
     //         light, i.e. a directional light, point light, etc.
-    vec3 specular_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const {
-        return this->color_at(position, prim);
+    vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
+        // Convert the position u,v coordinate (i.e. in the object's coordinate
+        // space for planar mapping).
+        vec4 proj = prim->parent_obj->converted_world_to_obj(position);
+        // uv is in the range 0-1.
+        vec2 uv = this->project_to_uv(proj);
+        // image_uv is in the range 0-image size.
+        vec2 image_uv = vec2(uv.x * this->image->w, uv.y * this->image->h);
+
+        return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
     }
 
     /*
@@ -123,20 +126,6 @@ public:
     // return: a texture shader which maps the texture using a spherical projection.
     static Texture *spherical(const char *image_name) {
         return new Texture(image_name, spherical_projected);
-    }
-
-private:
-    // return: the color at the given intersection on the object.
-    vec3 color_at(vec4 intersection_position, const Primitive *prim) const {
-        // Convert the position u,v coordinate (i.e. in the object's coordinate
-        // space for planar mapping).
-        vec4 proj = prim->parent_obj->converted_world_to_obj(intersection_position);
-        // uv is in the range 0-1.
-        vec2 uv = this->project_to_uv(proj);
-        // image_uv is in the range 0-image size.
-        vec2 image_uv = vec2(uv.x * this->image->w, uv.y * this->image->h);
-
-        return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
     }
 };
 

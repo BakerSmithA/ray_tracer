@@ -18,19 +18,10 @@ public:
     {
     }
 
-    // return: the color of the object in ambient lighting conditions, i.e.
-    //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
-        vec3 color1 = this->s1->ambient_color(position, prim, light);
-        vec3 color2 = this->s2->ambient_color(position, prim, light);
-
-        return this->combine_colors(color1, color2);
-    }
-
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 specular_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
-        vec3 color1 = this->s1->specular_color(position, prim, incoming, scene, light, num_shadow_rays);
-        vec3 color2 = this->s2->specular_color(position, prim, incoming, scene, light, num_shadow_rays);
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
+        vec3 color1 = this->s1->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
+        vec3 color2 = this->s2->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
 
         return this->combine_colors(color1, color2);
     }

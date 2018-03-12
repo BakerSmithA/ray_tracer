@@ -20,6 +20,16 @@ public:
     virtual vec3 intensity(vec4 point, vec4 surface_normal) const {
         return this->color;
     }
+
+    // return: nothing since ambient lights do not have a position.
+    virtual optional<Ray> ray_from(vec4 point) const {
+        return std::nullopt;
+    }
+
+    // return: the empty vector because ambient lights cannot cast shadows.
+    virtual vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
+        return vector<Ray>();
+    }
 };
 
 #endif // AMBIENT_LIGHT_H

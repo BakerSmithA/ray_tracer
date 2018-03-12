@@ -5,6 +5,7 @@
 #include "../geometry/object.h"
 #include "../lights/point_light.h"
 #include "../lights/directional_light.h"
+#include "../lights/ambient_light.h"
 #include "../shaders/diffuse.h"
 #include "../shaders/blinn_specular.h"
 #include "../shaders/phong_specular.h"
@@ -228,7 +229,6 @@ Object *cornel_large_sphere() {
 }
 
 Object *cornel_small_sphere() {
-	const vec3 col = vec3(0.75f, 0.15f, 0.15f);
 	Shader* shader = new Glass();//new BlinnSpecular(col);
 
 	vector<Primitive*> primitives;
@@ -265,7 +265,7 @@ vector<Light*> cornel_lights() {
 
 	PointLight *light = new PointLight(col, pos, radius);
 	// AmbientLight *ambient = new AmbientLight(vec3(0.15f, 0.15f, 0.15f));
-	AmbientLight *ambient = new AmbientLight(vec3(0.7f, 0.7f, 0.7f));
+	AmbientLight *ambient = new AmbientLight(vec3(0.2f, 0.2f, 0.2f));
 
 	lights.push_back(light);
 	lights.push_back(ambient);

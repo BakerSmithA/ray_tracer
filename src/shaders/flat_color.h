@@ -12,14 +12,8 @@ public:
     FlatColor(vec3 base_color): base_color(base_color) {
     }
 
-    // return: the color of the object in ambient lighting conditions, i.e.
-    //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
-        return this->base_color;
-    }
-
     // return: the base color of the surface irrespective of lighting.
-    vec3 specular_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
+    vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
         return this->base_color;
     }
 };

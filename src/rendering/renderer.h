@@ -23,15 +23,7 @@ vec3 colour_in_scene(Scene &scene, Ray &ray, const int num_shadow_rays) {
     vec3 acc_colour = vec3(0, 0, 0);
     // Colour is addative for all lights.
     for (const Light *light: scene.lights) {
-        // Try casting to a specular light. If that does work, assume the
-        // light is an ambient light.
-        const SpecularLight* specular = dynamic_cast<const SpecularLight*>(light);
-
-        if (specular != nullptr) {
-            acc_colour += i->primitive->shader->shadowed_color(i->pos, i->primitive, ray, scene, *specular, num_shadow_rays);
-        } else {
-            acc_colour += i->primitive->shader->ambient_color(i->pos, i->primitive, *light);
-        }
+        acc_colour += i->primitive->shader->shadowed_color(i->pos, i->primitive, ray, scene, *light, num_shadow_rays);
     }
 
     return acc_colour;

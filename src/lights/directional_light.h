@@ -1,9 +1,9 @@
-#include "specular_light.h"
+#include "light.h"
 
 #ifndef DIRECTIONAL_LIGHT_H
 #define DIRECTIONAL_LIGHT_H
 
-class DirectionalLight: public SpecularLight {
+class DirectionalLight: public Light {
 public:
     // The direction of the parallel light rays.
     const vec4 normalised_dir;
@@ -16,7 +16,7 @@ public:
     const float radius;
 
     DirectionalLight(vec3 color, vec4 dir, float shadow_ray_len, float radius):
-        SpecularLight(color), normalised_dir(glm::normalize(dir)), shadow_ray_len(shadow_ray_len), radius(radius) {
+        Light(color), normalised_dir(glm::normalize(dir)), shadow_ray_len(shadow_ray_len), radius(radius) {
     }
 
     // The intensity of a directional light depends only on the angle of the
@@ -36,7 +36,7 @@ public:
     //
     // return: a shadow ray from the point and the light source. Or, returns
     //         nothing if the light does not cast shadows.
-    virtual Ray ray_from(vec4 point) const {
+    virtual optional<Ray> ray_from(vec4 point) const {
         return Ray(point, this->normalised_dir * this->shadow_ray_len, 0);
     }
 
@@ -58,23 +58,6 @@ public:
 
         return rays;
     }
-
-    // // return: the given number of rays to points within the radius of the light.
-    // vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
-    //     // The ray can only be used to check obstructions between the point and
-    //     // light. Therefore it cannot bounce.
-    //     vec3 center_3d = vec3(this->pos);
-    //
-        // vector<Ray> rays;
-        // for (int i=0; i<num; i++) {
-        //     vec3 point_in_sphere_3d = random_in_sphere(center_3d, this->radius);
-        //     vec4 point_in_sphere = project_to_4D(point_in_sphere_3d);
-        //
-        //     rays.push_back(Ray(point, point_in_sphere - point, 0));
-        // }
-    //
-    //     return rays;
-    // }
 };
 
 #endif // DIRECTIONAL_LIGHT_H

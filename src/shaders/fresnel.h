@@ -19,14 +19,8 @@ public:
         s1(s1), s2(s2), base_transparency(base_transparency) {
     }
 
-    // return: the color of the object in ambient lighting conditions, i.e.
-    //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
-        return light.color;
-    }
-
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 specular_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
+    vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
         vec4 normal = normalize(prim->compute_normal(position));
         vec4 incoming_dir = normalize(incoming.dir);
         float kr;
@@ -47,8 +41,8 @@ public:
             kr = (Rs * Rs + Rp * Rp) / 2;
         }
 
-        vec3 color1 = this->s1->specular_color(position, prim, incoming, scene, light, num_shadow_rays);
-        vec3 color2 = this->s2->specular_color(position, prim, incoming, scene, light, num_shadow_rays);
+        vec3 color1 = this->s1->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
+        vec3 color2 = this->s2->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
 
         return mix(color1, color2, kr);
     }

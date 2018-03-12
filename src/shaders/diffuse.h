@@ -16,15 +16,17 @@ public:
     Diffuse(vec3 base_color): base_color(base_color) {
     }
 
-    // return: the color of the object in ambient lighting conditions, i.e.
-    //         with no shadows.
-    vec3 ambient_color(vec4 position, const Primitive *prim, const Light &light) const {
-        return this->base_color * light.color;
-    }
-
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 specular_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const SpecularLight &light, const int num_shadow_rays) const override {
-        vec4 shadow_ray = light.ray_from(position).dir;
+    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
+        optional<Ray> ray = light.ray_from(position);
+
+        // If the light does not have a notion of position, return the ambient
+        // color.
+        if (!ray.has_value()) {
+            return this->base_color * light.color;
+        }
+
+        vec4 shadow_ray = ray.value().dir;
         vec4 surface_normal = prim->compute_normal(position);
         // The proportion of light hitting the surface.
         float prop = dot(normalize(surface_normal), normalize(shadow_ray));
