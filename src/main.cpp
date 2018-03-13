@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
     //Scene scene = textured_test_scene();
     //Scene scene = star_scene();
     Scene scene = saturn_scene();
+    //Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 

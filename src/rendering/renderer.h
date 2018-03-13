@@ -42,7 +42,7 @@ vector<vec2> random_screen_targets(int x, int y, int num_rays) {
     for (int i=0; i<num_rays; i++) {
         vec2 pixel_center = vec2((float)x, (float)y);
         // We sample an area around the pixel too, hence the 1.5
-        vec2 target = random_in_box(pixel_center, 0.5, 0.5);
+        vec2 target = random_in_box(pixel_center, 0.02, 0.02);
         targets.push_back(target);
     }
     return targets;

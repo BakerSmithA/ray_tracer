@@ -32,11 +32,12 @@ Object *saturn_model() {
 
 Object *saturn_rings() {
 	float inner_r = 0.47f;
-	float outer_r = 0.63f;
+	float outer_r = 0.64f;
 	vec4 normal_dir = vec4(0.0f, 1.0f, 0.2f, 1.0f);
 	vec4 center = vec4(0.1, 0, -0.4, 1.0);
 
-	Disc *disc = new Disc(inner_r, outer_r, normal_dir, center, new FlatColor(vec3(0, 1, 0)));
+	Shader *shader = Texture::planar("../textures/saturn_rings.bmp", planar_y);
+	Disc *disc = new Disc(inner_r, outer_r, normal_dir, center, shader);
 
 	vector<Primitive*> primitives;
 	primitives.push_back(disc);
@@ -58,7 +59,7 @@ vector<Light*> saturn_lights() {
 
 	vec3 col = vec3(6, 6, 6);
 	vec4 dir = vec4(-0.5, -0.1f, -0.1f, 1.0f);
-	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.01f);
+	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.03f);
 	lights.push_back(light);
 
 	return lights;
