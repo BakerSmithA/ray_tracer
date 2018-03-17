@@ -37,6 +37,7 @@ public:
         if (a < 0) {
             normal_3d = -normal_3d;
             a = -dot(normal_3d, incoming_3d);
+            refraction_index = 1.0f / refraction_index;
         }
 
         // 1 - cos(Θ)^2
