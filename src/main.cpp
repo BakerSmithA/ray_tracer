@@ -6,11 +6,11 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 320 * 2
-#define SCREEN_HEIGHT 256 * 2
+#define SCREEN_WIDTH 320 * 1
+#define SCREEN_HEIGHT 256 * 1
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
-#define NUM_SHADOW_RAYS 1
+#define NUM_SHADOW_RAYS 0
 #define NUM_SAMPLES 8
 
 // /*Place updates of parameters here*/

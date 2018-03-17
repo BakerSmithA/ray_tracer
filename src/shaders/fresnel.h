@@ -13,23 +13,29 @@ class Fresnel: public Shader {
 public:
     const Shader *s1;
     const Shader *s2;
+    // The ratio n1/n2, assuming n1 is a vacuum. This indicates how much light
+    // slows down when entering the medium.
+    const float ray_velocity_ratio;
     const float base_transparency;
 
-    Fresnel(const Shader *s1, const Shader *s2, float base_transparency):
-        s1(s1), s2(s2), base_transparency(base_transparency) {
+    Fresnel(const Shader *s1, const Shader *s2, float ray_velocity_ratio, float base_transparency):
+        s1(s1), s2(s2), ray_velocity_ratio(ray_velocity_ratio), base_transparency(base_transparency) {
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
     vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
-        vec4 normal = prim->normal_at(position);
-        vec4 incoming_dir = normalize(incoming.dir);
-        float kr;
-        float cosi = dot(normal, incoming_dir);
-        float etai = 1, etat = 1.3; //ior. TODO: Change this value for different materials?
+        vec3 normal_3d = normalize(vec3(prim->normal_at(position)));
+        vec3 incoming_3d = normalize(vec3(incoming.dir));
+
+        // cos(theta_1) = -(N . i)
+        float cosi = glm::clamp(-1.0f, 1.0f, dot(normal_3d, incoming_3d));
+
+        float etai = 1, etat = this->ray_velocity_ratio;
         if (cosi > 0) { std::swap(etai, etat); }
         // Compute sini using Snell's law
         float sint = etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
         // Total internal reflection
+        float kr;
         if (sint >= 1) {
             kr = 1;
         }

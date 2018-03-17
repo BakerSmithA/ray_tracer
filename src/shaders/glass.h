@@ -18,9 +18,11 @@ private:
 public:
     Glass() {
         // ==== Material ====
-        Shader *refraction = new Refraction(0.5);
+        const float refractive_index = 2.0f;
+
+        Shader *refraction = new Refraction(refractive_index);
         Shader *mirror = new Mirror();
-        Shader *transparent = new Fresnel(refraction, mirror, 0.7f);
+        Shader *transparent = new Fresnel(refraction, mirror, refractive_index, 0.7f);
 
         // ==== Lighting ===
         // Specular is used to add a bright spot.
