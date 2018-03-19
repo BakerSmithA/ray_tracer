@@ -37,8 +37,8 @@ vec4 G(L,L,L,1);
 vec4 H(0,L,L,1);
 
 // return: the triangles scaled to fit in a -1 to 1 box.
-vector<Primitive*> scaled_triangles(vector<Triangle*> triangles) {
-	vector<Primitive*> new_triangles;
+Primitive **scaled_triangles(vector<Triangle*> triangles) {
+	Primitive **new_triangles = new Primitive*[triangles.size()];
 
 	for(size_t i=0; i<triangles.size(); i++) {
 		Triangle* triangle = static_cast<Triangle*>(triangles[i]);
@@ -66,7 +66,7 @@ vector<Primitive*> scaled_triangles(vector<Triangle*> triangles) {
 		new_v1.w = 1.0;
 		new_v2.w = 1.0;
 
-		new_triangles.push_back(new Triangle(new_v0, new_v1, new_v2, triangle->shader));
+		new_triangles[i] = new Triangle(new_v0, new_v1, new_v2, triangle->shader);
 	}
 
 	return new_triangles;
@@ -88,7 +88,7 @@ Object *cornel_floor() {
 	triangles.push_back(new Triangle(C, B, A, shader));
 	triangles.push_back(new Triangle(C, D, B, shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: the left wall of the cornel box.
@@ -100,7 +100,7 @@ Object *cornel_left_wall() {
 	triangles.push_back(new Triangle(A, E, C, shader));
 	triangles.push_back(new Triangle(C, E, G, shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: the right wall of the cornel box.
@@ -112,7 +112,7 @@ Object *cornel_right_wall() {
 	triangles.push_back(new Triangle(F, B, D, shader));
 	triangles.push_back(new Triangle(H, F, D, shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: the back wall of the cornel box.
@@ -124,7 +124,7 @@ Object *cornel_back_wall() {
 	triangles.push_back(new Triangle(G, D, C, diffuse_shader));
 	triangles.push_back(new Triangle(G, H, D, diffuse_shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: the ceiling of the cornel box.
@@ -136,7 +136,7 @@ Object *cornel_ceiling() {
 	triangles.push_back(new Triangle(E, F, G, shader));
 	triangles.push_back(new Triangle(F, H, G, shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: the short (red) block in the cornel box.
@@ -176,7 +176,7 @@ Object *cornel_short_block() {
 	triangles.push_back(new Triangle(G,F,E,shader));
 	triangles.push_back(new Triangle(G,H,F,shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: the tall (blue) block in the cornel box.
@@ -216,42 +216,40 @@ Object *cornel_tall_block() {
 	triangles.push_back(new Triangle(G,F,E,shader));
 	triangles.push_back(new Triangle(G,H,F,shader));
 
-	return new Object(scaled_triangles(triangles));
+	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
 // return: a glass sphere.
 Object *cornel_large_sphere() {
-	vector<Primitive*> primitives;
-
 	Shader *shader = new Glass();
-	// primitives.push_back(new Sphere(vec4(-0.4, 0.3, -0.75, 1.0), 0.3, shader));
-	primitives.push_back(new Sphere(vec4(0.0, 0.3, -0.9, 1.0), 0.3, shader));
 
-	return new Object(primitives);
+	Primitive **primitives = new Primitive*[1];
+	primitives[0] = new Sphere(vec4(0.0, 0.3, -0.9, 1.0), 0.3, shader);
+	return new Object(1, primitives);
 }
 
 Object *cornel_small_sphere() {
-	vector<Primitive*> primitives;
-
 	Shader* shader = Mix::ratio(new Mirror(), new Diffuse(vec3(1.0f, 0.97f, 0.45f)), 0.1f);
-	primitives.push_back(new Sphere(vec4(0.3, -0.2, -0.1, 1.0), 0.2, shader));
 
-	return new Object(primitives);
+	Primitive **primitives = new Primitive*[1];
+	primitives[0] = new Sphere(vec4(0.3, -0.2, -0.1, 1.0), 0.2, shader);
+	return new Object(1, primitives);
 }
 
 // return: all the objects in the cornel box.
-vector<Object*> cornel_objects() {
-	vector<Object*> objects;
+const Object **cornel_objects(int *num_objects) {
+	*num_objects = 9;
+	const Object **objects = new const Object*[9];
 
-	objects.push_back(cornel_floor());
-	objects.push_back(cornel_left_wall());
-	objects.push_back(cornel_right_wall());
-	objects.push_back(cornel_back_wall());
-	objects.push_back(cornel_ceiling());
-	objects.push_back(cornel_short_block());
-	objects.push_back(cornel_tall_block());
-	objects.push_back(cornel_large_sphere());
-	objects.push_back(cornel_small_sphere());
+	objects[0] = cornel_floor();
+	objects[1] = cornel_left_wall();
+	objects[2] = cornel_right_wall();
+	objects[3] = cornel_back_wall();
+	objects[4] = cornel_ceiling();
+	objects[5] = cornel_short_block();
+	objects[6] = cornel_tall_block();
+	objects[7] = cornel_large_sphere();
+	objects[8] = cornel_small_sphere();
 
 	return objects;
 }
@@ -277,7 +275,8 @@ vector<Light*> cornel_lights() {
 
 // return: the cornel box scene.
 Scene cornel_box() {
-	return Scene(cornel_objects(), cornel_lights());
+	int num_objects;
+	return Scene(num_objects, cornel_objects(&num_objects), cornel_lights());
 }
 
 #endif // CORNEL_BOX_H
