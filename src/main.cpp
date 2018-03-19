@@ -25,8 +25,8 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 500//320 * 1
-#define SCREEN_HEIGHT 500//256 * 1
+#define SCREEN_WIDTH 320 * 1
+#define SCREEN_HEIGHT 256 * 1
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
 #define NUM_SHADOW_RAYS 1
@@ -44,12 +44,18 @@ void update(Camera &camera) {
 
     // Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
-    if(scancodes[SDL_SCANCODE_DOWN]) camera.pos.z -= 0.01;
-    if(scancodes[SDL_SCANCODE_UP]) camera.pos.z += 0.01;
-    if(scancodes[SDL_SCANCODE_RIGHT]) camera.pos.x += 0.01;
-    if (scancodes[SDL_SCANCODE_LEFT]) camera.pos.x -= 0.01;
-    if(scancodes[SDL_SCANCODE_A]) camera.pos.y -= 0.01;
-    if(scancodes[SDL_SCANCODE_D]) camera.pos.y += 0.01;
+
+    const float move_delta = 0.05f;
+    const float yaw_delta = 0.05f;
+
+    if(scancodes[SDL_SCANCODE_DOWN])  camera.move_forward(-move_delta); // Backwards
+    if(scancodes[SDL_SCANCODE_UP])    camera.move_forward(move_delta); // Forwards
+    if(scancodes[SDL_SCANCODE_LEFT])  camera.move_right(-move_delta); // Left
+    if(scancodes[SDL_SCANCODE_RIGHT]) camera.move_right(move_delta); // Right
+    if(scancodes[SDL_SCANCODE_W])     camera.move_down(-move_delta); // Up
+    if(scancodes[SDL_SCANCODE_S])     camera.move_down(move_delta); // Down
+    if(scancodes[SDL_SCANCODE_A])     camera.turn(-yaw_delta);    // Pan Left
+    if(scancodes[SDL_SCANCODE_D])     camera.turn(yaw_delta);     // Pan Right
 }
 
 int main(int argc, char* argv[]) {
