@@ -27,7 +27,7 @@ public:
 
 	virtual optional<vec4> intersection(const Ray &ray) const override {
         vec3 orig = vec3(ray.start);
-        vec3 dir = normalize(vec3(ray.dir));
+        vec3 dir = vec3(ray.normalized_dir);
         float radius2 = radius * radius;
 
         //Computing inside of sqrt

@@ -25,7 +25,7 @@ public:
     // return: the color of the intersected surface, as illuminated by a specific light.
     vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
         vec3 normal_3d = normalize(vec3(prim->normal_at(position)));
-        vec3 incoming_3d = normalize(vec3(incoming.dir));
+        vec3 incoming_3d = vec3(incoming.normalized_dir);
 
         // cos(theta_1) = -(N . i)
         float cosi = glm::clamp(-1.0f, 1.0f, dot(normal_3d, incoming_3d));

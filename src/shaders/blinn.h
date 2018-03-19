@@ -22,7 +22,7 @@ public:
 
         // Calculate reflection ray direction
         vec3 l = normalize(vec3(shadow_ray_dir));
-        vec3 v = normalize(vec3(-incoming.dir));
+        vec3 v = vec3(-incoming.normalized_dir);
         vec3 lplusv = l + v;
         vec3 h = normalize(lplusv);
 

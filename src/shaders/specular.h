@@ -24,7 +24,7 @@ public:
             return vec3(0.0f, 0.0f, 0.0f);
         }
 
-        vec4 shadow_ray_dir = glm::normalize(shadow_ray.value().dir);
+        vec4 shadow_ray_dir = shadow_ray.value().normalized_dir;
         return this->specular_color(position, prim, shadow_ray_dir, incoming, scene, light, num_shadow_rays);
     }
 };

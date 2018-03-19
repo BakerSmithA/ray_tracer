@@ -26,7 +26,7 @@ public:
         float refraction_index = this->ray_velocity_ratio;
 
         vec3 normal_3d = normalize(vec3(prim->normal_at(position)));
-        vec3 incoming_3d = normalize(vec3(incoming.dir));
+        vec3 incoming_3d = vec3(incoming.normalized_dir);
 
         // cos(theta_1) = -(N . i)
         float a = -dot(normal_3d, incoming_3d);
