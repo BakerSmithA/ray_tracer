@@ -9,7 +9,7 @@ using glm::mat3;
 
 // return: the determinant of the the matrix A
 float determinant(const float source[16]) {
-    // Column vec 0, i.e. b
+    // Column vec 0, i.e. A[0]
     float a = source[0];
     float b = source[1];
     float c = source[2];
@@ -108,6 +108,11 @@ vec3 solve_linear(mat3 A, vec3 b) {
     float x3 = determinant2(source_A, source_b) * inv_det_A;
 
     return vec3(x1, x2, x3);
+}
+
+// return: the dot product of vectors x and y.
+float dot(const float x[3], const float y[3]) {
+    return x[0] * y[0] + x[1] * y[1] + x[2] * y[2];
 }
 
 #endif // LINEAR_ALG_H

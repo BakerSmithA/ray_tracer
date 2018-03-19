@@ -1,12 +1,12 @@
 #include <glm/glm.hpp>
 #include "primitive.h"
 #include "../projection.h"
+#include "../linear_alg.h"
 #include <math.h>
 
 using glm::vec3;
 using glm::vec4;
 using glm::normalize;
-using glm::dot;
 using std::optional;
 using std::nullopt;
 
@@ -32,8 +32,12 @@ public:
 
         //Computing inside of sqrt
         vec3 L = vec3(center) - orig;
-        float tca = dot(L,dir);
-        float d2 = dot(L,L) - tca * tca;
+        
+        const float *source_L = (const float*)glm::value_ptr(L);
+        const float *source_dir = (const float*)glm::value_ptr(dir);
+
+        float tca = dot(source_L, source_dir);
+        float d2 = dot(source_L, source_L) - tca * tca;
         if (d2 > radius2) { //cannot compute sqrt of negative number
             return nullopt;
         }
