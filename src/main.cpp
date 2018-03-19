@@ -50,12 +50,12 @@ void update(Camera &camera) {
 
     if(scancodes[SDL_SCANCODE_DOWN])  camera.move_forward(-move_delta); // Backwards
     if(scancodes[SDL_SCANCODE_UP])    camera.move_forward(move_delta);  // Forwards
-    if(scancodes[SDL_SCANCODE_A])  camera.move_right(-move_delta);   // Left
-    if(scancodes[SDL_SCANCODE_D]) camera.move_right(move_delta);    // Right
+    if(scancodes[SDL_SCANCODE_A])     camera.move_right(-move_delta);   // Left
+    if(scancodes[SDL_SCANCODE_D])     camera.move_right(move_delta);    // Right
     if(scancodes[SDL_SCANCODE_W])     camera.move_down(-move_delta);    // Up
     if(scancodes[SDL_SCANCODE_S])     camera.move_down(move_delta);     // Down
-    if(scancodes[SDL_SCANCODE_LEFT])     camera.turn(-yaw_delta);          // Pan Left
-    if(scancodes[SDL_SCANCODE_RIGHT])     camera.turn(yaw_delta);           // Pan Right
+    if(scancodes[SDL_SCANCODE_LEFT])  camera.turn(-yaw_delta);          // Pan Left
+    if(scancodes[SDL_SCANCODE_RIGHT]) camera.turn(yaw_delta);           // Pan Right
 }
 
 int main(int argc, char* argv[]) {
