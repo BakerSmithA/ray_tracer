@@ -1,8 +1,26 @@
+#include <glm/glm.hpp>
+#include <vector>
+#include "geometry/primitives/triangle.h"
+#include "geometry/primitives/sphere.h"
+#include "geometry/object.h"
+#include "lights/point_light.h"
+#include "lights/directional_light.h"
+#include "lights/ambient_light.h"
+#include "shaders/diffuse.h"
+#include "shaders/blinn.h"
+#include "shaders/mirror.h"
+#include "shaders/mix.h"
+#include "shaders/refraction.h"
+#include "shaders/fresnel.h"
+#include "shaders/glass.h"
+#include "shaders/flat_color.h"
+#include "shaders/smoke.h"
+#include "shaders/texture.h"
 #include "rendering/renderer.h"
 // #include "models/cornel_box.h"
 // #include "models/textured_test_model.h"
 // #include "models/star_model.h"
-// #include "models/saturn_model.h"
+#include "models/saturn_model.h"
 #include "models/sphere_model.h"
 #include <glm/glm.hpp>
 #include <SDL.h>
@@ -38,8 +56,8 @@ int main(int argc, char* argv[]) {
     //Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
     //Scene scene = star_scene();
-    //Scene scene = saturn_scene();
-    Scene scene = sphere_scene();
+    Scene scene = saturn_scene();
+    //Scene scene = sphere_scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);

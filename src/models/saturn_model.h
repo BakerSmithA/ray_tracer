@@ -5,8 +5,6 @@
 
 // return: a star model.
 Object *saturn_model() {
-	vector<Primitive*> primitives;
-
 	const float sphere_radius = 0.3f;
 	const float sphere_diameter = 2 * sphere_radius;
 
@@ -25,9 +23,9 @@ Object *saturn_model() {
     Shader *combine = Mix::multiply(atmosphere, texture);
     Shader *shader = Mix::multiply(combine, lighting);
 
-	primitives.push_back(new Sphere(vec4(0.1, 0, -0.4, 1.0), sphere_radius, shader));
-
-	return new Object(primitives);
+	Primitive **primitives = new Primitive*[1];
+	primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), sphere_radius, shader);
+	return new Object(1, primitives);
 }
 
 Object *saturn_rings() {
@@ -37,19 +35,27 @@ Object *saturn_rings() {
 	vec4 center = vec4(0.1, 0, -0.4, 1.0);
 
 	Shader *shader = Texture::planar("../textures/saturn_rings.bmp", planar_y);
-	Disc *disc = new Disc(inner_r, outer_r, normal_dir, center, shader);
 
-	vector<Primitive*> primitives;
-	primitives.push_back(disc);
-	return new Object(primitives);
+	Primitive **primitives = new Primitive*[1];
+	primitives[0] = new Disc(inner_r, outer_r, normal_dir, center, shader);
+	return new Object(1, primitives);
+}
+
+// return: a spherical star map.
+Object *star_map() {
+	Shader *shader = Texture::spherical("../textures/star_sphere_map.bmp");
+
+	Primitive **primitives = new Primitive*[1];
+	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 2.3, shader);
+	return new Object(1, primitives);
 }
 
 // return: all the objects in the cornel box.
-vector<Object*> saturn_objects() {
-	vector<Object*> objects;
-	objects.push_back(saturn_model());
-	objects.push_back(saturn_rings());
-	objects.push_back(star_map());
+const Object **saturn_objects() {
+	const Object **objects = new const Object*[3];
+	objects[0] = saturn_model();
+	objects[1] = saturn_rings();
+	objects[2] = star_map();
 	return objects;
 }
 
@@ -67,7 +73,7 @@ vector<Light*> saturn_lights() {
 
 // return: a scene containing a star.
 Scene saturn_scene() {
-	return Scene(saturn_objects(), saturn_lights());
+	return Scene(3, saturn_objects(), saturn_lights());
 }
 
 #endif // SATURN_MODEL_H

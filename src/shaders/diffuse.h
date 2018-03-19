@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include "shader.h"
 
 using glm::dot;
 using glm::normalize;

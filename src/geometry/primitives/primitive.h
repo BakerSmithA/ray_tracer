@@ -7,7 +7,6 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 using std::optional;
-using std::array;
 
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
