@@ -10,15 +10,17 @@ using std::vector;
 // A collection of primitives.
 class Object {
 public:
-    const vector<Primitive*> primitives;
+    const int num_prims;
+    Primitive **primitives;
     const BoundingCube bounding_cube;
 
-    Object(const vector<Primitive*> primitives):
+    Object(const int num_prims, Primitive **primitives):
+        num_prims(num_prims),
         primitives(primitives),
-        bounding_cube(Object::make_bounding_cube(primitives))
+        bounding_cube(Object::make_bounding_cube(num_prims, primitives))
     {
-        for (Primitive *prim: this->primitives) {
-            prim->parent_obj = this;
+        for (int i=0; i<num_prims; i++) {
+            this->primitives[i]->parent_obj = this;
         }
     }
 
@@ -43,12 +45,12 @@ public:
 
 private:
     // return: a bounding box around all the primtives.
-    static BoundingCube make_bounding_cube(std::vector<Primitive*> primitives) {
+    static BoundingCube make_bounding_cube(const int num_prims, Primitive **primitives) {
         // Initialise the min and max, these will be updated below.
 		vec4 min = primitives[0]->bounding_cube.min;
 		vec4 max = primitives[0]->bounding_cube.max;
 
-		for (size_t i=1; i<primitives.size(); i++) {
+		for (int i=1; i<num_prims; i++) {
 			if (primitives[i]->bounding_cube.min.x < min.x) min.x = primitives[i]->bounding_cube.min.x;
 			if (primitives[i]->bounding_cube.min.y < min.y) min.y = primitives[i]->bounding_cube.min.y;
 			if (primitives[i]->bounding_cube.min.z < min.z) min.z = primitives[i]->bounding_cube.min.z;

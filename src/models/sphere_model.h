@@ -1,20 +1,39 @@
+#include <glm/glm.hpp>
+#include <vector>
+#include "../geometry/primitives/triangle.h"
+#include "../geometry/primitives/sphere.h"
+#include "../geometry/object.h"
+#include "../lights/point_light.h"
+#include "../lights/directional_light.h"
+#include "../lights/ambient_light.h"
+#include "../shaders/diffuse.h"
+#include "../shaders/blinn.h"
+#include "../shaders/mirror.h"
+#include "../shaders/mix.h"
+#include "../shaders/refraction.h"
+#include "../shaders/fresnel.h"
+#include "../shaders/glass.h"
+#include "../shaders/flat_color.h"
+#include "../shaders/smoke.h"
+#include "../shaders/texture.h"
+
 #ifndef SPHERE_MODEL_H
 #define SPHERE_MODEL_H
 
 // return: a green sphere.
 Object *sphere_object() {
-	vector<Primitive*> primitives;
+	Primitive **primitives = (Primitive**)malloc(sizeof(Primitive*) * 1);
 
 	Shader *shader = new FlatColor(vec3(0.0, 1.0, 0.0));
-	primitives.push_back(new Sphere(vec4(0, 0, 0, 1.0), 1.0, shader));
+	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 1.0, shader);
 
-	return new Object(primitives);
+	return new Object(1, primitives);
 }
 
 // return: all the objects in the scene.
-vector<Object*> sphere_objects() {
-	vector<Object*> objects;
-	objects.push_back(sphere_object());
+const Object **sphere_objects() {
+	const Object **objects = (const Object**)malloc(sizeof(Object*) * 1);
+	objects[0] = sphere_object();
 	return objects;
 }
 
@@ -30,7 +49,7 @@ vector<Light*> sphere_lights() {
 
 // return: a scene containing a sphere.
 Scene sphere_scene() {
-	return Scene(sphere_objects(), sphere_lights());
+	return Scene(1, sphere_objects(), sphere_lights());
 }
 
 #endif // SPHERE_MODEL_H

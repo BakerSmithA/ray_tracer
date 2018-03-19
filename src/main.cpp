@@ -1,8 +1,8 @@
 #include "rendering/renderer.h"
-#include "models/cornel_box.h"
-#include "models/textured_test_model.h"
-#include "models/star_model.h"
-#include "models/saturn_model.h"
+// #include "models/cornel_box.h"
+// #include "models/textured_test_model.h"
+// #include "models/star_model.h"
+// #include "models/saturn_model.h"
 #include "models/sphere_model.h"
 #include <glm/glm.hpp>
 #include <SDL.h>

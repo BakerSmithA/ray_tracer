@@ -20,11 +20,15 @@ using std::nullopt;
 // Contains all the geometry, lights, etc for a scene.
 class Scene {
 public:
-    const vector<Object*> objects;
+    // The number of objects in the scene.
+    const int num_objects;
+    // An array containing the objects in the scene.
+    const Object **objects;
+    // An array of the lights in the scene.
     const vector<Light*> lights;
 
-    Scene(const vector<Object*> objects, const vector<Light*> lights):
-        objects(objects), lights(lights)
+    Scene(const int num_objects, const Object **objects, const vector<Light*> lights):
+        num_objects(num_objects), objects(objects), lights(lights)
     {
     }
 
@@ -40,16 +44,18 @@ public:
         // The intersection point in the scene's coordinate system.
         vec4 intersection_pos;
 
-        for (size_t j=0; j<this->objects.size(); j++) {
+        for (int j=0; j<this->num_objects; j++) {
+            const Object *object = this->objects[j];
+
             // Ignore objects for which the ray does not intersect the bounding
             // box of the object.
-            if (!this->objects[j]->bounding_cube.does_intersect_ray(ray)) {
+            if (!object->bounding_cube.does_intersect_ray(ray)) {
                 continue;
             }
 
-            vector<Primitive*> primitives = this->objects[j]->primitives;
+            Primitive **primitives = object->primitives;
 
-            for (size_t i=0; i<primitives.size(); i++) {
+            for (int i=0; i<object->num_prims; i++) {
                 if (is_excluded_prim(primitives[i])) {
                     continue;
                 }
@@ -113,10 +119,10 @@ public:
     vector<Intersection> all_intersections(const Ray &ray, const Primitive *excluded_prim = nullptr) const {
         vector<Intersection> intersections;
 
-        for (size_t j=0; j<this->objects.size(); j++) {
-            vector<Primitive*> primitives = this->objects[j]->primitives;
+        for (int j=0; j<this->num_objects; j++) {
+            Primitive **primitives = this->objects[j]->primitives;
 
-            for (size_t i=0; i<primitives.size(); i++) {
+            for (int i=0; i<this->objects[j]->num_prims; i++) {
                 if (primitives[i] == excluded_prim) {
                     continue;
                 }
