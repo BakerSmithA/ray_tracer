@@ -96,7 +96,7 @@ vec3 mean_pixel_color(Scene &scene, Camera &camera, screen *screen, const int x,
 // param num_samples: the number of primary rays to average per pixel.
 // param num_shadow_rays: the number of rays to shoot to the the sphere around the light.
 void render(Scene &scene, Camera &camera, screen* screen, const int num_samples, const int num_shadow_rays) {
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (int y=0; y<screen->height; y++) {
         for (int x=0; x<screen->width; x++) {
             //vec3 color = mean_pixel_color(scene, camera, screen, x, y, num_samples, num_shadow_rays);
