@@ -6,6 +6,7 @@ using glm::vec4;
 using glm::normalize;
 using glm::cross;
 using glm::mat3;
+using glm::determinant;
 using std::optional;
 using std::nullopt;
 
@@ -35,7 +36,8 @@ public:
 	optional<vec4> intersection(const Ray &ray) const override {
         vec3 b = vec3(ray.start - v0);
         mat3 A = mat3(-vec3(ray.dir), e1, e2);
-		vec3 intersection_in_plane_coordinates = inverse(A) * b;
+		//vec3 intersection_in_plane_coordinates = inverse(A) * b;
+		vec3 intersection_in_plane_coordinates = this->solve(A, b);
 
 		if(!is_inside(intersection_in_plane_coordinates)) {
 			return nullopt;
@@ -48,6 +50,22 @@ public:
     }
 
 private:
+	// return: the solution Ax=b using Cramer's rule, described
+	//		   https://rosettacode.org/wiki/Cramer%27s_rule
+	vec3 solve(mat3 A, vec3 b) const {
+		mat3 x1_mat = mat3(b, A[1], A[2]);
+		mat3 x2_mat = mat3(A[0], b, A[2]);
+		mat3 x3_mat = mat3(A[0], A[1], b);
+		float inv_det_A = 1.0f / determinant(A);
+
+		float x1 = determinant(x1_mat) * inv_det_A;
+		float x2 = determinant(x2_mat) * inv_det_A;
+		float x3 = determinant(x3_mat) * inv_det_A;
+
+		return vec3(x1, x2, x3);
+	}
+
+
 	// return: whether the point [t u v], in the triangle's coordinate system
 	//		   (i.e. e1 and e2 are the basis vectors), is inside the triangle
 	bool is_inside(vec3 pos) const {
