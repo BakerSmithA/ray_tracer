@@ -41,8 +41,9 @@ private:
 
         optional<Intersection> collision = scene.closest_intersection(outgoing);
 
+        // The ray never came out of the volume.
         if (!collision.has_value()) {
-            throw std::runtime_error("Ray must exit volume or intersect object inside volume");
+            return 0.0f;
         }
 
         return length(intersection_pos - collision.value().pos);
