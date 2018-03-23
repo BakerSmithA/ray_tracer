@@ -60,7 +60,8 @@ Object *sphere_volume_model() {
 
 // return: the floor of the volumetric model box.
 Object *volume_floor() {
-	const Shader *shader = new Diffuse(vec3(1.0, 0.0, 0.0));
+    vec3 col = vec3(1.0f, 1.0f, 1.0f);
+	const Shader *shader = new Diffuse(col);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(C, B, A, shader));
@@ -69,12 +70,64 @@ Object *volume_floor() {
 	return new Object(triangles.size(), scaled_triangles(triangles));
 }
 
+// return: the left wall of the cornel box.
+Object *volume_left_wall() {
+	const vec3 col = vec3(1.0f, 0.0f, 0.0f);
+	const Shader *shader = new Diffuse(col);
+
+	vector<Triangle*> triangles;
+	triangles.push_back(new Triangle(A, E, C, shader));
+	triangles.push_back(new Triangle(C, E, G, shader));
+
+	return new Object(triangles.size(), scaled_triangles(triangles));
+}
+
+// return: the right wall of the cornel box.
+Object *volume_right_wall() {
+	const vec3 col = vec3(0.0f, 1.0f, 0.0f);
+	const Shader *shader = new Diffuse(col);
+
+	vector<Triangle*> triangles;
+	triangles.push_back(new Triangle(F, B, D, shader));
+	triangles.push_back(new Triangle(H, F, D, shader));
+
+	return new Object(triangles.size(), scaled_triangles(triangles));
+}
+
+// return: the back wall of the cornel box.
+Object *volume_back_wall() {
+	const vec3 col = vec3(0.0f, 0.0f, 1.0f);
+	const Shader *shader = new Diffuse(col);
+
+	vector<Triangle*> triangles;
+	triangles.push_back(new Triangle(G, D, C, shader));
+	triangles.push_back(new Triangle(G, H, D, shader));
+
+	return new Object(triangles.size(), scaled_triangles(triangles));
+}
+
+// return: the ceiling of the cornel box.
+Object *volume_ceiling() {
+	const vec3 col = vec3(1.0f, 1.0f, 1.0f);
+	const Shader *shader = new Diffuse(col);
+
+	vector<Triangle*> triangles;
+	triangles.push_back(new Triangle(E, F, G, shader));
+	triangles.push_back(new Triangle(F, H, G, shader));
+
+	return new Object(triangles.size(), scaled_triangles(triangles));
+}
+
 // return: all the objects in the cornel box.
 const Object **volume_objects() {
-	const Object **objects = new const Object*[3];
+	const Object **objects = new const Object*[7];
 	objects[0] = cube_volume_model();
     objects[1] = sphere_volume_model();
     objects[2] = volume_floor();
+    objects[3] = volume_left_wall();
+    objects[4] = volume_right_wall();
+    objects[5] = volume_back_wall();
+    objects[6] = volume_ceiling();
 	return objects;
 }
 
@@ -96,7 +149,7 @@ vector<Light*> volume_lights() {
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(3, volume_objects(), volume_lights());
+	return Scene(7, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H
