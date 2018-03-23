@@ -29,7 +29,7 @@ public:
         }
 
         // Construct a new ray inside the volume, which is used to test the
-        // furthest a ray will travel inside the smoke.
+        // furthest a ray will travel inside the volume.
         // This is offset from the initial intersection position, since we
         // cannot exclude this primitive from the search, e.g. for spheres.
         const float offset_dist = this->ray_step_size * -0.001;
@@ -40,12 +40,13 @@ public:
         // full transparency.
         float extinction = 1.0f;
 
-        auto step = [&](vec4 step_pos) {
+        // Used to update the extinction for how much light enters the camera.
+        auto primary_ray_step = [&](vec4 step_pos, vec4 termination_pos) {
             float density = this->texture->density_at(step_pos);
             extinction *= exp(-this->extinction_coefficient * density * this->ray_step_size);
         };
 
-        this->for_each_ray_step(outgoing, scene, step);
+        this->for_each_ray_step(outgoing, scene, primary_ray_step);
 
         // If the extinction is too low, there's no point computing the
         // background color as it will not show through.
@@ -53,43 +54,40 @@ public:
             return vec3(0.0f, 0.0f, 0.0f);
         }
 
-        // Compute the color of the object behind the smoke, to mix with the
-        // smoke color.
+        // Compute the color of the object behind the volume, to mix with the
+        // volume color.
         vec3 background_col = this->color_behind(prim, outgoing, scene, light, num_shadow_rays);
 
         return glm::mix(vec3(0,0,0), background_col, extinction);
     }
 
 private:
-    // param f: called for each step and given the position of the step.
+    // param f: called for each step and given the position of the step, and
+    //          given the termination position of the ray inside the volume.
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const Ray ray, const Scene &scene, function<void(vec4)> f) const {
-        // Find where the ray exits the smoke, or where the ray hits an object
-        // inside the smoke. Therefore, we know where to stop ray marching.
-        const float max_dist = this->distance_in_volume(ray.start, ray, scene);
+    void for_each_ray_step(const Ray ray, const Scene &scene, function<void(vec4, vec4)> f) const {
+        // Find where the ray exits the volume, or where the ray hits an object
+        // inside the volume. Therefore, we know where to stop ray marching.
+        optional<Intersection> termination = scene.closest_intersection(ray);
+
+        // The ray never came out of the volume.
+        if (!termination.has_value()) {
+            throw std::runtime_error("Ray must exit volume, or intersect another object inside");
+        }
+
+        const vec4 termination_pos = termination.value().pos;
+        const float max_dist = length(ray.start - termination_pos);
 
         // Perform ray marching through the volume.
         for (float dist = 0.0f; dist <= max_dist; dist += this->ray_step_size) {
             vec4 pos = ray.start + ray.normalized_dir * dist;
-            f(pos);
+            f(pos, termination_pos);
         }
     }
 
-    // return: The distance the ray travels in the smoke before exiting.
-    float distance_in_volume(const vec4 intersection_pos, const Ray outgoing, const Scene &scene) const {
-        optional<Intersection> collision = scene.closest_intersection(outgoing);
-
-        // The ray never came out of the volume.
-        if (!collision.has_value()) {
-            return 0.0f;
-        }
-
-        return length(intersection_pos - collision.value().pos);
-    }
-
-    // return: the color of the object behind or inside the smoke.
+    // return: the color of the object behind or inside the volume.
     vec3 color_behind(const Primitive *prim, const Ray &outgoing, const Scene &scene, const Light &light, const int num_shadow_rays) const {
         // Don't include the volumetric object in the search.
         optional<Intersection> op_collision = scene.closest_intersection_excluding_obj(outgoing, prim->parent_obj);
