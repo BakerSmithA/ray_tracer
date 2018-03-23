@@ -13,9 +13,12 @@ public:
     // Used to determine how blurry shadows from the light should be.
     // A larger radius will produce blurrier shadows.
     const float radius;
+    // Used to determine how quickly the light should disappate as you get
+    // further from the light source.
+    const float dropoff;
 
-    PointLight(vec3 color, vec4 pos, float radius):
-        Light(color), pos(pos), radius(radius) {
+    PointLight(vec3 color, vec4 pos, float radius, float dropoff = 1.0f):
+        Light(color), pos(pos), radius(radius), dropoff(dropoff) {
     }
 
     // param point: the point to be illuminated.
@@ -26,7 +29,7 @@ public:
         // The intensity of light is inversely proportional to the distance squared.
         float dist = length(shadow_ray);
         float surface_area_at_radius_r = 4 * M_PI * dist * dist;
-        vec3 intensity = this->color / surface_area_at_radius_r;
+        vec3 intensity = this->color / (surface_area_at_radius_r * dropoff);
 
         return intensity;
     }

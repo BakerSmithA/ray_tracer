@@ -42,8 +42,9 @@ public:
 
         // Used to update the extinction for how much light enters the camera.
         auto primary_ray_step = [&](vec4 step_pos, vec4 termination_pos) {
+            float lighting = mean_random_transparency(position, prim, scene, light, num_shadow_rays);
             float density = this->texture->density_at(step_pos);
-            extinction *= exp(-this->extinction_coefficient * density * this->ray_step_size);
+            extinction *= exp(-this->extinction_coefficient * density * this->ray_step_size) * lighting;
         };
 
         this->for_each_ray_step(outgoing, scene, primary_ray_step);
