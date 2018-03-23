@@ -7,11 +7,12 @@
 
 // return: a star model.
 Object *cube_volume_model() {
+    const float ray_step_size = 0.01f;
     Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
-    Shader *shader = new Volumetric(texture);
+    Shader *shader = new Volumetric(texture, ray_step_size);
 
 	Primitive **primitives = new Primitive*[1];
-	primitives[0] = new Sphere(vec4(0.1f, 0.0f, -0.4f, 1.0f), 0.3f, shader);
+	primitives[0] = new Sphere(vec4(0.1f, 0.0f, -0.4f, 1.0f), 0.5f, shader);
 	return new Object(1, primitives);
 }
 
@@ -30,7 +31,8 @@ vector<Light*> volume_lights() {
 	vec3 col = vec3(18, 18, 18);
 	float radius = 0.1;
 
-	PointLight *light = new PointLight(col, pos, radius);
+	//PointLight *light = new PointLight(col, pos, radius);
+    AmbientLight *light = new AmbientLight(vec3(1.0, 1.0, 1.0));
 
 	lights.push_back(light);
 
