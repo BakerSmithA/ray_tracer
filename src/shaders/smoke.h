@@ -24,7 +24,7 @@ public:
 
     // return: a color depending on how far the ray has to travel before
     //         exiting the smoke.
-    vec3 color(const vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
+    vec3 color(const vec4 position, const Primitive *smoke_prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
         // Offset into the shape as the excluded primitive on scene.closest_intersection
         // cannot be used here. This is because the smoke may be made of one
         // primitive (e.g. sphere) and we need to check for self-intersections.

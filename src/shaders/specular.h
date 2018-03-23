@@ -5,7 +5,7 @@
 
 // Models specular a surface which has only specular highlights. The base color
 // of the material is black.
-class Specular: public Shader {
+class Specular: public ShadowedShader {
 public:
     // The higher the number, the larger the bright-spot.
     const int specular_exponent;

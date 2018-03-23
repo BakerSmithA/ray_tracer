@@ -73,7 +73,7 @@ vec2 spherical_projected(vec4 object_space_point) {
     return vec2(u, 1-v);
 }
 
-class Projection: public Shader {
+class Projection: public ShadowedShader {
 private:
     SDL_Surface *image = NULL;
 

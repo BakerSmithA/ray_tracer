@@ -6,7 +6,7 @@ using std::optional;
 #define RAY_SPAWNER_H
 
 // Models a surface who's color is found by firing out another ray, e.g. mirror.
-class RaySpawner: public Shader {
+class RaySpawner: public ShadowedShader {
     // return: the ray direction used to find the color of the shader, e.g. the
     //         reflected ray for a mirror.
     virtual vec4 outgoing_ray_dir(const vec4 Position, const Primitive *prim, const Ray &incoming) const = 0;

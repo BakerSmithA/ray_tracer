@@ -19,7 +19,7 @@ public:
     }
 
     // return: the color of the intersected surface, as illuminated by a specific light.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
+    vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
         vec3 color1 = this->s1->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
         vec3 color2 = this->s2->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
 

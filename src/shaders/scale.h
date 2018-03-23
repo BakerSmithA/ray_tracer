@@ -19,7 +19,7 @@ public:
 
     // return: the color of the intersected surface, as illuminated by a
     //         specific light.
-    vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
+    vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const override {
         vec3 t = this->shader->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
         return glm::mix(this->min_col, this->max_col, t);
     }

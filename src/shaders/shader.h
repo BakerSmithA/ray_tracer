@@ -14,8 +14,19 @@ public:
         return 0.0f;
     }
 
-    // return: the color of the intersected surface, illuminated by any type of light.
-    virtual vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const = 0;
+    // return: the color of the intersected surface. Takes occulsion of the
+    //         light, by other objects, into account.
+    virtual vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const = 0;
+};
+
+// By subclassing this shader, a the materical can have its shadowed color
+// automatically computed according to whether other objects are occluding the
+// light. Also takes into account whether the light source can cast shadows.
+class ShadowedShader: public Shader {
+public:
+    // return: the unshadowed color of the object. This is used to compute the
+    //         shadowed color.
+    virtual vec3 color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const = 0;
 
     // return: the color of the intersected surface. Takes occulsion of the
     //         light, by other objects, into account.
@@ -28,7 +39,7 @@ public:
         return acc_transparency * col;
     }
 
-protected:
+private:
     // return: the mean transparency from the intersection position to the
     //         random points in the sphere of the light source.
     float mean_random_transparency(vec4 pos, const Primitive *prim, const Scene &scene, const Light &light, const int num_shadow_rays) const {
@@ -73,9 +84,5 @@ protected:
         return acc_mult_transparency;
     }
 };
-
-// class ShadowedColorMixin {
-//
-// };
 
 #endif // SHADER_H

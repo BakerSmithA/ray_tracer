@@ -9,7 +9,7 @@ using glm::length;
 #define DIFFUSE_H
 
 // Models an ideally diffuse surface.
-class Diffuse: public Shader {
+class Diffuse: public ShadowedShader {
 public:
     // The color of the shader without considering light, refection, etc.
     const vec3 base_color;

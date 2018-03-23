@@ -22,7 +22,7 @@ public:
     }
 
     // return: the direction of the refracted incoming ray.
-    virtual vec4 outgoing_ray_dir(const vec4 position, const Primitive *prim, const Ray &incoming) const override {
+    vec4 outgoing_ray_dir(const vec4 position, const Primitive *prim, const Ray &incoming) const override {
         float refraction_index = this->ray_velocity_ratio;
 
         vec3 normal_3d = normalize(vec3(prim->normal_at(position)));
