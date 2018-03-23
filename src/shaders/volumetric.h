@@ -56,7 +56,7 @@ public:
 
         // Compute the color of the object behind the volume, to mix with the
         // volume color.
-        vec3 background_col = this->color_behind(prim, outgoing, scene, light, num_shadow_rays);
+        vec3 background_col = this->color_behind(position, prim, outgoing, scene, light, num_shadow_rays);
 
         return glm::mix(vec3(0,0,0), background_col, extinction);
     }
@@ -74,7 +74,8 @@ private:
 
         // The ray never came out of the volume.
         if (!termination.has_value()) {
-            throw std::runtime_error("Ray must exit volume, or intersect another object inside");
+            printf("WARNING: Ray should exit volume, or intersect another object inside");
+            return;
         }
 
         const vec4 termination_pos = termination.value().pos;
@@ -88,17 +89,26 @@ private:
     }
 
     // return: the color of the object behind or inside the volume.
-    vec3 color_behind(const Primitive *prim, const Ray &outgoing, const Scene &scene, const Light &light, const int num_shadow_rays) const {
-        // Don't include the volumetric object in the search.
-        optional<Intersection> op_collision = scene.closest_intersection_excluding_obj(outgoing, prim->parent_obj);
+    vec3 color_behind(vec4 position, const Primitive *prim, const Ray &through_vol_ray, const Scene &scene, const Light &light, const int num_shadow_rays) const {
+        if (!through_vol_ray.can_bounce()) {
+            return vec3(0, 0, 0);
+        }
+        // The number of bounces is reduced due to this interaction.
+        Ray outgoing_ray = Ray(position, through_vol_ray.dir, through_vol_ray.bounces_remaining - 1);
 
-        // The ray never came out of the volume.
-        if (!op_collision.has_value()) {
+        optional<Intersection> i = scene.closest_intersection(outgoing_ray, prim);
+        if (!i.has_value()) {
             return vec3(0, 0, 0);
         }
 
-        Intersection collision = op_collision.value();
-        return collision.primitive->shader->shadowed_color(collision.pos, prim, outgoing, scene, light, num_shadow_rays);
+        return i->primitive->shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light, num_shadow_rays);
+    }
+
+    // return: the proportion by which light is let through the
+    //         material. E.g. a value of 1 is totally transparent, and a value
+    //         of 0 is totally opaque.
+    virtual float transparency() const {
+        return 1.0f;
     }
 };
 
