@@ -25,11 +25,11 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 320 * 1
-#define SCREEN_HEIGHT 256 * 1
+#define SCREEN_WIDTH 500//320 * 1
+#define SCREEN_HEIGHT 500//256 * 1
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
-#define NUM_SHADOW_RAYS 20
+#define NUM_SHADOW_RAYS 4
 #define NUM_SAMPLES 8
 
 // /*Place updates of parameters here*/
@@ -59,13 +59,13 @@ void update(Camera &camera) {
 }
 
 int main(int argc, char* argv[]) {
-    //Scene scene = cornel_box();
+    Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
-    Scene scene = star_scene();
+    //Scene scene = star_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
-    //Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
-    Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
+    Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
+    //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {
