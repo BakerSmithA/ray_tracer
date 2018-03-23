@@ -15,7 +15,7 @@ public:
 
     // return: the color of the volume by performing ray marching though the object.
     vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
-        return vec3(0, 1.0, 0);
+        return this->texture->color_at(position);
     }
 };
 

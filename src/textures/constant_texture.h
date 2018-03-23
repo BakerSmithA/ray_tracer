@@ -3,8 +3,8 @@
 #ifndef CONSTANT_TEXTURE
 #define CONSTANT_TEXTURE
 
-template <class Position>
-class ConstantTexture: public Texture<Position> {
+template <class ObjectRelativePos>
+class ConstantTexture: public Texture<ObjectRelativePos> {
 public:
     // The paramters for everywhere in the texture.
     const vec3 color;
@@ -14,13 +14,17 @@ public:
         color(color), transparency(transparency) {
     }
 
-    // return: the color of the the texture at the given position in 3D space.
-    vec3 color_at(Position position) const override {
+    // return: the color of the the texture at the given position in the
+    //         coordinate space of the object, i.e. in the range 0-1 for each
+    //         axis.
+    vec3 color_at(ObjectRelativePos position) const override {
         return this->color;
     }
 
-    // return: the transparency of the the texture at the given position in 3D space.
-    float transparency_at(Position position) const override {
+    // return: the transparency of the the texture at the given position in the
+    //         coordinate space of the object, i.e. in the range 0-1 for each
+    //         axis.
+    float transparency_at(ObjectRelativePos position) const override {
         return this->transparency;
     }
 };

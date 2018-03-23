@@ -1,5 +1,5 @@
-// #include "../textures/texture.h"
-//#include "../textures/constant_texture.h"
+#include "../textures/texture.h"
+#include "../textures/constant_texture.h"
 #include "../shaders/volumetric.h"
 
 #ifndef VOLUME_MODEL_H
@@ -7,11 +7,11 @@
 
 // return: a star model.
 Object *cube_volume_model() {
-    Texture<vec4> *texture = NULL;//ConstantTexture(vec3(0.5, 1.0, 0.5), 1.0);
+    Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
     Shader *shader = new Volumetric(texture);
 
 	Primitive **primitives = new Primitive*[1];
-	primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3, shader);
+	primitives[0] = new Sphere(vec4(0.1f, 0.0f, -0.4f, 1.0f), 0.3f, shader);
 	return new Object(1, primitives);
 }
 

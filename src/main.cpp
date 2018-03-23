@@ -61,13 +61,13 @@ void update(Camera &camera) {
 
 int main(int argc, char* argv[]) {
     //Scene scene = cornel_box();
-    Scene scene = textured_test_scene();
+    //Scene scene = textured_test_scene();
     //Scene scene = star_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
-    //Scene scene = volume_scene();
-    Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
-    //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
+    Scene scene = volume_scene();
+    //Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
+    Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {
