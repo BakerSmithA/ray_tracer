@@ -67,10 +67,10 @@ private:
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const Ray ray, const Scene &scene, function<void(vec4, vec4)> f) const {
+    void for_each_ray_step(const Ray through_vol_ray, const Scene &scene, function<void(vec4, vec4)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
-        optional<Intersection> termination = scene.closest_intersection(ray);
+        optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
 
         // The ray never came out of the volume.
         if (!termination.has_value()) {
@@ -79,11 +79,11 @@ private:
         }
 
         const vec4 termination_pos = termination.value().pos;
-        const float max_dist = length(ray.start - termination_pos);
+        const float max_dist = length(through_vol_ray.start - termination_pos);
 
         // Perform ray marching through the volume.
         for (float dist = 0.0f; dist <= max_dist; dist += this->ray_step_size) {
-            vec4 pos = ray.start + ray.normalized_dir * dist;
+            vec4 pos = through_vol_ray.start + through_vol_ray.normalized_dir * dist;
             f(pos, termination_pos);
         }
     }
