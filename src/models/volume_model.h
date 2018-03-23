@@ -7,7 +7,7 @@
 
 // return: a cube with a volumetric shader.
 Object *cube_volume_model() {
-    const float extinction_coeff = 2.0f;
+    const float extinction_coeff = 5.0f;
     const float ray_step_size = 0.01f;
     Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
@@ -48,7 +48,7 @@ Object *cube_volume_model() {
 }
 
 Object *sphere_volume_model() {
-    const float extinction_coeff = 3.0f;
+    const float extinction_coeff = 6.0f;
     const float ray_step_size = 0.01f;
     Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);

@@ -74,4 +74,8 @@ protected:
     }
 };
 
+// class ShadowedColorMixin {
+//
+// };
+
 #endif // SHADER_H

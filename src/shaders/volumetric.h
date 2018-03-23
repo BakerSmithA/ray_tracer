@@ -20,8 +20,18 @@ public:
 
     // return: the color of the volume by performing ray marching though the object.
     vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
-        // Code with help from pseudo-code here:
-        //  http://patapom.com/topics/Revision2013/Revision%202013%20-%20Real-time%20Volumetric%20Rendering%20Course%20Notes.pdf
+        return vec3(0, 0, 0);
+    }
+
+    // return: the color of the volume by performing ray marching though the object.
+    vec3 shadowed_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
+        // References:
+        //  - http://patapom.com/topics/Revision2013/Revision%202013%20-%20Real-time%20Volumetric%20Rendering%20Course%20Notes.pdf
+        //  - http://shaderbits.com/blog/creating-volumetric-ray-marcher
+
+        if (!incoming.can_bounce()) {
+            return vec3(0.0f, 0.0f, 0.0f);
+        }
 
         // Construct a new ray inside the volume, which is used to test the
         // furthest a ray will travel inside the smoke.
@@ -59,14 +69,6 @@ public:
         vec3 background_col = this->color_behind(prim, outgoing, scene, light, num_shadow_rays);
 
         return glm::mix(vec3(0,0,0), background_col, extinction);
-    }
-
-    // return: the color of the volume by performing ray marching though the object.
-    vec3 shadowed_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
-        if (!incoming.can_bounce()) {
-            return vec3(0.0f, 0.0f, 0.0f);
-        }
-        return color(position, prim, incoming, scene, light, num_shadow_rays);
     }
 
 private:
