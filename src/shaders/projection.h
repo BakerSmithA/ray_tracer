@@ -21,7 +21,7 @@ enum PlanarProjectionDirection {
 // return: the point (in object space) projected to uv texture coordinates.
 vec2 planar_projected(vec4 object_space_point, PlanarProjectionDirection dir) {
     // Uses the planar mapping described in:
-    //  http://cs-people.bu.edu/sbargal/Fall%202016/lecture_notes/Dec_5_Advanced_Texture_Mapping_And_Ray_Tracing.pdf
+    //  http://cs-people.bu.edu/sbargal/Fall%202016/lecture_notes/Dec_5_Advanced_Projection_Mapping_And_Ray_Tracing.pdf
 
     float u = 0, v = 0;
 
@@ -49,7 +49,7 @@ vec2 planar_projected(vec4 object_space_point, PlanarProjectionDirection dir) {
 // return: the point (in object space) projected onto uv texture coordinates.
 vec2 spherical_projected(vec4 object_space_point) {
     // Uses the spherical mapping described in:
-    //  http://cs-people.bu.edu/sbargal/Fall%202016/lecture_notes/Dec_5_Advanced_Texture_Mapping_And_Ray_Tracing.pdf
+    //  http://cs-people.bu.edu/sbargal/Fall%202016/lecture_notes/Dec_5_Advanced_Projection_Mapping_And_Ray_Tracing.pdf
 
     // The object space point is in the range 0-1, therefore the center of the
     // sphere is at (0.5, 0.5, 0.5).
@@ -73,7 +73,7 @@ vec2 spherical_projected(vec4 object_space_point) {
     return vec2(u, 1-v);
 }
 
-class Texture: public Shader {
+class Projection: public Shader {
 private:
     SDL_Surface *image = NULL;
 
@@ -82,7 +82,7 @@ public:
     // Takes a point in 4d object coordinates to a point 2d uv coordinate.
     const function<vec2(vec4)> project_to_uv;
 
-    Texture(const char *image_name, const function<vec2(vec4)> project_to_uv):
+    Projection(const char *image_name, const function<vec2(vec4)> project_to_uv):
         image(SDL_LoadBMP(image_name)), project_to_uv(project_to_uv)
     {
         if (image == NULL) {
@@ -91,7 +91,7 @@ public:
         }
     }
 
-    ~Texture() {
+    ~Projection() {
         SDL_FreeSurface(this->image);
     }
 
@@ -115,17 +115,17 @@ public:
 
     // return: a texture shader which maps the texture using planar mapping
     //         in the given direction.
-    static Texture *planar(const char *image_name, PlanarProjectionDirection dir) {
+    static Projection *planar(const char *image_name, PlanarProjectionDirection dir) {
         const auto project_to_uv = [=](vec4 object_coordinate) {
             return planar_projected(object_coordinate, dir);
         };
 
-        return new Texture(image_name, project_to_uv);
+        return new Projection(image_name, project_to_uv);
     }
 
     // return: a texture shader which maps the texture using a spherical projection.
-    static Texture *spherical(const char *image_name) {
-        return new Texture(image_name, spherical_projected);
+    static Projection *spherical(const char *image_name) {
+        return new Projection(image_name, spherical_projected);
     }
 };
 

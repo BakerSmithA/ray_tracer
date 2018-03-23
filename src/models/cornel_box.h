@@ -15,7 +15,7 @@
 #include "../shaders/glass.h"
 #include "../shaders/flat_color.h"
 #include "../shaders/smoke.h"
-#include "../shaders/texture.h"
+#include "../shaders/projection.h"
 
 using std::vector;
 using glm::vec3;

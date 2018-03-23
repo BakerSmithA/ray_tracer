@@ -9,7 +9,7 @@
 typedef struct{
   SDL_Window *window;
   SDL_Renderer *renderer;
-  SDL_Texture *texture;
+  SDL_Projection *texture;
   int height;
   int width;
   uint32_t *buffer;
@@ -56,7 +56,7 @@ void SDL_SaveImage(screen *s, const char* filename)
 void KillSDL(screen* s)
 {
   delete[] s->buffer;
-  SDL_DestroyTexture(s->texture);
+  SDL_DestroyProjection(s->texture);
   SDL_DestroyRenderer(s->renderer);
   SDL_DestroyWindow(s->window);
   SDL_Quit();
@@ -64,7 +64,7 @@ void KillSDL(screen* s)
 
 void SDL_Renderframe(screen* s)
 {
-  SDL_UpdateTexture(s->texture, NULL, s->buffer, s->width*sizeof(uint32_t));
+  SDL_UpdateProjection(s->texture, NULL, s->buffer, s->width*sizeof(uint32_t));
   SDL_RenderClear(s->renderer);
   SDL_RenderCopy(s->renderer, s->texture, NULL, NULL);
   SDL_RenderPresent(s->renderer);
@@ -112,7 +112,7 @@ screen* InitializeSDL(int width,int height, bool fullscreen)
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
   SDL_RenderSetLogicalSize(s->renderer, s->width, s->height);
 
-  s->texture = SDL_CreateTexture(s->renderer,
+  s->texture = SDL_CreateProjection(s->renderer,
 				 SDL_PIXELFORMAT_ARGB8888,
 				 SDL_TEXTUREACCESS_STATIC,
 				 s->width,s->height);

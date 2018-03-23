@@ -17,7 +17,7 @@ Object *saturn_model() {
     };
 
     Shader *atmosphere = new Smoke(vec3(1, 1, 1), atmosphere_transparency);
-    Shader *texture = Texture::spherical("../textures/saturn.bmp");
+    Shader *texture = Projection::spherical("../textures/saturn.bmp");
     Shader *lighting = new Diffuse(vec3(1, 1, 1));
 
     Shader *combine = Mix::multiply(atmosphere, texture);
@@ -34,7 +34,7 @@ Object *saturn_rings() {
 	vec4 normal_dir = vec4(0.0f, 1.0f, 0.2f, 1.0f);
 	vec4 center = vec4(0.1, 0, -0.4, 1.0);
 
-	Shader *shader = Texture::planar("../textures/saturn_rings.bmp", planar_y);
+	Shader *shader = Projection::planar("../textures/saturn_rings.bmp", planar_y);
 
 	Primitive **primitives = new Primitive*[1];
 	primitives[0] = new Disc(inner_r, outer_r, normal_dir, center, shader);
@@ -43,7 +43,7 @@ Object *saturn_rings() {
 
 // return: a spherical star map.
 Object *star_map() {
-	Shader *shader = Texture::spherical("../textures/star_sphere_map.bmp");
+	Shader *shader = Projection::spherical("../textures/star_sphere_map.bmp");
 
 	Primitive **primitives = new Primitive*[1];
 	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 2.3, shader);

@@ -15,7 +15,7 @@
 #include "shaders/glass.h"
 #include "shaders/flat_color.h"
 #include "shaders/smoke.h"
-#include "shaders/texture.h"
+#include "shaders/projection.h"
 #include "rendering/renderer.h"
 #include "models/cornel_box.h"
 #include "models/textured_test_model.h"
