@@ -19,11 +19,6 @@ public:
     }
 
     // return: the color of the volume by performing ray marching though the object.
-    vec3 color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
-        return vec3(0, 0, 0);
-    }
-
-    // return: the color of the volume by performing ray marching though the object.
     vec3 shadowed_color(const vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
         // References:
         //  - http://patapom.com/topics/Revision2013/Revision%202013%20-%20Real-time%20Volumetric%20Rendering%20Course%20Notes.pdf
@@ -41,22 +36,16 @@ public:
         Ray outgoing = Ray(position, incoming.dir, incoming.bounces_remaining - 1)
                       .offset(prim->normal_at(position), offset_dist);
 
-        // Find where the ray exits the smoke, or where the ray hits an object
-        // inside the smoke. Therefore, we know where to stop ray marching.
-        const float max_dist = this->distance_in_volume(position, outgoing, scene);
+        // Find the how much light made it through the volume, starting with
+        // full transparency.
+        float extinction = 1.0f;
 
-        float extinction = 1.0f; // Start with full transparency.
-        float scattering = 0.0f; // Start with no accumulated light.
-
-        // Perform ray marching through the volume.
-        for (float dist = 0.0f; dist <= max_dist; dist += this->ray_step_size) {
-            vec4 pos = position + incoming.normalized_dir * dist;
-
-            // Accumulate extinction for this step, i.e, how much more light has
-            // been scattered out of the path of going into the camera.
-            float density = this->texture->density_at(pos);
+        auto step = [&](vec4 step_pos) {
+            float density = this->texture->density_at(step_pos);
             extinction *= exp(-this->extinction_coefficient * density * this->ray_step_size);
-        }
+        };
+
+        this->for_each_ray_step(outgoing, scene, step);
 
         // If the extinction is too low, there's no point computing the
         // background color as it will not show through.
@@ -72,6 +61,22 @@ public:
     }
 
 private:
+    // param f: called for each step and given the position of the step.
+    // effect: performs ray marching along the ray, running the function f at
+    //         step along the ray until the ray exits the volume or hits an
+    //         object inside the volume.
+    void for_each_ray_step(const Ray ray, const Scene &scene, function<void(vec4)> f) const {
+        // Find where the ray exits the smoke, or where the ray hits an object
+        // inside the smoke. Therefore, we know where to stop ray marching.
+        const float max_dist = this->distance_in_volume(ray.start, ray, scene);
+
+        // Perform ray marching through the volume.
+        for (float dist = 0.0f; dist <= max_dist; dist += this->ray_step_size) {
+            vec4 pos = ray.start + ray.normalized_dir * dist;
+            f(pos);
+        }
+    }
+
     // return: The distance the ray travels in the smoke before exiting.
     float distance_in_volume(const vec4 intersection_pos, const Ray outgoing, const Scene &scene) const {
         optional<Intersection> collision = scene.closest_intersection(outgoing);
