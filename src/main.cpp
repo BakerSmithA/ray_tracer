@@ -30,7 +30,7 @@
 #define SCREEN_HEIGHT 500//256 * 1
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 3
-#define NUM_SHADOW_RAYS 0
+#define NUM_SHADOW_RAYS 1
 #define NUM_SAMPLES 8
 
 // /*Place updates of parameters here*/
@@ -66,8 +66,8 @@ int main(int argc, char* argv[]) {
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
     Scene scene = volume_scene();
-    //Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
-    Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
+    Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
+    //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {

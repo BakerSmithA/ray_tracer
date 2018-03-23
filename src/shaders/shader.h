@@ -28,7 +28,7 @@ public:
         return acc_transparency * col;
     }
 
-private:
+protected:
     // return: the mean transparency from the intersection position to the
     //         random points in the sphere of the light source.
     float mean_random_transparency(vec4 pos, const Primitive *prim, const Scene &scene, const Light &light, const int num_shadow_rays) const {

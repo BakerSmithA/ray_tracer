@@ -7,9 +7,10 @@
 
 // return: a cube with a volumetric shader.
 Object *cube_volume_model() {
+    const float extinction_coeff = 2.0f;
     const float ray_step_size = 0.01f;
     Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
-    Shader *shader = new Volumetric(texture, ray_step_size);
+    Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
     vec4 A = vec4(290,0,114,1);
 	vec4 B = vec4(130,0, 65,1);
@@ -47,9 +48,10 @@ Object *cube_volume_model() {
 }
 
 Object *sphere_volume_model() {
+    const float extinction_coeff = 3.0f;
     const float ray_step_size = 0.01f;
     Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
-    Shader *shader = new Volumetric(texture, ray_step_size);
+    Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
 	Primitive **primitives = new Primitive*[1];
 	primitives[0] = new Sphere(vec4(0.1f, 0.0f, -0.4f, 1.0f), 0.2f, shader);

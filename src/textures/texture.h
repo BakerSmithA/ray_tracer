@@ -10,15 +10,16 @@
 template <class ObjectRelativePos>
 class Texture {
 public:
+    // param position: position in the texture where each axis goes from 0-1.
     // return: the color of the the texture at the given position in the
-    //         coordinate space of the object, i.e. in the range 0-1 for each
-    //         axis.
+    //         coordinate space of the object.
     virtual vec3 color_at(ObjectRelativePos position) const = 0;
 
-    // return: the transparency of the the texture at the given position in the
-    //         coordinate space of the object, i.e. in the range 0-1 for each
-    //         axis.
-    virtual float transparency_at(ObjectRelativePos position) const = 0;
+    // param position: position in the texture where each axis goes from 0-1.
+    // return: the density of the the texture at the given position in the
+    //         coordinate space of the object. The denser this is, the less
+    //         light will be allowed to pass through.
+    virtual float density_at(ObjectRelativePos position) const = 0;
 };
 
 #endif // TEXTURE_H
