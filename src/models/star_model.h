@@ -3,7 +3,7 @@
 
 // return: a star model.
 Object *star_model() {
-    Shader *shader = Projection::spherical("../textures/sun_large.bmp");
+    Shader *shader = Projection::spherical("../texture_files/sun_large.bmp");
 
 	Primitive **primitives = new Primitive*[1];
 	primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3, shader);

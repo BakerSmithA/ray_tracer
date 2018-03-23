@@ -27,7 +27,7 @@ Object *floor() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../textures/metal.bmp", planar_y);
+	const Shader *tex_shader = Projection::planar("../texture_files/metal.bmp", planar_y);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
@@ -42,7 +42,7 @@ Object *left_wall() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../textures/bricks.bmp", planar_x);
+	const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_x);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
@@ -57,7 +57,7 @@ Object *right_wall() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../textures/bricks.bmp", planar_x);
+	const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_x);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
@@ -72,7 +72,7 @@ Object *back_wall() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../textures/bricks.bmp", planar_z);
+	const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_z);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
