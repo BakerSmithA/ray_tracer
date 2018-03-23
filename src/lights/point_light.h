@@ -19,9 +19,8 @@ public:
     }
 
     // param point: the point to be illuminated.
-    // param surface_normal: the normal of the object at the point.
     // return: the intensity of light at the position in the scene.
-    vec3 intensity(vec4 point, vec4 surface_normal) const {
+    vec3 intensity(vec4 point) const {
         // The distance from the light source to the intersection, i.e. the radius of the sphere.
         vec4 shadow_ray = this->pos - point;
         // The intensity of light is inversely proportional to the distance squared.
@@ -30,6 +29,19 @@ public:
         vec3 intensity = this->color / surface_area_at_radius_r;
 
         return intensity;
+    }
+
+    // param position: the position on the object to get the factor of.
+    // param surface_normal: the normal of the illuminated surface.
+    // return: the proportion of light which strikes the surface depending
+    //         on the angle of the surface to the light.
+    float projection_factor(vec4 position, vec4 surface_normal) const {
+        Ray shadow_ray = this->ray_from(position).value(); // Because we know it has a value.
+        vec4 shadow_ray_dir = shadow_ray.normalized_dir;
+        // The proportion of light hitting the surface.
+        float prop = dot(normalize(surface_normal), shadow_ray_dir);
+        // Because negative light is not allowed.
+        return std::max(prop, 0.0f);
     }
 
     // return: a shadow ray from the point and the light source. This is

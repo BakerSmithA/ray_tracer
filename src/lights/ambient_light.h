@@ -17,8 +17,19 @@ public:
     // param surface_normal: the normal of the object at the point.
     // return: the intensity of each color channel of the light at the given
     //         position in the scene.
-    vec3 intensity(vec4 point, vec4 surface_normal) const {
+    vec3 intensity(vec4 point) const {
         return this->color;
+    }
+
+    // An ambient light has no position, and so its projection factor is the
+    // same everywhere.
+    //
+    // param position: the position on the object to get the factor of.
+    // param surface_normal: the normal of the illuminated surface.
+    // return: the proportion of light which strikes the surface depending
+    //         on the angle of the surface to the light.
+    virtual float projection_factor(vec4 position, vec4 surface_normal) const {
+        return 1.0f;
     }
 
     // return: nothing since ambient lights do not have a position.
