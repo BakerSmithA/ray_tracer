@@ -10,8 +10,8 @@ using glm::normalize;
 using glm::length;
 using std::function;
 
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef PROJECTION_TEXTURE_H
+#define PROJECTION_TEXTURE_H
 
 // The axis to 'shine' a texture along in to generate a planar projection.
 enum PlanarProjectionDirection {
@@ -130,4 +130,4 @@ public:
     }
 };
 
-#endif // TEXTURE_H
+#endif // PROJECTION_TEXTURE_H

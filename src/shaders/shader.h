@@ -7,7 +7,6 @@
 // Used to model different types of surfaces, e.g. matte, glossy, etc.
 class Shader {
 public:
-
     // return: the proportion by which light is let through the
     //         material. E.g. a value of 1 is totally transparent, and a value
     //         of 0 is totally opaque.
