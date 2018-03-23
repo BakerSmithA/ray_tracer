@@ -110,7 +110,8 @@ public:
     }
 
     /*
-     ** Convenience functions.
+     ** Convenience functions for creating shaders with different
+     ** projection methods.
      */
 
     // return: a texture shader which maps the texture using planar mapping
