@@ -27,7 +27,7 @@ public:
     // param surface_normal: the normal of the object at the point.
     // return: the intensity of each color channel of the light at the given
     //         position in the scene.
-    virtual vec3 intensity(vec4 point, vec4 surface_normal) const {
+    vec3 intensity(vec4 point, vec4 surface_normal) const {
         return glm::dot(this->normalised_dir, surface_normal) * this->color;
     }
 
@@ -36,14 +36,14 @@ public:
     //
     // return: a shadow ray from the point and the light source. Or, returns
     //         nothing if the light does not cast shadows.
-    virtual optional<Ray> ray_from(vec4 point) const {
+    optional<Ray> ray_from(vec4 point) const {
         return Ray(point, this->normalised_dir * this->shadow_ray_len, 0);
     }
 
     // return: a number of randomly selected shadow rays from an area around
     //         the light to the point. Or, returns nothing if the light does
     //         not cast shadows.
-    virtual vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
+    vector<Ray> random_shadow_rays_from(vec4 point, int num) const {
         // The center of the sphere used to draw shadow rays to.
         vec3 center_3d = vec3(point - this->normalised_dir);
 
