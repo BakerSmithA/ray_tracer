@@ -36,11 +36,9 @@ public:
         float my = 1 / (max.y - min.y);
         float mz = 1 / (max.z - min.z);
 
-        vec4 m = vec4(mx, my, mz, 1.0f);
+        vec4 scale = vec4(mx, my, mz, 1.0f);
 
-        vec4 p = m * (world_point - this->bounding_cube.min);
-        p.w = 1.0f;
-        return p;
+        return (world_point - this->bounding_cube.min) * scale;
     }
 
 private:

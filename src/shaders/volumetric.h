@@ -42,12 +42,16 @@ public:
 
         // Used to update the extinction for how much light enters the camera.
         auto primary_ray_step = [&](vec4 step_pos, vec4 termination_pos) {
+            // The projection of the step position into object coordinates.
+            vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
+            float density = this->texture->density_at(proj);
+
             float lighting = mean_random_transparency(position, prim, scene, light, num_shadow_rays);
-            float density = this->texture->density_at(step_pos);
+
             extinction *= exp(-this->extinction_coefficient * density * this->ray_step_size) * lighting;
         };
 
-        this->for_each_ray_step(outgoing, scene, primary_ray_step);
+        this->for_each_ray_step(position, outgoing, scene, primary_ray_step);
 
         // If the extinction is too low, there's no point computing the
         // background color as it will not show through.
@@ -68,7 +72,7 @@ private:
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const Ray through_vol_ray, const Scene &scene, function<void(vec4, vec4)> f) const {
+    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const Scene &scene, function<void(vec4, vec4)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
         optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
@@ -80,11 +84,12 @@ private:
         }
 
         const vec4 termination_pos = termination.value().pos;
-        const float max_dist = length(through_vol_ray.start - termination_pos);
+        const float max_dist = length(position - termination_pos);
 
-        // Perform ray marching through the volume.
-        for (float dist = 0.0f; dist <= max_dist; dist += this->ray_step_size) {
-            vec4 pos = through_vol_ray.start + through_vol_ray.normalized_dir * dist;
+        // Perform ray marching through the volume. Minus the step size from the
+        // maximum to avoid the ray going outside the shape.
+        for (float dist = 0.0f; dist < max_dist; dist += this->ray_step_size) {
+            vec4 pos = position + through_vol_ray.normalized_dir * dist;
             f(pos, termination_pos);
         }
     }

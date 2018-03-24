@@ -25,7 +25,11 @@ public:
     //         coordinate space of the object. The denser this is, the less
     //         light will be allowed to pass through.
     float density_at(vec4 position) const override {
-        return 1.0f;
+        if (position.z > 1.0) {
+            printf("BAD: %f\n", position.z);
+        }
+        vec2 p = vec2(position.x, position.z);
+        return this->frames->color_at(p).x;
     }
 };
 

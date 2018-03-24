@@ -12,7 +12,7 @@ Object *cube_volume_model() {
     Texture3d *texture = new Stacked3d("../texture_files/cloud_frames.bmp", 12);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
-    float y = 40.0f;
+    float y = 0.0f;
 
     vec4 A = vec4(290,y,114,1);
 	vec4 B = vec4(130,y, 65,1);
