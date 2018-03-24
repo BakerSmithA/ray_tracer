@@ -36,47 +36,19 @@ Primitive **scaled_flipped_triangles(vector<Triangle*> triangles) {
 		new_v2.w = 1.0;
 
 		new_triangles[i] = new Triangle(new_v1, new_v0, new_v2, triangle->shader);
-        //new_triangles[i] = new Triangle(new_v0, new_v1, new_v2, triangle->shader);
 	}
 
 	return new_triangles;
 }
 
 Object *volume_cube_model() {
-    Shader *shader = new Diffuse(vec3(1,0,0));
+    // Shader *shader = new Diffuse(vec3(1,0,0));
+    Texture3d *texture = new Stacked3d("../texture_files/cloud_frames.bmp", 12);
+    Shader *shader = new Volumetric(texture, 0.3f, 1.0f);
 
-    vector<Triangle*> triangles;
-    // floor
-    triangles.push_back(new Triangle(C, B, A, shader));
-    triangles.push_back(new Triangle(C, D, B, shader));
-
-    // left
-    triangles.push_back(new Triangle(A, E, C, shader));
-    triangles.push_back(new Triangle(C, E, G, shader));
-
-    // right
-    triangles.push_back(new Triangle(F, B, D, shader));
-    triangles.push_back(new Triangle(H, F, D, shader));
-
-    // back
-    triangles.push_back(new Triangle(G, D, C, shader));
-    triangles.push_back(new Triangle(G, H, D, shader));
-
-    // ceiling
-    triangles.push_back(new Triangle(E, F, G, shader));
-	triangles.push_back(new Triangle(F, H, G, shader));
-
-    // front
-    G.z = 0;
-    D.z = 0;
-    C.z = 0;
-    H.z = 0;
-    triangles.push_back(new Triangle(D, G, C, shader));
-    triangles.push_back(new Triangle(H, G, D, shader));
-    // triangles.push_back(new Triangle(G, D, C, shader));
-    // triangles.push_back(new Triangle(G, H, D, shader));
-
-    return new Object(triangles.size(), scaled_flipped_triangles(triangles));
+    Primitive **primitives = new Primitive*[1];
+    primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.6, shader);
+    return new Object(1, primitives);
 }
 
 // return: all the objects in the cornel box.

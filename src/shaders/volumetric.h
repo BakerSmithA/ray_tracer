@@ -63,7 +63,7 @@ public:
         // volume color.
         vec3 background_col = this->color_behind(position, prim, outgoing, scene, light, num_shadow_rays);
 
-        return glm::mix(vec3(0,0,0), background_col, extinction);
+        return glm::mix(vec3(1,1,1), background_col, extinction);
     }
 
 private:
