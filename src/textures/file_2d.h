@@ -8,7 +8,10 @@ private:
     SDL_Surface *image;
 
 public:
-    File2d(const char *image_name): image(SDL_LoadBMP(image_name)) {
+    const float width, height;
+
+    File2d(const char *image_name):
+        image(SDL_LoadBMP(image_name)), width(image->w), height(image->h) {
         if (image == NULL) {
             printf("Unable to load bitmap: %s\n", SDL_GetError());
             exit(1);
@@ -24,7 +27,8 @@ public:
     //         coordinate space of the object.
     vec3 color_at(vec2 uv) const override {
         // TODO: Mix color of pixels.
-        vec2 image_uv = vec2(uv.x * this->image->w, uv.y * this->image->h);
+        vec2 clamped = glm::clamp(uv, vec2(0, 0), vec2(1, 1));
+        vec2 image_uv = vec2(clamped.x * this->image->w, clamped.y * this->image->h);
         return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
     }
 };

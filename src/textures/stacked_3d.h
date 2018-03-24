@@ -11,9 +11,10 @@ public:
     // image, which is then split up.
     const File2d *frames;
     const int frames_per_side;
+    const float frame_size;
 
     Stacked3d(File2d *frames, int frames_per_side):
-        frames(frames), frames_per_side(frames_per_side) {
+        frames(frames), frames_per_side(frames_per_side), frame_size(frames->width / frames_per_side) {
     }
 
     Stacked3d(const char *frames_file_name, int frames_per_side):
@@ -25,10 +26,7 @@ public:
     //         coordinate space of the object. The denser this is, the less
     //         light will be allowed to pass through.
     float density_at(vec4 position) const override {
-        if (position.z > 1.0) {
-            printf("BAD: %f\n", position.z);
-        }
-        vec2 p = vec2(position.x, position.z);
+        vec2 p = vec2(position) / 6.0f;
         return this->frames->color_at(p).x;
     }
 };
