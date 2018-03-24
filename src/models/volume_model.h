@@ -1,5 +1,4 @@
-#include "../textures/texture.h"
-#include "../textures/constant_texture.h"
+#include "../textures/uniform_3d.h"
 #include "../shaders/volumetric.h"
 
 #ifndef VOLUME_MODEL_H
@@ -9,7 +8,7 @@
 Object *cube_volume_model() {
     const float extinction_coeff = 2.0f;
     const float ray_step_size = 0.01f;
-    Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
+    Texture3d *texture = new Uniform3d(vec3(0.5f, 1.0f, 0.5f), 1.0f);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
     vec4 A = vec4(290,0,114,1);
@@ -50,7 +49,7 @@ Object *cube_volume_model() {
 Object *sphere_volume_model() {
     const float extinction_coeff = 1.5f;
     const float ray_step_size = 0.01f;
-    Texture<vec4> *texture = new ConstantTexture<vec4>(vec3(0.5f, 1.0f, 0.5f), 1.0f);
+    Texture3d *texture = new Uniform3d(vec3(0.5f, 1.0f, 0.5f), 1.0f);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
 	Primitive **primitives = new Primitive*[1];
@@ -136,12 +135,10 @@ vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
 	vec4 pos = vec4(0, -0.5, 0, 1.0);
-	// vec3 col = vec3(18, 18, 18);
-    vec3 col = vec3(50, 50, 50);
+	vec3 col = vec3(18, 18, 18);
 	float radius = 0.1;
-    float dropoff = 10.0f;
 
-	PointLight *light = new PointLight(col, pos, radius, dropoff);
+	PointLight *light = new PointLight(col, pos, radius);
     AmbientLight *ambient = new AmbientLight(vec3(0.1, 0.1, 0.1));
 
 	lights.push_back(light);

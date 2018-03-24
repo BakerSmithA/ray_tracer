@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "../rendering/SDLauxiliary.h"
 #include "shader.h"
+#include "../textures/file_2d.h"
 #include <math.h>
 #include <functional>
 
@@ -74,25 +75,16 @@ vec2 spherical_projected(vec4 object_space_point) {
 }
 
 class Projection: public ShadowedShader {
-private:
-    SDL_Surface *image = NULL;
-
 public:
-    //const PlanarProjectionDirection projection_dir;
+    // The texture projected onto the surface.
+    const Texture2d *texture;
+
     // Takes a point in 4d object coordinates to a point 2d uv coordinate.
     const function<vec2(vec4)> project_to_uv;
 
-    Projection(const char *image_name, const function<vec2(vec4)> project_to_uv):
-        image(SDL_LoadBMP(image_name)), project_to_uv(project_to_uv)
+    Projection(Texture2d *texture, const function<vec2(vec4)> project_to_uv):
+        texture(texture), project_to_uv(project_to_uv)
     {
-        if (image == NULL) {
-            printf("Unable to load bitmap: %s\n", SDL_GetError());
-            exit(1);
-        }
-    }
-
-    ~Projection() {
-        SDL_FreeSurface(this->image);
     }
 
     // return: the color of the intersected surface, illuminated by a specular
@@ -103,10 +95,8 @@ public:
         vec4 proj = prim->parent_obj->converted_world_to_obj(position);
         // uv is in the range 0-1.
         vec2 uv = this->project_to_uv(proj);
-        // image_uv is in the range 0-image size.
-        vec2 image_uv = vec2(uv.x * this->image->w, uv.y * this->image->h);
-
-        return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
+        // Converts uv to be in image coordinates.
+        return this->texture->color_at(uv);
     }
 
     /*
@@ -121,12 +111,14 @@ public:
             return planar_projected(object_coordinate, dir);
         };
 
-        return new Projection(image_name, project_to_uv);
+        Texture2d *texture = new File2d(image_name);
+        return new Projection(texture, project_to_uv);
     }
 
     // return: a texture shader which maps the texture using a spherical projection.
     static Projection *spherical(const char *image_name) {
-        return new Projection(image_name, spherical_projected);
+        Texture2d *texture = new File2d(image_name);
+        return new Projection(texture, spherical_projected);
     }
 };
 

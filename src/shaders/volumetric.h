@@ -1,5 +1,5 @@
 #include "shader.h"
-#include "../textures/texture.h"
+#include "../textures/texture_3d.h"
 
 #ifndef VOLUMETRIC_H
 #define VOLUMETRIC_H
@@ -8,13 +8,13 @@
 class Volumetric: public Shader {
 public:
     // Describes the shape, color, and transparency of the 3d texture.
-    Texture<vec4> *texture;
+    Texture3d *texture;
     // The size of the steps to use for ray marching inside the object.
     const float ray_step_size;
     // Attenuation due of light to both absorption and scatterring.
     const float extinction_coefficient;
 
-    Volumetric(Texture<vec4> *texture, float ray_step_size, float extinction_coefficient):
+    Volumetric(Texture3d *texture, float ray_step_size, float extinction_coefficient):
         texture(texture), ray_step_size(ray_step_size), extinction_coefficient(extinction_coefficient) {
     }
 
