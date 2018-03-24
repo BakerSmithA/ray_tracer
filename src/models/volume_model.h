@@ -1,4 +1,5 @@
 #include "../textures/uniform_3d.h"
+#include "../textures/stacked_3d.h"
 #include "../shaders/volumetric.h"
 
 #ifndef VOLUME_MODEL_H
@@ -8,18 +9,20 @@
 Object *cube_volume_model() {
     const float extinction_coeff = 2.0f;
     const float ray_step_size = 0.01f;
-    Texture3d *texture = new Uniform3d(vec3(0.5f, 1.0f, 0.5f), 1.0f);
+    Texture3d *texture = new Stacked3d("../texture_files/cloud_frames.bmp", 12);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
-    vec4 A = vec4(290,0,114,1);
-	vec4 B = vec4(130,0, 65,1);
-	vec4 C = vec4(240,0,272,1);
-	vec4 D = vec4(82,0,225,1);
+    float y = 40.0f;
 
-	vec4 E = vec4(290,165,114,1);
-	vec4 F = vec4(130,165, 65,1);
-	vec4 G = vec4(240,165,272,1);
-	vec4 H = vec4(82,165,225,1);
+    vec4 A = vec4(290,y,114,1);
+	vec4 B = vec4(130,y, 65,1);
+	vec4 C = vec4(240,y,272,1);
+	vec4 D = vec4(82,y,225,1);
+
+	vec4 E = vec4(290,165+y,114,1);
+	vec4 F = vec4(130,165+y, 65,1);
+	vec4 G = vec4(240,165+y,272,1);
+	vec4 H = vec4(82,165+y,225,1);
 
 	vector<Triangle*> triangles;
 
@@ -49,7 +52,7 @@ Object *cube_volume_model() {
 Object *sphere_volume_model() {
     const float extinction_coeff = 1.5f;
     const float ray_step_size = 0.01f;
-    Texture3d *texture = new Uniform3d(vec3(0.5f, 1.0f, 0.5f), 1.0f);
+    Texture3d *texture = new Uniform3d(1.0f);
     Shader *shader = new Volumetric(texture, ray_step_size, extinction_coeff);
 
 	Primitive **primitives = new Primitive*[1];
@@ -125,8 +128,8 @@ const Object **volume_objects() {
     objects[2] = volume_right_wall();
     objects[3] = volume_back_wall();
     objects[4] = volume_ceiling();
-    objects[5] = sphere_volume_model();
-    objects[6] = cube_volume_model();
+    objects[5] = cube_volume_model();
+    objects[6] = sphere_volume_model();
 	return objects;
 }
 
@@ -139,10 +142,11 @@ vector<Light*> volume_lights() {
 	float radius = 0.1;
 
 	PointLight *light = new PointLight(col, pos, radius);
-    AmbientLight *ambient = new AmbientLight(vec3(0.1, 0.1, 0.1));
+    // AmbientLight *ambient = new AmbientLight(vec3(0.1, 0.1, 0.1));
+    AmbientLight *ambient = new AmbientLight(vec3(1,1,1));
 
-	lights.push_back(light);
-    //lights.push_back(ambient);
+	//lights.push_back(light);
+    lights.push_back(ambient);
 
 	return lights;
 }

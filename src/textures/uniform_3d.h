@@ -6,18 +6,9 @@
 class Uniform3d: public Texture3d {
 public:
     // The paramters for everywhere in the texture.
-    const vec3 color;
     const float density;
 
-    Uniform3d(vec3 color, float density):
-        color(color), density(density) {
-    }
-
-    // param position: position in the texture where each axis goes from 0-1.
-    // return: the color of the the texture at the given position in the
-    //         coordinate space of the object.
-    vec3 color_at(vec4 position) const override {
-        return this->color;
+    Uniform3d(float density): density(density) {
     }
 
     // param position: position in the texture where each axis goes from 0-1.
