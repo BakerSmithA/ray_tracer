@@ -1,4 +1,8 @@
 #include <glm/glm.hpp>
+#include <algorithm>
+
+using std::min;
+using std::max;
 
 #ifndef TEXTURE_2D_H
 #define TEXTURE_2D_H
@@ -20,8 +24,7 @@ public:
     // return: the color of the the texture at the given position in the
     //         coordinate space of the object.
     vec3 color_at(vec2 position) const {
-        vec2 clamped = glm::clamp(vec2(0,0), vec2(1,1), position);
-        vec2 image_uv = clamped * vec2(this->width(), this->height());
+        vec2 image_uv = position * vec2(this->width(), this->height());
         return this->bilinear_color_at_pixel(image_uv.x, image_uv.y);
     }
 
@@ -40,10 +43,15 @@ private:
     // return: the bilinearly interpolated color at the given position in
     //         image space, i.e. x and y go from 0 to width and height respectively.
     vec3 bilinear_color_at_pixel(float x, float y) const {
-        // Uses the formula described:
+        // With help from:
         //  http://supercomputingblog.com/graphics/coding-bilinear-interpolation/
-        float min_x = floor(x), min_y = floor(y);
-        float max_x = ceil(x),  max_y = ceil(y);
+
+        // Bound the indices to be inside the buffer.
+        int min_x = min((int)floor(x), this->width()-1);
+        int min_y = min((int)floor(y), this->height()-1);
+
+        int max_x = min((int)ceil(x), this->width()-1);
+        int max_y = min((int)ceil(y), this->height()-1);
 
         // Need to be careful of division by zero, otherwise get black lines
         // appearing on texture.
