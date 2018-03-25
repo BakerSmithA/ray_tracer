@@ -22,16 +22,6 @@ public:
     //         image buffer. Therefore the x and y go from 0 to image width
     //         and height respectively.
     vec3 pixel_at(int x, int y) const {
-        if (x >= this->m_width) {
-            int min_x = min((int)floor(x), this->width()-1);
-            int min_y = min((int)floor(y), this->height()-1);
-
-            int max_x = min((int)ceil(x), this->width()-1);
-            int max_y = min((int)ceil(y), this->height()-1);
-
-            printf("min_x = %d\nmax_x = %d\nmin_y = %d\nmax_y = %d\n\n", min_x, max_x, min_y, max_y);
-        }
-
         float grayscale = this->buffer[y * this->m_width + x];
         return vec3(grayscale);
     }
