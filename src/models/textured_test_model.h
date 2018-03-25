@@ -14,7 +14,7 @@
 #include "../shaders/flat_color.h"
 #include "../shaders/smoke.h"
 #include "../shaders/projection.h"
-#include "../textures/noise_2d.h"
+#include "../textures/perlin_2d.h"
 
 using std::vector;
 using glm::vec3;
@@ -74,7 +74,8 @@ Object *back_wall() {
 
 	const Shader *diffuse_shader = new Diffuse(col);
 	// const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_z);
-	const Texture2d *noise = new Noise2d(10, 10);
+	int octaves = 8;
+	const Texture2d *noise = new Perlin2d(octaves);
 	const Shader *tex_shader = Projection::planar(noise, planar_z);
 
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);

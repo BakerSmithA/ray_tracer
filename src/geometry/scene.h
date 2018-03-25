@@ -18,6 +18,9 @@ using std::nullopt;
 #define SCENE_H
 
 // Contains all the geometry, lights, etc for a scene.
+//
+// WARNING: when the scene is destroyed the objects, and lights, pointed to by
+// the scene will also be destroyed.
 class Scene {
 public:
     // The number of objects in the scene.
@@ -30,6 +33,17 @@ public:
     Scene(const int num_objects, const Object **objects, const vector<Light*> lights):
         num_objects(num_objects), objects(objects), lights(lights)
     {
+    }
+
+    ~Scene() {
+        for (size_t i=0; i<lights.size(); i++) {
+            delete lights[i];
+        }
+
+        for (int i=0; i<num_objects; i++) {
+            delete objects[i];
+        }
+        delete[] objects;
     }
 
     // param ray:              A ray, in scene coordinates, check intersection with.

@@ -8,6 +8,9 @@ using std::vector;
 #define OBJECT_H
 
 // A collection of primitives.
+//
+// WARNING: when the object is destroyed, the primitives it contains will also
+// be destroyed.
 class Object {
 public:
     const int num_prims;
@@ -22,6 +25,14 @@ public:
         for (int i=0; i<num_prims; i++) {
             this->primitives[i]->parent_obj = this;
         }
+    }
+
+    ~Object() {
+        for (int i=0; i<num_prims; i++) {
+            delete this->primitives[i];
+        }
+
+        delete[] this->primitives;
     }
 
     // return: the world_point converted to in the axis aligned coordinate

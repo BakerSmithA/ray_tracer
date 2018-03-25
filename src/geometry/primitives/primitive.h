@@ -15,6 +15,8 @@ using std::optional;
 class Shader;
 class Object;
 
+// WARNING: When the primtive is destroyed, the shader is contains will
+// also be destroyed.
 class Primitive {
 public:
 	// Used to tell the color of the triangle.
@@ -28,6 +30,11 @@ public:
     Primitive(const Shader *shader, BoundingCube bounding_cube):
 		shader(shader), bounding_cube(bounding_cube) {
 	};
+
+	virtual ~Primitive() {
+		// TODO: Delete shader.
+		//delete this->shader;
+	}
 
 	// return: the position of the intersection with the primitive, or nullptr
 	//		   if no intersection occurred.

@@ -13,6 +13,9 @@ public:
     Light(vec3 color): color(color) {
     }
 
+    virtual ~Light() {
+    }
+
     // param point: the point to be illuminated.
     // return: the intensity of each color channel of the light at the given
     //         position in the scene.
