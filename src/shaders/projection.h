@@ -82,7 +82,7 @@ public:
     // Takes a point in 4d object coordinates to a point 2d uv coordinate.
     const function<vec2(vec4)> project_to_uv;
 
-    Projection(Texture2d *texture, const function<vec2(vec4)> project_to_uv):
+    Projection(const Texture2d *texture, const function<vec2(vec4)> project_to_uv):
         texture(texture), project_to_uv(project_to_uv)
     {
     }
@@ -106,16 +106,22 @@ public:
 
     // return: a texture shader which maps the texture using planar mapping
     //         in the given direction.
-    static Projection *planar(const char *image_name, PlanarProjectionDirection dir) {
+    static Projection *planar(const Texture2d *texture, PlanarProjectionDirection dir) {
         const auto project_to_uv = [=](vec4 object_coordinate) {
             return planar_projected(object_coordinate, dir);
         };
 
-        Texture2d *texture = new File2d(image_name);
         return new Projection(texture, project_to_uv);
     }
 
-    // return: a texture shader which maps the texture using a spherical projection.
+    // return: a texture shader which maps the file texture using planar mapping
+    //         in the given direction.
+    static Projection *planar(const char *image_name, PlanarProjectionDirection dir) {
+        const Texture2d *texture = new File2d(image_name);
+        return Projection::planar(texture, dir);
+    }
+
+    // return: a texture shader which maps the file texture using a spherical projection.
     static Projection *spherical(const char *image_name) {
         Texture2d *texture = new File2d(image_name);
         return new Projection(texture, spherical_projected);

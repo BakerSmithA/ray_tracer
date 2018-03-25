@@ -14,6 +14,7 @@
 #include "../shaders/flat_color.h"
 #include "../shaders/smoke.h"
 #include "../shaders/projection.h"
+#include "../textures/perlin_2d.h"
 
 using std::vector;
 using glm::vec3;
@@ -72,7 +73,10 @@ Object *back_wall() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_z);
+	// const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_z);
+	const Texture2d *noise = new Perlin2d(vec3(0.0, 1.0, 0.0), 10, 10);
+	const Shader *tex_shader = Projection::planar(noise, planar_z);
+
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;

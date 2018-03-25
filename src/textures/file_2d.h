@@ -29,16 +29,6 @@ public:
         vec2 image_uv = vec2(clamped.x * this->image->w, clamped.y * this->image->h);
         return get_pixel(this->image, (int)round(image_uv.x), (int)round(image_uv.y));
     }
-
-    // return: the width of the texture.
-    virtual int width() {
-        return 0;
-    }
-
-    // return: the height of the texture.
-    virtual int height() {
-        return 0;
-    }
 };
 
 #endif // FILE_2D_H

@@ -1,5 +1,4 @@
 #include "../textures/uniform_3d.h"
-#include "../textures/stacked_3d.h"
 #include "../shaders/volumetric.h"
 
 #ifndef VOLUME_MODEL_H
@@ -43,7 +42,7 @@ Primitive **scaled_flipped_triangles(vector<Triangle*> triangles) {
 
 Object *volume_cube_model() {
     // Shader *shader = new Diffuse(vec3(1,0,0));
-    Texture3d *texture = new Stacked3d("../texture_files/cloud_frames.bmp", 12);
+    Texture3d *texture = new Uniform3d(1.0f);
     const float step_size = 0.015f;
     const float extinction_coefficient = 2.0f;
     Shader *shader = new Volumetric(texture, step_size, extinction_coefficient);
