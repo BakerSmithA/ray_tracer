@@ -24,10 +24,36 @@ public:
     // return: the color of the the texture at the given position in the
     //         coordinate space of the object.
     vec3 color_at(vec2 uv) const override {
-        // TODO: Mix color of pixels.
-        vec2 clamped = glm::clamp(uv, vec2(0, 0), vec2(1, 1));
-        vec2 image_uv = vec2(clamped.x * this->image->w, clamped.y * this->image->h);
-        return get_pixel(this->image, (int)round(image_uv.x), (int)round(image_uv.y));
+        vec2 image_uv = uv * vec2(this->image->w, this->image->h);
+        return this->bilinear_color_at_pixel(image_uv.x, image_uv.y);
+    }
+
+private:
+    // return: the bilinearly interpolated color at the given position in
+    //         image space, i.e. x and y go from 0 to width and height respectively.
+    vec3 bilinear_color_at_pixel(float x, float y) const {
+        // Uses the formula described:
+        //  http://supercomputingblog.com/graphics/coding-bilinear-interpolation/
+        float min_x = floor(x), min_y = floor(y);
+        float max_x = ceil(x),  max_y = ceil(y);
+
+        float inv_width = 1.0f / (max_x - min_x);
+        float inv_height = 1.0f / (max_y - min_y);
+
+        // The colors of the pixels around location we want to sample.
+        vec3 col11 = get_pixel(this->image, min_x, min_y);
+        vec3 col12 = get_pixel(this->image, min_x, max_y);
+        vec3 col21 = get_pixel(this->image, max_x, min_y);
+        vec3 col22 = get_pixel(this->image, max_x, max_y);
+
+        // Interpolate the color of the lower pixels along the x-axis.
+        vec3 r1 = ((max_x - x) * inv_width * col11) + ((x - min_x) * inv_width * col21);
+        // Interpolate the color of the upper pixels along the x-axis.
+        vec3 r2 = ((max_x - x) * inv_width * col12) + ((x - min_x) * inv_width * col22);
+        // Interpolate along the y-axis.
+        vec3 q = ((max_y - y) * inv_height * r1) + ((y - min_y) * inv_height * r2);
+
+        return q;
     }
 };
 
