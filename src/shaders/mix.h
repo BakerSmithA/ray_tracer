@@ -6,7 +6,7 @@ using std::function;
 #ifndef MIX_SHADER_H
 #define MIX_SHADER_H
 
-// Mixes two shaders together with given ratio.
+// Mixes two shaders together with a given operation.
 class Mix: public Shader {
 public:
     const Shader *s1;

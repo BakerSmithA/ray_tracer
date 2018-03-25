@@ -73,6 +73,10 @@ float shadow_ray_transparency(vec4 pos, const Primitive *prim, const Scene &scen
 //         random points in the sphere of the light source. Accounts for if
 //         the light cannot cast shadows.
 float mean_random_transparency(vec4 pos, const Primitive *prim, const Scene &scene, const Light &light, const int num_shadow_rays) {
+    if (num_shadow_rays == 0) {
+        return 1.0f;
+    }
+
     vector<Ray> shadow_rays = light.random_shadow_rays_from(pos, num_shadow_rays);
 
     // If the light does not support shadows, assume all the light reached

@@ -15,6 +15,7 @@
 #include "../shaders/smoke.h"
 #include "../shaders/projection.h"
 #include "../textures/perlin_2d.h"
+#include "../shaders/mask.h"
 
 using std::vector;
 using glm::vec3;
@@ -70,15 +71,14 @@ Object *right_wall() {
 
 // return: the back wall of the box.
 Object *back_wall() {
-	const vec3 col = vec3(1, 1, 1);
-
-	const Shader *diffuse_shader = new Diffuse(col);
-	// const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_z);
 	int octaves = 8;
 	const Texture2d *noise = new Perlin2d(octaves);
-	const Shader *tex_shader = Projection::planar(noise, planar_z);
+	const Shader *mask = Projection::planar(noise, planar_z);
 
-	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
+	const Shader *s1 = new Diffuse(vec3(0.2,0.2,0.2));
+	const Shader *s2 = new Mirror();
+
+	const Shader *shader = new Mask(s1, s2, mask);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(G, D, C, shader));

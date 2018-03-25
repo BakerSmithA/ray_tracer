@@ -16,6 +16,8 @@
 #include "../shaders/flat_color.h"
 #include "../shaders/smoke.h"
 #include "../shaders/projection.h"
+#include "../textures/perlin_2d.h"
+#include "../shaders/mask.h"
 
 using std::vector;
 using glm::vec3;
@@ -229,7 +231,16 @@ Object *cornel_large_sphere() {
 }
 
 Object *cornel_small_sphere() {
-	Shader* shader = Mix::ratio(new Mirror(), new Diffuse(vec3(1.0f, 0.97f, 0.45f)), 0.1f);
+	// Shader* shader = Mix::ratio(new Mirror(), new Diffuse(vec3(1.0f, 0.97f, 0.45f)), 0.1f);
+
+	int octaves = 8;
+	const Texture2d *noise = new Perlin2d(octaves);
+	const Shader *mask = Projection::planar(noise, planar_z);
+
+	const Shader *s1 = new Diffuse(vec3(0.2,0.2,0.2));
+	const Shader *s2 = new Mirror();
+
+	Shader *shader = new Mask(s1, s2, mask);
 
 	Primitive **primitives = new Primitive*[1];
 	primitives[0] = new Sphere(vec4(0.3, -0.2, -0.1, 1.0), 0.2, shader);
