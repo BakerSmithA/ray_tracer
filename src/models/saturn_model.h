@@ -13,7 +13,8 @@ Object *saturn_model() {
 		// The larger the number, the blurrier the edges of the planet will be.
 		// float edge_blur = 0.6f;
 		float edge_blur = 0.1f;
-		return 1 - (pow(smoke_dist, edge_blur) / pow(sphere_diameter, edge_blur));
+		///return 1 - (pow(smoke_dist, edge_blur) / pow(sphere_diameter, edge_blur));
+		return 0.0f;
     };
 
     Shader *atmosphere = new Smoke(vec3(1, 1, 1), atmosphere_transparency);
@@ -63,7 +64,7 @@ const Object **saturn_objects() {
 vector<Light*> saturn_lights() {
 	vector<Light*> lights;
 
-	vec3 col = vec3(6, 6, 6);
+	vec3 col = vec3(3, 3, 3);
 	vec4 dir = vec4(-0.5, -0.1f, -0.1f, 1.0f);
 	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.03f);
 	lights.push_back(light);

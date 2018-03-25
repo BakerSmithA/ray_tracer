@@ -8,10 +8,8 @@ private:
     SDL_Surface *image;
 
 public:
-    const float width, height;
-
     File2d(const char *image_name):
-        image(SDL_LoadBMP(image_name)), width(image->w), height(image->h) {
+        image(SDL_LoadBMP(image_name)) {
         if (image == NULL) {
             printf("Unable to load bitmap: %s\n", SDL_GetError());
             exit(1);
@@ -29,7 +27,17 @@ public:
         // TODO: Mix color of pixels.
         vec2 clamped = glm::clamp(uv, vec2(0, 0), vec2(1, 1));
         vec2 image_uv = vec2(clamped.x * this->image->w, clamped.y * this->image->h);
-        return get_pixel(this->image, (int)image_uv.x, (int)image_uv.y);
+        return get_pixel(this->image, (int)round(image_uv.x), (int)round(image_uv.y));
+    }
+
+    // return: the width of the texture.
+    virtual int width() {
+        return 0;
+    }
+
+    // return: the height of the texture.
+    virtual int height() {
+        return 0;
     }
 };
 
