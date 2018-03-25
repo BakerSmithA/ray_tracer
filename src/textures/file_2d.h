@@ -37,6 +37,8 @@ private:
         float min_x = floor(x), min_y = floor(y);
         float max_x = ceil(x),  max_y = ceil(y);
 
+        // Need to be careful of division by zero, otherwise get black lines
+        // appearing on texture.
         float inv_width = (max_x - min_x) == 0.0f ? 0.5f : 1.0f / (max_x - min_x);
         float inv_height = (max_y - min_y) == 0.0f ? 0.5f : 1.0f / (max_y - min_y);
 
@@ -52,7 +54,6 @@ private:
         // Interpolate the color of the upper pixels along the x-axis.
         vec3 r2 = glm::mix(col22, col12, x_prop);
         // Interpolate along the y-axis.
-
         vec3 q = glm::mix(r2, r1, (max_y - y) * inv_height);
 
         return q;
