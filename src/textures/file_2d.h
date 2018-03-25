@@ -37,8 +37,8 @@ private:
         float min_x = floor(x), min_y = floor(y);
         float max_x = ceil(x),  max_y = ceil(y);
 
-        float inv_width = 1.0f / (max_x - min_x);
-        float inv_height = 1.0f / (max_y - min_y);
+        float inv_width = (max_x - min_x) == 0.0f ? 0.5f : 1.0f / (max_x - min_x);
+        float inv_height = (max_y - min_y) == 0.0f ? 0.5f : 1.0f / (max_y - min_y);
 
         // The colors of the pixels around location we want to sample.
         vec3 col11 = get_pixel(this->image, min_x, min_y);
@@ -47,11 +47,13 @@ private:
         vec3 col22 = get_pixel(this->image, max_x, max_y);
 
         // Interpolate the color of the lower pixels along the x-axis.
-        vec3 r1 = ((max_x - x) * inv_width * col11) + ((x - min_x) * inv_width * col21);
+        float x_prop = (max_x - x) * inv_width;
+        vec3 r1 = glm::mix(col21, col11, x_prop);
         // Interpolate the color of the upper pixels along the x-axis.
-        vec3 r2 = ((max_x - x) * inv_width * col12) + ((x - min_x) * inv_width * col22);
+        vec3 r2 = glm::mix(col22, col12, x_prop);
         // Interpolate along the y-axis.
-        vec3 q = ((max_y - y) * inv_height * r1) + ((y - min_y) * inv_height * r2);
+
+        vec3 q = glm::mix(r2, r1, (max_y - y) * inv_height);
 
         return q;
     }
