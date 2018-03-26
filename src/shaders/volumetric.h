@@ -11,7 +11,7 @@ class Volumetric: public Shader {
 public:
     // Describes the shape, color, and transparency of the 3d texture.
     Texture3d *texture;
-    // The color of the volume.
+    // Color of light exiting the volume.
     const vec3 extinction_color;
     // The size of the steps to use for primary ray marching inside the volume.
     const float primary_ray_step_size;
@@ -81,6 +81,9 @@ private:
             vec3 light_col = this->scattered_light_color(step_pos, prim, scene, light);
             vec3 step_scattering = light_col * step_size;
             out_col += extinction * step_scattering;
+
+            // Stop marching is the extinction is low enough.
+            return extinction >= 0.001f;
         };
 
         // Ray march through the volume.
@@ -107,7 +110,10 @@ private:
         auto shadow_ray_step = [&](vec4 step_pos, float step_size) {
             vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
             float density = this->texture->density_at(proj);
-            extinction *= glm::exp(-this->extinction_coefficient * density * step_size * (vec3(1) - this->extinction_color));
+            vec3 opposite_extinction_color = vec3(1.0f) - this->extinction_color;
+            extinction *= glm::exp(-this->extinction_coefficient * density * step_size * opposite_extinction_color);
+
+            return true;
         };
 
         // Offset the shadow ray to ensure it's inside the volume.
@@ -123,7 +129,7 @@ private:
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const float max_step_size, const Scene &scene, function<void(vec4, float)> f) const {
+    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const float max_step_size, const Scene &scene, function<bool(vec4, float)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
         optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
@@ -141,12 +147,16 @@ private:
         // remaining depth to avoid slicing artefacts when other objects are
         // inside the volume.
         float dist = 0.0f;
+        // Whether to continue marching through the volume. This is updated
+        // by the function which marches through the volume, therefore allowing
+        // for time savings.
+        bool should_march = true;
 
         // Perform ray marching through the volume. Minus the step size from the
         // maximum to avoid the ray going outside the shape.
-        for (; dist < max_dist; dist += max_step_size) {
+        for (; dist < max_dist && should_march; dist += max_step_size) {
             vec4 pos = position + through_vol_ray.normalized_dir * dist;
-            f(pos, max_step_size);
+            should_march = f(pos, max_step_size);
         }
 
         // Fractional step to remove slicing artefacts from objects inside volume.

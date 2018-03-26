@@ -85,7 +85,7 @@ vector<Light*> volume_lights() {
 	vec4 light2_pos = vec4(2.0, 2.0, 2.0, 1.0);
 	vec3 light2_col = vec3(104, 118, 186) * vec3(1.0f/255.0f) * 10.0f;
 
-	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.2f;
+	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.5f;
 
 	PointLight *light1 = new PointLight(light1_col, light1_pos, radius, 0.5f);
 	PointLight *light2 = new PointLight(light2_col, light2_pos, radius, 0.5f);
@@ -93,7 +93,7 @@ vector<Light*> volume_lights() {
 
 	lights.push_back(light1);
 	lights.push_back(light2);
-    //lights.push_back(ambient);
+    lights.push_back(ambient);
 
 	return lights;
 }
