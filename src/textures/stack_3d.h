@@ -38,8 +38,9 @@ public:
     //         coordinate space of the object. The denser this is, the less
     //         light will be allowed to pass through.
     float density_at(vec4 position) const {
-        vec3 slice_top = vec3(position) * vec3(this->frame_size, this->frame_size, this->num_frames_per_side);
-        return density_pixel_at(slice_top.x, slice_top.y, slice_top.z);
+        // Slices the volume texture along the z-axis.
+        vec3 slice_side = vec3(position) * vec3(this->frame_size, this->frame_size, this->num_frames_per_side);
+        return density_pixel_at(slice_side.x, slice_side.y, slice_side.z);
     }
 
     // return: the density of the pixel at the given x, y, frame_index in the
@@ -51,7 +52,7 @@ public:
         int frame_start_x = frame_index / num_frames_per_side;
         int frame_start_y = frame_index % num_frames_per_side;
 
-        return get_pixel(this->frames, x + 5 * frame_size, y + 5 * frame_size).x;
+        return get_pixel(this->frames, x + frame_start_x * frame_size, y + frame_start_y * frame_size).x;
     }
 };
 
