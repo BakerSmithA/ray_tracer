@@ -9,7 +9,7 @@
 // Models a point light which radiates light outwards.
 class PointLight: public Light {
 public:
-    const vec4 pos;
+    vec4 pos;
     // Used to determine how blurry shadows from the light should be.
     // A larger radius will produce blurrier shadows.
     const float radius;

@@ -44,7 +44,7 @@ Primitive **scaled_flipped_triangles(vector<Triangle*> triangles) {
 Object *volume_sphere_model() {
 	Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
-    const float primary_step_size = 0.015f;
+    const float primary_step_size = 0.1f;
 	const float shadow_step_size = 0.1f;
     const float extinction_coefficient = 2.0f;
     Shader *shader = new Volumetric(texture, primary_step_size, shadow_step_size, extinction_coefficient);

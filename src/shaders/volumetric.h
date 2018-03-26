@@ -53,12 +53,12 @@ public:
         auto shadow_ray_step = [&](vec4 step_pos, float step_size) {
             // The projection of the step position into object coordinates.
             vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
-            //float density = this->texture->density_at(proj);
+            float density = this->texture->density_at(proj);
 
             // Find how much light reached the position from the light.
             //float lighting = mean_random_transparency(termination_pos, prim, scene, light, num_shadow_rays);
 
-            //shadow_extinction *= exp(-this->extinction_coefficient * density * step_size);
+            shadow_extinction *= exp(-this->extinction_coefficient * density * step_size);
         };
 
         // Find the how much light made it through the volume, starting with
@@ -77,7 +77,7 @@ public:
             optional<Ray> shadow_ray = light.ray_from(step_pos);
             if (shadow_ray.has_value()) {
                 Ray offset_shadow_ray = shadow_ray.value().offset(prim->normal_at(step_pos), offset_dist);
-                this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, shadow_ray_step);
+                this->for_each_ray_step(step_pos, offset_shadow_ray, this->shadow_ray_step_size, scene, shadow_ray_step);
             }
 
             extinction *= exp(-this->extinction_coefficient * density * step_size);
@@ -95,7 +95,7 @@ public:
         // volume color.
         vec3 background_col = this->color_behind(position, prim, outgoing, scene, light, num_shadow_rays);
 
-        return glm::mix(vec3(1,1,1), background_col, extinction);
+        return glm::mix(vec3(shadow_extinction), background_col, extinction);
     }
 
 private:

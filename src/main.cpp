@@ -34,7 +34,7 @@
 #define NUM_SAMPLES 8
 
 // /*Place updates of parameters here*/
-void update(Camera &camera) {
+void update(Camera &camera, Scene &scene) {
     static int t = SDL_GetTicks();
     /* Compute frame time */
     int t2 = SDL_GetTicks();
@@ -46,32 +46,42 @@ void update(Camera &camera) {
     // Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
 
-    const float move_delta = 0.025f;
+    const float cam_move_delta = 0.025f;
     const float yaw_delta = 0.07f;
+    const float light_move_delta = 0.5f;
 
-    if(scancodes[SDL_SCANCODE_DOWN])  camera.move_forward(-move_delta); // Backwards
-    if(scancodes[SDL_SCANCODE_UP])    camera.move_forward(move_delta);  // Forwards
-    if(scancodes[SDL_SCANCODE_A])     camera.move_right(-move_delta);   // Left
-    if(scancodes[SDL_SCANCODE_D])     camera.move_right(move_delta);    // Right
-    if(scancodes[SDL_SCANCODE_W])     camera.move_down(-move_delta);    // Up
-    if(scancodes[SDL_SCANCODE_S])     camera.move_down(move_delta);     // Down
+    // Camera movement
+    if(scancodes[SDL_SCANCODE_DOWN])  camera.move_forward(-cam_move_delta); // Backwards
+    if(scancodes[SDL_SCANCODE_UP])    camera.move_forward(cam_move_delta);  // Forwards
+    if(scancodes[SDL_SCANCODE_A])     camera.move_right(-cam_move_delta);   // Left
+    if(scancodes[SDL_SCANCODE_D])     camera.move_right(cam_move_delta);    // Right
+    if(scancodes[SDL_SCANCODE_W])     camera.move_down(-cam_move_delta);    // Up
+    if(scancodes[SDL_SCANCODE_S])     camera.move_down(cam_move_delta);     // Down
     if(scancodes[SDL_SCANCODE_LEFT])  camera.turn(-yaw_delta);          // Pan Left
     if(scancodes[SDL_SCANCODE_RIGHT]) camera.turn(yaw_delta);           // Pan Right
+
+    // Light movement.
+    // Try getting the first light as a point light which can be moved.
+    PointLight* light = dynamic_cast<PointLight*>(scene.lights[0]);
+    if (light != NULL) {
+        if(scancodes[SDL_SCANCODE_I]) light->pos.x -= light_move_delta; // Backwards
+        if(scancodes[SDL_SCANCODE_K]) light->pos.x += light_move_delta; // Forwards
+    }
 }
 
 int main(int argc, char* argv[]) {
     //Scene scene = cornel_box();
-    Scene scene = textured_test_scene();
+    //Scene scene = textured_test_scene();
     //Scene scene = star_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
-    //Scene scene = volume_scene();
+    Scene scene = volume_scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
 
     while (NoQuitMessageSDL()) {
-        update(cam);
+        update(cam, scene);
         render(scene, cam, screen, NUM_SAMPLES, NUM_SHADOW_RAYS);
         SDL_Renderframe(screen);
     }
