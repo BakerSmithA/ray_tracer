@@ -44,10 +44,11 @@ Primitive **scaled_flipped_triangles(vector<Triangle*> triangles) {
 Object *volume_sphere_model() {
 	Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
-    const float primary_step_size = 0.1f;
-	const float shadow_step_size = 0.1f;
-    const float extinction_coefficient = 2.0f;
-    Shader *shader = new Volumetric(texture, primary_step_size, shadow_step_size, extinction_coefficient);
+    const float primary_step_size = 0.015f;
+	const float shadow_step_size = 0.05f;
+    const float extinction_coefficient = 3.5f;
+	const float scattering_coefficient = 0.1f;
+    Shader *shader = new Volumetric(texture, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
 
     Primitive **primitives = new Primitive*[1];
     primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.6, shader);
@@ -74,10 +75,10 @@ const Object **volume_objects() {
 vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
-	vec4 pos = vec4(0, -2.0, -2.0, 1.0);
+	vec4 pos = vec4(-2.0, -2.0, 2.0, 1.0);
 	vec3 col = vec3(18, 18, 18);
 	float radius = 0.01;
-	float falloff = 0.5;
+	float falloff = 2.0f;
 
 	PointLight *light = new PointLight(col, pos, radius, falloff);
     //AmbientLight *ambient = new AmbientLight(vec3(0.3,0.3,0.3));
