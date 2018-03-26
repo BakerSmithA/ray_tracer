@@ -41,8 +41,7 @@ Primitive **scaled_flipped_triangles(vector<Triangle*> triangles) {
 	return new_triangles;
 }
 
-Object *volume_cube_model() {
-    //Texture3d *texture = new Uniform3d(1.0f);
+Object *volume_sphere_model() {
 	Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
     const float step_size = 0.015f;
@@ -54,10 +53,19 @@ Object *volume_cube_model() {
     return new Object(1, primitives);
 }
 
+Object *sphere_inside_volume_model() {
+	Shader *shader = new Diffuse(vec3(1,0,0));
+
+	Primitive **primitives = new Primitive*[1];
+    primitives[0] = new Sphere(vec4(0.1, 0, -0.1, 1.0), 0.2, shader);
+    return new Object(1, primitives);
+}
+
 // return: all the objects in the cornel box.
 const Object **volume_objects() {
-	const Object **objects = new const Object*[1];
-    objects[0] = volume_cube_model();
+	const Object **objects = new const Object*[2];
+    objects[0] = volume_sphere_model();
+	objects[1] = sphere_inside_volume_model();
 	return objects;
 }
 
@@ -81,7 +89,7 @@ vector<Light*> volume_lights() {
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(1, volume_objects(), volume_lights());
+	return Scene(2, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H
