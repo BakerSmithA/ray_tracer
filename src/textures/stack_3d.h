@@ -76,8 +76,6 @@ private:
         float frame_start_x = (float)frame_index_x * this->inv_num_frames_per_side;
         float frame_start_y = (float)frame_index_y * this->inv_num_frames_per_side;
 
-        //return get_pixel(this->frames, x + frame_start_x / num_frames_per_side, y + frame_start_y / num_frames_per_side).x;
-        //vec2 pos = vec2(x + frame_start_x / num_frames_per_side, y + frame_start_y / num_frames_per_side);
         vec2 pos = vec2(x + frame_start_x, y + frame_start_y);
         return this->frames->color_at(pos).x;
     }
