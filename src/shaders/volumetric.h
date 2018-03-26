@@ -188,8 +188,8 @@ private:
 
             extinction *= exp(-this->extinction_coefficient * density * step_size);
             vec3 light_col = this->scattered_light_color(step_pos, prim, scene, light);
-            vec3 step_scattering = light_col * step_size * this->scattering_coefficient;
-            out_col += extinction * vec3(1) * step_scattering;
+            vec3 step_scattering = light_col * step_size;
+            out_col += extinction * step_scattering;
         };
 
         // Ray march through the volume.
@@ -224,7 +224,7 @@ private:
         // Ray march through the volume.
         this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, shadow_ray_step);
 
-        return light.color * extinction;
+        return light.color * extinction * this->scattering_coefficient;
     }
 
     // param f: called for each step and given the position of the step,

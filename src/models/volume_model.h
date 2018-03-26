@@ -67,7 +67,7 @@ Object *sphere_inside_volume_model() {
 const Object **volume_objects() {
 	const Object **objects = new const Object*[2];
     objects[0] = volume_sphere_model();
-	//objects[1] = sphere_inside_volume_model();
+	objects[1] = sphere_inside_volume_model();
 	return objects;
 }
 
@@ -81,11 +81,11 @@ vector<Light*> volume_lights() {
 	float falloff = 2.0f;
 
 	PointLight *light = new PointLight(col, pos, radius, falloff);
-    //AmbientLight *ambient = new AmbientLight(vec3(0.3,0.3,0.3));
+    AmbientLight *ambient = new AmbientLight(vec3(0.3f));
     //AmbientLight *ambient = new AmbientLight(vec3(1.0, 1.0, 1.0));
 
 	lights.push_back(light);
-    //lights.push_back(ambient);
+    lights.push_back(ambient);
 
 	return lights;
 }
