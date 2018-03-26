@@ -99,7 +99,7 @@ private:
             f(pos, termination_pos, this->ray_step_size);
         }
 
-        // Fractional step.
+        // Fractional step to remove slicing artefacts from objects inside volume.
         float fractional_dist = max_dist - dist;
         f(termination_pos, termination_pos, fractional_dist);
     }
