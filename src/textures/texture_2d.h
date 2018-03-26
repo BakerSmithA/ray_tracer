@@ -50,11 +50,11 @@ private:
         //  http://supercomputingblog.com/graphics/coding-bilinear-interpolation/
 
         // Bound the indices to be inside the buffer.
-        int min_x = min((int)floor(x), this->width()-1);
-        int min_y = min((int)floor(y), this->height()-1);
+        int min_x = std::clamp((int)floor(x), 0, this->width()-1);
+        int min_y = std::clamp((int)floor(y), 0, this->height()-1);
 
-        int max_x = min((int)ceil(x), this->width()-1);
-        int max_y = min((int)ceil(y), this->height()-1);
+        int max_x = std::clamp((int)ceil(x), 0, this->width()-1);
+        int max_y = std::clamp((int)ceil(y), 0, this->height()-1);
 
         // Need to be careful of division by zero, otherwise get black lines
         // appearing on texture. If the min and max are the same, mix the

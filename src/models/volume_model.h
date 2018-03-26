@@ -66,7 +66,7 @@ Object *sphere_inside_volume_model() {
 const Object **volume_objects() {
 	const Object **objects = new const Object*[2];
     objects[0] = volume_sphere_model();
-	objects[1] = sphere_inside_volume_model();
+	//objects[1] = sphere_inside_volume_model();
 	return objects;
 }
 
@@ -74,23 +74,24 @@ const Object **volume_objects() {
 vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
-	vec4 pos = vec4(0, -1.2, -1.2, 1.0);
+	vec4 pos = vec4(0, -2.0, -2.0, 1.0);
 	vec3 col = vec3(18, 18, 18);
 	float radius = 0.01;
+	float falloff = 0.5;
 
-	PointLight *light = new PointLight(col, pos, radius);
-    // AmbientLight *ambient = new AmbientLight(vec3(0.3,0.3,0.3));
-    AmbientLight *ambient = new AmbientLight(vec3(1.0, 1.0, 1.0));
+	PointLight *light = new PointLight(col, pos, radius, falloff);
+    //AmbientLight *ambient = new AmbientLight(vec3(0.3,0.3,0.3));
+    //AmbientLight *ambient = new AmbientLight(vec3(1.0, 1.0, 1.0));
 
-	//lights.push_back(light);
-    lights.push_back(ambient);
+	lights.push_back(light);
+    //lights.push_back(ambient);
 
 	return lights;
 }
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(2, volume_objects(), volume_lights());
+	return Scene(1, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H

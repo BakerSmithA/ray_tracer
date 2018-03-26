@@ -48,8 +48,8 @@ private:
     //         image space, i.e. x and y go from 0 to width and height respectively.
     float lerp_density_at(float x, float y, float z) const {
         // Bound the indices to be inside the buffer.
-        int min_z = min((int)floor(z), this->num_frames - 1);
-        int max_z = min((int)ceil(z), this->num_frames - 1);
+        int min_z = std::clamp((int)floor(z), 0, this->num_frames - 1);
+        int max_z = std::clamp((int)ceil(z), 0, this->num_frames - 1);
 
         // Need to be careful of division by zero, otherwise get black lines
         // appearing on texture. If the min and max are the same, mix the

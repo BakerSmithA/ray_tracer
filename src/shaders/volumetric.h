@@ -5,6 +5,8 @@
 #define VOLUMETRIC_H
 
 // Represents a material which light can penetrate, e.g. smoke.
+// Uses ray marching to sample the interior structure of the volume.
+// Lighting is calculated using nested ray marching.
 class Volumetric: public Shader {
 public:
     // Describes the shape, color, and transparency of the 3d texture.
@@ -44,17 +46,41 @@ public:
 
         // Find the how much light made it through the volume, starting with
         // full transparency.
+        float shadow_extinction = 1.0f;
+
+        // Calculate how much light intensity is lost as the light travels
+        // through the volume.
+        auto shadow_ray_step = [&](vec4 step_pos, float step_size) {
+            // The projection of the step position into object coordinates.
+            vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
+            //float density = this->texture->density_at(proj);
+
+            // Find how much light reached the position from the light.
+            //float lighting = mean_random_transparency(termination_pos, prim, scene, light, num_shadow_rays);
+
+            //shadow_extinction *= exp(-this->extinction_coefficient * density * step_size);
+        };
+
+        // Find the how much light made it through the volume, starting with
+        // full transparency.
         float extinction = 1.0f;
 
         // Used to update the extinction for how much light enters the camera.
-        auto primary_ray_step = [&](vec4 step_pos, vec4 termination_pos, float step_size) {
+        auto primary_ray_step = [&](vec4 step_pos, float step_size) {
             // The projection of the step position into object coordinates.
             vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
             float density = this->texture->density_at(proj);
 
-            float lighting = mean_random_transparency(position, prim, scene, light, num_shadow_rays);
+            // Calculate how much light reaches the position in the volume from
+            // where the shadow ray stops. This may be at the edge of the
+            // volume or at an object inside the volume.
+            optional<Ray> shadow_ray = light.ray_from(step_pos);
+            if (shadow_ray.has_value()) {
+                Ray offset_shadow_ray = shadow_ray.value().offset(prim->normal_at(step_pos), offset_dist);
+                this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, shadow_ray_step);
+            }
 
-            extinction *= exp(-this->extinction_coefficient * density * step_size) * lighting;
+            extinction *= exp(-this->extinction_coefficient * density * step_size);
         };
 
         this->for_each_ray_step(position, outgoing, this->primary_ray_step_size, scene, primary_ray_step);
@@ -74,19 +100,18 @@ public:
 
 private:
     // param f: called for each step and given the position of the step,
-    //          the termination position of the ray inside the volume, and the
-    //          step size.
+    //          and the step size for that step.
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const float max_step_size, const Scene &scene, function<void(vec4, vec4, float)> f) const {
+    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const float max_step_size, const Scene &scene, function<void(vec4, float)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
         optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
 
         // The ray never came out of the volume.
         if (!termination.has_value()) {
-            printf("WARNING: Ray should exit volume, or intersect another object inside");
+            printf("WARNING: Ray should exit volume, or intersect another object inside\n");
             return;
         }
 
@@ -102,12 +127,12 @@ private:
         // maximum to avoid the ray going outside the shape.
         for (; dist < max_dist; dist += max_step_size) {
             vec4 pos = position + through_vol_ray.normalized_dir * dist;
-            f(pos, termination_pos, max_step_size);
+            f(pos, max_step_size);
         }
 
         // Fractional step to remove slicing artefacts from objects inside volume.
         float fractional_dist = max_dist - dist;
-        f(termination_pos, termination_pos, fractional_dist);
+        f(termination_pos, fractional_dist);
     }
 
     // return: the color of the object behind or inside the volume.
