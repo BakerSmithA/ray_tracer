@@ -101,7 +101,7 @@ private:
         // If the light does not cast shadows, then the light cannot be
         // scattered as it moves through the volume.
         if (!shadow_ray.has_value()) {
-            return light.color * this->extinction_color;
+            return light.color;
         }
 
         // Find the how much light made it through the volume, starting with

@@ -1,31 +1,28 @@
 #include "../geometry/primitives/disc.h"
+#include "../textures/uniform_3d.h"
+#include "../shaders/volumetric.h"
 
 #ifndef SATURN_MODEL_H
 #define SATURN_MODEL_H
 
 // return: a star model.
 Object *saturn_model() {
-	const float sphere_radius = 0.3f;
-	const float sphere_diameter = 2 * sphere_radius;
+	Texture3d *volume_texture = new Uniform3d(1.0f);
 
-    // The transparency of the smoke for the distance a ray travelled through.
-    auto atmosphere_transparency = [=](float smoke_dist) {
-		// The larger the number, the blurrier the edges of the planet will be.
-		// float edge_blur = 0.6f;
-		float edge_blur = 0.1f;
-		///return 1 - (pow(smoke_dist, edge_blur) / pow(sphere_diameter, edge_blur));
-		return 0.0f;
-    };
+	const vec3 extinction_color = vec3(0.0f);
+    const float primary_step_size = 0.015f;
+	const float shadow_step_size = 0.035f;
+    const float extinction_coefficient = 20.0f;
+	const float scattering_coefficient = 0.7f;
 
-    Shader *atmosphere = new Smoke(vec3(1, 1, 1), atmosphere_transparency);
-    Shader *texture = Projection::spherical("../texture_files/saturn.bmp");
-    Shader *lighting = new Diffuse(vec3(1, 1, 1));
-
-    Shader *combine = Mix::multiply(atmosphere, texture);
-    Shader *shader = Mix::multiply(combine, lighting);
+    Shader *volume = new Volumetric(volume_texture, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
+	Shader *texture = Projection::spherical("../texture_files/jupiter.bmp");
+	Shader *lighting = new Diffuse(vec3(1.0f));
+	Shader *combine = Mix::multiply(volume, texture);
+	Shader *shader = Mix::multiply(lighting, combine);
 
 	Primitive **primitives = new Primitive*[1];
-	primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), sphere_radius, shader);
+	primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.3f, shader);
 	return new Object(1, primitives);
 }
 
@@ -47,7 +44,7 @@ Object *star_map() {
 	Shader *shader = Projection::spherical("../texture_files/star_sphere_map.bmp");
 
 	Primitive **primitives = new Primitive*[1];
-	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 2.3, shader);
+	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 2.5, shader);
 	return new Object(1, primitives);
 }
 
@@ -55,8 +52,8 @@ Object *star_map() {
 const Object **saturn_objects() {
 	const Object **objects = new const Object*[3];
 	objects[0] = saturn_model();
-	objects[1] = saturn_rings();
-	objects[2] = star_map();
+	objects[1] = star_map();
+	objects[2] = saturn_rings();
 	return objects;
 }
 
@@ -64,17 +61,20 @@ const Object **saturn_objects() {
 vector<Light*> saturn_lights() {
 	vector<Light*> lights;
 
-	vec3 col = vec3(3, 3, 3);
+	vec3 col = vec3(10, 10, 10);
 	vec4 dir = vec4(-0.5, -0.1f, -0.1f, 1.0f);
-	DirectionalLight *light = new DirectionalLight(col, dir, 1.0f, 0.03f);
+	Light *light = new DirectionalLight(col, dir, 1.0f, 0.03f);
+	Light *ambient = new AmbientLight(vec3(2.05f));
+
 	lights.push_back(light);
+	lights.push_back(ambient);
 
 	return lights;
 }
 
 // return: a scene containing a star.
 Scene saturn_scene() {
-	return Scene(3, saturn_objects(), saturn_lights());
+	return Scene(2, saturn_objects(), saturn_lights());
 }
 
 #endif // SATURN_MODEL_H
