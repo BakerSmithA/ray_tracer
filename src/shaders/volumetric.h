@@ -9,13 +9,19 @@ class Volumetric: public Shader {
 public:
     // Describes the shape, color, and transparency of the 3d texture.
     Texture3d *texture;
-    // The size of the steps to use for ray marching inside the object.
-    const float ray_step_size;
+    // The size of the steps to use for primary ray marching inside the volume.
+    const float primary_ray_step_size;
+    // The size of the steps to use when calculating lighting inside the volume.
+    const float shadow_ray_step_size;
     // Attenuation due of light to both absorption and scatterring.
     const float extinction_coefficient;
 
-    Volumetric(Texture3d *texture, float ray_step_size, float extinction_coefficient):
-        texture(texture), ray_step_size(ray_step_size), extinction_coefficient(extinction_coefficient) {
+    Volumetric(Texture3d *texture, float primary_ray_step_size, float shadow_ray_step_size, float extinction_coefficient):
+        texture(texture),
+        primary_ray_step_size(primary_ray_step_size),
+        shadow_ray_step_size(shadow_ray_step_size),
+        extinction_coefficient(extinction_coefficient)
+    {
     }
 
     // return: the color of the volume by performing ray marching though the object.
@@ -32,7 +38,7 @@ public:
         // furthest a ray will travel inside the volume.
         // This is offset from the initial intersection position, since we
         // cannot exclude this primitive from the search, e.g. for spheres.
-        const float offset_dist = this->ray_step_size * -0.001;
+        const float offset_dist = this->primary_ray_step_size * -0.001;
         Ray outgoing = Ray(position, incoming.dir, incoming.bounces_remaining - 1)
                       .offset(prim->normal_at(position), offset_dist);
 
@@ -51,7 +57,7 @@ public:
             extinction *= exp(-this->extinction_coefficient * density * step_size) * lighting;
         };
 
-        this->for_each_ray_step(position, outgoing, scene, primary_ray_step);
+        this->for_each_ray_step(position, outgoing, this->primary_ray_step_size, scene, primary_ray_step);
 
         // If the extinction is too low, there's no point computing the
         // background color as it will not show through.
@@ -73,7 +79,7 @@ private:
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const Scene &scene, function<void(vec4, vec4, float)> f) const {
+    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const float max_step_size, const Scene &scene, function<void(vec4, vec4, float)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
         optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
@@ -94,9 +100,9 @@ private:
 
         // Perform ray marching through the volume. Minus the step size from the
         // maximum to avoid the ray going outside the shape.
-        for (; dist < max_dist; dist += this->ray_step_size) {
+        for (; dist < max_dist; dist += max_step_size) {
             vec4 pos = position + through_vol_ray.normalized_dir * dist;
-            f(pos, termination_pos, this->ray_step_size);
+            f(pos, termination_pos, max_step_size);
         }
 
         // Fractional step to remove slicing artefacts from objects inside volume.
