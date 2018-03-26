@@ -57,7 +57,8 @@ private:
         int max_y = min((int)ceil(y), this->height()-1);
 
         // Need to be careful of division by zero, otherwise get black lines
-        // appearing on texture.
+        // appearing on texture. If the min and max are the same, mix the
+        // samples in equal proportions.
         float inv_width = (max_x - min_x) == 0.0f ? 0.5f : 1.0f / (max_x - min_x);
         float inv_height = (max_y - min_y) == 0.0f ? 0.5f : 1.0f / (max_y - min_y);
 
