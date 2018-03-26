@@ -41,14 +41,14 @@ public:
         float extinction = 1.0f;
 
         // Used to update the extinction for how much light enters the camera.
-        auto primary_ray_step = [&](vec4 step_pos, vec4 termination_pos) {
+        auto primary_ray_step = [&](vec4 step_pos, vec4 termination_pos, float step_size) {
             // The projection of the step position into object coordinates.
             vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
             float density = this->texture->density_at(proj);
 
             float lighting = mean_random_transparency(position, prim, scene, light, num_shadow_rays);
 
-            extinction *= exp(-this->extinction_coefficient * density * this->ray_step_size) * lighting;
+            extinction *= exp(-this->extinction_coefficient * density * step_size) * lighting;
         };
 
         this->for_each_ray_step(position, outgoing, scene, primary_ray_step);
@@ -67,12 +67,13 @@ public:
     }
 
 private:
-    // param f: called for each step and given the position of the step, and
-    //          given the termination position of the ray inside the volume.
+    // param f: called for each step and given the position of the step,
+    //          the termination position of the ray inside the volume, and the
+    //          step size.
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const Scene &scene, function<void(vec4, vec4)> f) const {
+    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const Scene &scene, function<void(vec4, vec4, float)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
         optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
@@ -86,12 +87,21 @@ private:
         const vec4 termination_pos = termination.value().pos;
         const float max_dist = length(position - termination_pos);
 
+        // Defined because we need to perform a final fractional step of any
+        // remaining depth to avoid slicing artefacts when other objects are
+        // inside the volume.
+        float dist = 0.0f;
+
         // Perform ray marching through the volume. Minus the step size from the
         // maximum to avoid the ray going outside the shape.
-        for (float dist = 0.0f; dist < max_dist; dist += this->ray_step_size) {
+        for (; dist < max_dist; dist += this->ray_step_size) {
             vec4 pos = position + through_vol_ray.normalized_dir * dist;
-            f(pos, termination_pos);
+            f(pos, termination_pos, this->ray_step_size);
         }
+
+        // Fractional step.
+        float fractional_dist = max_dist - dist;
+        f(termination_pos, termination_pos, fractional_dist);
     }
 
     // return: the color of the object behind or inside the volume.
