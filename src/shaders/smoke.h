@@ -63,7 +63,7 @@ public:
         return this->color(position, smoke_prim, incoming, scene, light, num_shadow_rays);
     }
 
-    float transparency(const Ray &shadow_ray) const {
+    float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
         return 1.0f;
     }
 

@@ -14,12 +14,14 @@ public:
     virtual ~Shader() {
     }
 
-    // param shadow_ray: the shadow ray used to test whether light can reach
-    //                   an object.
+    // param position: the position of the intersection of the prim with the shadow ray.
+    // param prim: the primitive to calculate the transparency of.
+    // param shadow_ray: the shadow ray from the original object the shadow is
+    //                   being tested for, to the light source.
     // return: the proportion by which light is let through the
     //         material. E.g. a value of 1 is totally transparent, and a value
     //         of 0 is totally opaque.
-    virtual float transparency(const Ray &shadow_ray) const {
+    virtual float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
         return 0.0f;
     }
 
@@ -64,7 +66,8 @@ float shadow_ray_transparency(vec4 pos, const Primitive *prim, const Scene &scen
     for (size_t i=0; i<all_intersections.size() && acc_mult_transparency >= 0.001; i++) {
         // If the intersection occurs between the light and this object.
         if (length(all_intersections[i].pos - shadow_ray.start) < shadow_len) {
-            acc_mult_transparency *= all_intersections[i].primitive->shader->transparency(shadow_ray);
+            const Primitive *prim = all_intersections[i].primitive;
+            acc_mult_transparency *= prim->shader->transparency(all_intersections[i].pos, prim, shadow_ray, scene);
         }
     }
 

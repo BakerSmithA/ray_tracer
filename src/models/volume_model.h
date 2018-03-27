@@ -55,7 +55,7 @@ Object *volume_sphere_model() {
 
 	const vec3 extinction_color = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.3f;
     const float primary_step_size = 0.015f;
-	const float shadow_step_size = 0.05f;//0.02f;
+	const float shadow_step_size = 0.02f;
     const float extinction_coefficient = 5.5f;
 	const float scattering_coefficient = 0.13f;
 
@@ -109,7 +109,7 @@ const Object **volume_objects() {
 vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
-	float radius = 0.01;
+	float radius = 0.1;
 
 	vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
 	//vec3 light1_col = vec3(1.0f) * 25.0f;

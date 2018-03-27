@@ -181,10 +181,25 @@ private:
     }
 
     // return: the proportion by which light is let through the
-    //         material. E.g. a value of 1 is totally transparent, and a value
-    //         of 0 is totally opaque.
-    virtual float transparency(const Ray &shadow_ray) const {
-        return 0.0f;
+    //         material. The value is the extinction and is calculated by
+    //         performing ray marching through the volume.
+    virtual float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
+        float extinction = 1.0f;
+
+        auto ray_step = [&](vec4 step_pos, float step_size) {
+            vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
+            float density = this->texture->density_at(proj);
+            extinction *= exp(-this->extinction_coefficient * density * step_size);
+
+            // Stop marching is the extinction is low enough.
+            return extinction >= 0.001f;
+        };
+
+        // Offset the shadow ray to ensure it's inside the volume.
+        Ray offset_shadow_ray = Ray(position, shadow_ray.dir, 0).offset(prim->normal_at(position), this->shadow_ray_step_size * this->offset_multipler);
+        this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, ray_step);
+
+        return extinction;
     }
 };
 

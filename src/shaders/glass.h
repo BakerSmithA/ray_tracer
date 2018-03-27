@@ -52,7 +52,7 @@ public:
         return this->glass_shader->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
     }
 
-    float transparency(const Ray &shadow_ray) const override {
+    float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const override {
         return 0.7f;
     }
 };

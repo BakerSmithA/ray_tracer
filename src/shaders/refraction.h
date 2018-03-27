@@ -59,7 +59,7 @@ public:
     }
 
     // return: 1.0 as all light is allowed to pass through.
-    float transparency(const Ray &shadow_ray) const override {
+    float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const override {
         return 1.0f;
     }
 };
