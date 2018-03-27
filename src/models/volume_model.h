@@ -110,8 +110,7 @@ const Object **volume_objects() {
 vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
-	float radius = 0.1;
-
+	// vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
 	vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
 	//vec3 light1_col = vec3(1.0f) * 25.0f;
 	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
@@ -121,20 +120,20 @@ vector<Light*> volume_lights() {
 
 	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.15f;
 
-	PointLight *light1 = new PointLight(light1_col, light1_pos, radius, 0.25f);
-	PointLight *light2 = new PointLight(light2_col, light2_pos, radius, 0.25f);
+	PointLight *light1 = new PointLight(light1_col, light1_pos, 0.4f, 0.25f);
+	PointLight *light2 = new PointLight(light2_col, light2_pos, 0.01f, 0.25f);
     AmbientLight *ambient = new AmbientLight(ambient_col);
 
 	lights.push_back(light1);
 	lights.push_back(light2);
-    lights.push_back(ambient);
+    //lights.push_back(ambient);
 
 	return lights;
 }
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(3, volume_objects(), volume_lights());
+	return Scene(2, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H

@@ -37,7 +37,7 @@ public:
     }
 
     // return: this ray, where the start position is offset by a small amount.
-    Ray offset(vec4 offset_dir, float offset_scalar) {
+    Ray offset(vec4 offset_dir, float offset_scalar) const {
         return Ray(this->start + offset_scalar * offset_dir, this->dir, this->bounces_remaining);
     }
 };

@@ -52,7 +52,7 @@ public:
         Ray through_vol_ray = Ray(position, incoming.dir, incoming.bounces_remaining - 1)
                              .offset(prim->normal_at(position), offset_dist);
 
-        vec4 out_col = this->ray_marched_color(position, through_vol_ray, prim, scene, light);
+        vec4 out_col = this->ray_marched_color(position, through_vol_ray, prim, scene, light, num_shadow_rays);
 
         // Compute the color of the object behind the volume, to mix with the
         // volume color.
@@ -67,7 +67,7 @@ private:
     //         Calculated by performs ray marching through the volume to
     //         determine the interior structure. Also computes the lighting for
     //         points inside the volume.
-    vec4 ray_marched_color(vec4 position, Ray through_vol_ray, const Primitive *prim, const Scene &scene, const Light &light) const {
+    vec4 ray_marched_color(vec4 position, Ray through_vol_ray, const Primitive *prim, const Scene &scene, const Light &light, const int num_shadow_rays) const {
         // Start off with full transparency as the light has not yet passed through any volume.
         float extinction = 1.0f;
         // Start with no accumulated color, as the light has not yet passed through any volume.
@@ -78,7 +78,7 @@ private:
             float density = this->texture->density_at(proj);
 
             extinction *= exp(-this->extinction_coefficient * density * step_size);
-            vec3 light_col = this->scattered_light_color(step_pos, prim, scene, light);
+            vec3 light_col = this->mean_random_scattered_light_color(step_pos, prim, scene, light, num_shadow_rays);
             vec3 step_scattering = light_col * step_size;
             out_col += extinction * step_scattering;
 
@@ -92,18 +92,32 @@ private:
         return vec4(out_col, extinction);
     }
 
-    // return: the color of the light at the given position inside the volume.
-    //         Takes scattering of the light into account as it goes through
-    //         the volume.
-    vec3 scattered_light_color(vec4 position, const Primitive *prim, const Scene &scene, const Light &light) const {
-        optional<Ray> shadow_ray = light.ray_from(position);
+    // return: the mean color of a number of random rays to the light source,
+    //         therefore allowing for soft shadows.
+    vec3 mean_random_scattered_light_color(vec4 position, const Primitive *prim, const Scene &scene, const Light &light, const int num_shadow_rays) const {
+        vector<Ray> shadow_rays = light.random_shadow_rays_from(position, num_shadow_rays);
 
-        // If the light does not cast shadows, then the light cannot be
-        // scattered as it moves through the volume.
-        if (!shadow_ray.has_value()) {
+        // If the light does not support shadows, assume all the light reached
+        // the surface.
+        if (shadow_rays.size() == 0) {
             return light.color;
         }
 
+        // The addition of all light colors from the different light rays.
+        vec3 acc_light_col = vec3(0.0f);
+
+        for (Ray shadow_ray: shadow_rays) {
+            acc_light_col += this->scattered_light_color(position, shadow_ray, prim, scene, light);
+        }
+
+        // Calculate the mean by dividing by the number of rays.
+        return acc_light_col / (float)shadow_rays.size();
+    }
+
+    // return: the color of the light at the given position inside the volume.
+    //         Takes scattering of the light into account as it goes through
+    //         the volume.
+    vec3 scattered_light_color(vec4 position, const Ray &shadow_ray, const Primitive *prim, const Scene &scene, const Light &light) const {
         // Find the how much light made it through the volume, starting with
         // full transparency.
         vec3 extinction = vec3(1.0f);
@@ -117,7 +131,7 @@ private:
         };
 
         // Offset the shadow ray to ensure it's inside the volume.
-        Ray offset_shadow_ray = shadow_ray.value().offset(prim->normal_at(position), this->shadow_ray_step_size * this->offset_multipler);
+        Ray offset_shadow_ray = shadow_ray.offset(prim->normal_at(position), this->shadow_ray_step_size * this->offset_multipler);
         // Ray march through the volume.
         this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, shadow_ray_step);
 
