@@ -184,7 +184,7 @@ private:
     //         material. E.g. a value of 1 is totally transparent, and a value
     //         of 0 is totally opaque.
     virtual float transparency() const {
-        return 1.0f;
+        return 0.0f;
     }
 };
 
