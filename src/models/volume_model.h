@@ -72,10 +72,11 @@ Object *volume_sphere_model() {
 }
 
 Object *sphere_inside_volume_model() {
-	Shader *shader = new Diffuse(vec3(1,0,0));
+	vec3 col = vec3(65, 87, 110) * vec3(1.0f/255.0f);
+	Shader *shader = new Diffuse(col);
 
 	Primitive **primitives = new Primitive*[1];
-    primitives[0] = new Sphere(vec4(0.1, 0, -0.1, 1.0), 0.2, shader);
+    primitives[0] = new Sphere(vec4(-0.4, 0.0, -0.37, 1.0), 0.2, shader);
     return new Object(1, primitives);
 }
 
@@ -98,10 +99,10 @@ Object *volume_floor() {
 
 // return: all the objects in the cornel box.
 const Object **volume_objects() {
-	const Object **objects = new const Object*[2];
+	const Object **objects = new const Object*[3];
     objects[0] = volume_sphere_model();
 	objects[1] = volume_floor();
-	//objects[1] = sphere_inside_volume_model();
+	objects[2] = sphere_inside_volume_model();
 	return objects;
 }
 
@@ -118,22 +119,22 @@ vector<Light*> volume_lights() {
 	vec4 light2_pos = vec4(2.0, 2.0, 0.0, 1.0);
 	vec3 light2_col = vec3(142, 135, 167) * vec3(1.0f/255.0f) * 7.0f;
 
-	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.5f;
+	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.15f;
 
 	PointLight *light1 = new PointLight(light1_col, light1_pos, radius, 0.25f);
 	PointLight *light2 = new PointLight(light2_col, light2_pos, radius, 0.25f);
-    //AmbientLight *ambient = new AmbientLight(ambient_col);
+    AmbientLight *ambient = new AmbientLight(ambient_col);
 
 	lights.push_back(light1);
 	lights.push_back(light2);
-    //lights.push_back(ambient);
+    lights.push_back(ambient);
 
 	return lights;
 }
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(2, volume_objects(), volume_lights());
+	return Scene(3, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H
