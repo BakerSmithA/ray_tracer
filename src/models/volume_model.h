@@ -53,12 +53,10 @@ Primitive **converted_triangles(vector<Triangle*> triangles, float width) {
 Object *volume_sphere_model() {
 	Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
-	const vec3 extinction_color = vec3(0.0f);//vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.3f;
-    // const float primary_step_size = 0.015f;
-	// const float shadow_step_size = 0.02f;
-	const float primary_step_size = 0.03f;
-	const float shadow_step_size = 0.05f;
-    const float extinction_coefficient = 3.5f;//5.5f;
+	const vec3 extinction_color = vec3(0.0f);
+    const float primary_step_size = 0.015f;
+	const float shadow_step_size = 0.02f;
+    const float extinction_coefficient = 3.5f;
 	const float scattering_coefficient = 2.0f;
 
     Shader *shader = new Volumetric(texture,
