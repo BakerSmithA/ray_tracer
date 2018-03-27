@@ -73,10 +73,7 @@ private:
         // Start with no accumulated color, as the light has not yet passed through any volume.
         vec3 out_col = vec3(0.0f, 0.0f, 0.0f);
 
-        auto primary_ray_step = [&](vec4 step_pos, float step_size) {
-            vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
-            float density = this->texture->density_at(proj);
-
+        auto primary_ray_step = [&](vec4 step_pos, float step_size, float density) {
             extinction *= exp(-this->extinction_coefficient * density * step_size);
             vec3 light_col = this->mean_random_scattered_light_color(step_pos, prim, scene, light, num_shadow_rays);
             vec3 step_scattering = light_col * step_size;
@@ -87,7 +84,7 @@ private:
         };
 
         // Ray march through the volume.
-        this->for_each_ray_step(position, through_vol_ray, this->primary_ray_step_size, scene, primary_ray_step);
+        this->for_each_ray_step(position, through_vol_ray, prim, this->primary_ray_step_size, scene, primary_ray_step);
 
         return vec4(out_col, extinction);
     }
@@ -121,9 +118,7 @@ private:
         // Find the how much light made it through the volume, starting with
         // full transparency.
         vec3 extinction = vec3(1.0f);
-        auto shadow_ray_step = [&](vec4 step_pos, float step_size) {
-            vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
-            float density = this->texture->density_at(proj);
+        auto shadow_ray_step = [&](vec4 step_pos, float step_size, float density) {
             vec3 opposite_extinction_color = vec3(1.0f) - this->extinction_color;
             extinction *= glm::exp(-this->extinction_coefficient * density * step_size * opposite_extinction_color);
 
@@ -133,7 +128,7 @@ private:
         // Offset the shadow ray to ensure it's inside the volume.
         Ray offset_shadow_ray = shadow_ray.offset(prim->normal_at(position), this->shadow_ray_step_size * this->offset_multipler);
         // Ray march through the volume.
-        this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, shadow_ray_step);
+        this->for_each_ray_step(position, offset_shadow_ray, prim, this->shadow_ray_step_size, scene, shadow_ray_step);
 
         return light.color * extinction * this->scattering_coefficient;
     }
@@ -143,7 +138,7 @@ private:
     // effect: performs ray marching along the ray, running the function f at
     //         step along the ray until the ray exits the volume or hits an
     //         object inside the volume.
-    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const float max_step_size, const Scene &scene, function<bool(vec4, float)> f) const {
+    void for_each_ray_step(const vec4 position, const Ray through_vol_ray, const Primitive *prim, const float max_step_size, const Scene &scene, function<bool(vec4, float, float)> f) const {
         // Find where the ray exits the volume, or where the ray hits an object
         // inside the volume. Therefore, we know where to stop ray marching.
         optional<Intersection> termination = scene.closest_intersection(through_vol_ray);
@@ -169,13 +164,22 @@ private:
         // Perform ray marching through the volume. Minus the step size from the
         // maximum to avoid the ray going outside the shape.
         for (; dist < max_dist && should_march; dist += max_step_size) {
-            vec4 pos = position + through_vol_ray.normalized_dir * dist;
-            should_march = f(pos, max_step_size);
+            vec4 step_pos = position + through_vol_ray.normalized_dir * dist;
+            float density = this->volume_density(step_pos, prim);
+
+            should_march = f(step_pos, max_step_size, density);
         }
 
         // Fractional step to remove slicing artefacts from objects inside volume.
         float fractional_dist = max_dist - dist;
-        f(termination_pos, fractional_dist);
+        float density = this->volume_density(termination_pos, prim);
+        f(termination_pos, fractional_dist, density);
+    }
+
+    // return: the density of the volume at the given position in world coordinates.
+    float volume_density(vec4 world_pos, const Primitive *prim) const {
+        vec4 proj = prim->parent_obj->converted_world_to_obj(world_pos);
+        return this->texture->density_at(proj);
     }
 
     // return: the color of the object behind or inside the volume.
@@ -200,18 +204,15 @@ private:
     virtual float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
         float extinction = 1.0f;
 
-        auto ray_step = [&](vec4 step_pos, float step_size) {
-            vec4 proj = prim->parent_obj->converted_world_to_obj(step_pos);
-            float density = this->texture->density_at(proj);
+        auto ray_step = [&](vec4 step_pos, float step_size, float density) {
             extinction *= exp(-this->extinction_coefficient * density * step_size);
-
             // Stop marching is the extinction is low enough.
             return extinction >= 0.001f;
         };
 
         // Offset the shadow ray to ensure it's inside the volume.
         Ray offset_shadow_ray = Ray(position, shadow_ray.dir, 0).offset(prim->normal_at(position), this->shadow_ray_step_size * this->offset_multipler);
-        this->for_each_ray_step(position, offset_shadow_ray, this->shadow_ray_step_size, scene, ray_step);
+        this->for_each_ray_step(position, offset_shadow_ray, prim, this->shadow_ray_step_size, scene, ray_step);
 
         return extinction;
     }

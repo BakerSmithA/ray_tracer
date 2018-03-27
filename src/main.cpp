@@ -26,8 +26,8 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 600//320 * 1
-#define SCREEN_HEIGHT 600//256 * 1
+#define SCREEN_WIDTH 500//320 * 1
+#define SCREEN_HEIGHT 500//256 * 1
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 5
 #define NUM_SHADOW_RAYS 1
