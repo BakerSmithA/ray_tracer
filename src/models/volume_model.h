@@ -123,8 +123,8 @@ vector<Light*> volume_lights() {
     AmbientLight *ambient = new AmbientLight(ambient_col);
 
 	lights.push_back(light1);
-	lights.push_back(light2);
-    lights.push_back(ambient);
+	//lights.push_back(light2);
+    //lights.push_back(ambient);
 
 	return lights;
 }

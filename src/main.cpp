@@ -47,7 +47,7 @@ void update(Camera &camera, Scene &scene) {
     // Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
 
-    const float cam_move_delta = 0.025f;
+    const float cam_move_delta = 0.2f;
     const float yaw_delta = 0.07f;
     const float light_move_delta = 0.5f;
 
@@ -58,15 +58,19 @@ void update(Camera &camera, Scene &scene) {
     if(scancodes[SDL_SCANCODE_D])     camera.move_right(cam_move_delta);    // Right
     if(scancodes[SDL_SCANCODE_W])     camera.move_down(-cam_move_delta);    // Up
     if(scancodes[SDL_SCANCODE_S])     camera.move_down(cam_move_delta);     // Down
-    if(scancodes[SDL_SCANCODE_LEFT])  camera.turn(-yaw_delta);          // Pan Left
-    if(scancodes[SDL_SCANCODE_RIGHT]) camera.turn(yaw_delta);           // Pan Right
+    if(scancodes[SDL_SCANCODE_LEFT])  camera.turn(-yaw_delta);              // Pan Left
+    if(scancodes[SDL_SCANCODE_RIGHT]) camera.turn(yaw_delta);               // Pan Right
 
     // Light movement.
     // Try getting the first light as a point light which can be moved.
     PointLight* light = dynamic_cast<PointLight*>(scene.lights[0]);
     if (light != NULL) {
-        if(scancodes[SDL_SCANCODE_I]) light->pos.x -= light_move_delta; // Backwards
-        if(scancodes[SDL_SCANCODE_K]) light->pos.x += light_move_delta; // Forwards
+        if(scancodes[SDL_SCANCODE_I]) light->pos.y -= light_move_delta; // Up
+        if(scancodes[SDL_SCANCODE_K]) light->pos.y += light_move_delta; // Down
+        if(scancodes[SDL_SCANCODE_J]) light->pos.x -= light_move_delta; // Left
+        if(scancodes[SDL_SCANCODE_L]) light->pos.x += light_move_delta; // Right
+        if(scancodes[SDL_SCANCODE_U]) light->pos.z -= light_move_delta; // Backwards
+        if(scancodes[SDL_SCANCODE_O]) light->pos.z += light_move_delta; // Forwards
     }
 }
 
@@ -76,8 +80,8 @@ int main(int argc, char* argv[]) {
     //Scene scene = star_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
-    //Scene scene = volume_scene();
-    Scene scene = interstellar_cloud::scene();
+    Scene scene = volume_scene();
+    //Scene scene = interstellar_cloud::scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
