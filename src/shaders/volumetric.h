@@ -97,7 +97,7 @@ private:
         // If the light does not support shadows, assume all the light reached
         // the surface.
         if (shadow_rays.size() == 0) {
-            return light.color;
+            return light.intensity(inside_position);
         }
 
         // The addition of all light colors from the different light rays.
@@ -135,7 +135,7 @@ private:
         // Ray march through the volume.
         this->for_each_ray_step(inside_position, offset_shadow_ray, prim, this->shadow_ray_step_size, scene, shadow_ray_step);
 
-        return light.color * extinction * this->scattering_coefficient;
+        return light.intensity(inside_position) * extinction * this->scattering_coefficient;
     }
 
     // param f: called for each step and given the position of the step,

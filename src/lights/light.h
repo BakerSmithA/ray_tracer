@@ -7,9 +7,10 @@ using std::optional;
 
 // Models a light source.
 class Light {
-public:
+protected:
     const vec3 color;
 
+public:
     Light(vec3 color): color(color) {
     }
 

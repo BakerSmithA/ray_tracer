@@ -53,11 +53,13 @@ Primitive **converted_triangles(vector<Triangle*> triangles, float width) {
 Object *volume_sphere_model() {
 	Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
-	const vec3 extinction_color = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.3f;
-    const float primary_step_size = 0.015f;
-	const float shadow_step_size = 0.02f;
-    const float extinction_coefficient = 5.5f;
-	const float scattering_coefficient = 0.13f;
+	const vec3 extinction_color = vec3(0.0f);//vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.3f;
+    // const float primary_step_size = 0.015f;
+	// const float shadow_step_size = 0.02f;
+	const float primary_step_size = 0.03f;
+	const float shadow_step_size = 0.05f;
+    const float extinction_coefficient = 3.5f;//5.5f;
+	const float scattering_coefficient = 2.0f;
 
     Shader *shader = new Volumetric(texture,
 									extinction_color,
@@ -76,7 +78,7 @@ Object *sphere_inside_volume_model() {
 	Shader *shader = new Diffuse(col);
 
 	Primitive **primitives = new Primitive*[1];
-    primitives[0] = new Sphere(vec4(-0.4, 0.0, -0.2, 1.0), 0.2, shader);
+    primitives[0] = new Sphere(vec4(-0.4, 0.0, -0.2, 1.0), 0.5, shader);
     return new Object(1, primitives);
 }
 
@@ -110,18 +112,16 @@ const Object **volume_objects() {
 vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
-	// vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
-	vec4 light1_pos = vec4(-2.0, -2.0, 0.0, 1.0);
-	//vec3 light1_col = vec3(1.0f) * 25.0f;
+	vec4 light1_pos = vec4(1.25, -2.0, 1.0, 1.0);
 	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
 
-	vec4 light2_pos = vec4(2.0, 2.0, 0.0, 1.0);
-	vec3 light2_col = vec3(142, 135, 167) * vec3(1.0f/255.0f) * 7.0f;
+	vec4 light2_pos = vec4(0.0, 1.0, 0.0, 1.0);
+	vec3 light2_col = vec3(142, 135, 167) * vec3(1.0f/255.0f) * 1.15f;
 
 	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.03f;
 
 	PointLight *light1 = new PointLight(light1_col, light1_pos, 0.05f, 0.25f);
-	PointLight *light2 = new PointLight(light2_col, light2_pos, 0.01f, 0.25f);
+	PointLight *light2 = new PointLight(light2_col, light2_pos, 0.4f, 0.25f);
     AmbientLight *ambient = new AmbientLight(ambient_col);
 
 	lights.push_back(light1);
@@ -133,7 +133,7 @@ vector<Light*> volume_lights() {
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(3, volume_objects(), volume_lights());
+	return Scene(2, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H
