@@ -115,4 +115,23 @@ float dot(const float x[3], const float y[3]) {
     return x[0] * y[0] + x[1] * y[1] + x[2] * y[2];
 }
 
+// return: the result of linearly interpolating using ratio defined by t.
+__attribute__((always_inline))
+float fast_lerp(float a, float b, float t) {
+    return a * (1 - t) + b * t;
+}
+
+// return: the result of linearly interpolating all three axes using the
+//         ratio defined by t.
+vec3 fast_lerp(vec3 a, vec3 b, float t) {
+    const float *source_a = (const float*)glm::value_ptr(a);
+    const float *source_b = (const float*)glm::value_ptr(b);
+
+    float lerp_a = fast_lerp(source_a[0], source_b[0], t);
+    float lerp_b = fast_lerp(source_a[1], source_b[1], t);
+    float lerp_c = fast_lerp(source_a[2], source_b[2], t);
+
+    return vec3(lerp_a, lerp_b, lerp_c);
+}
+
 #endif // LINEAR_ALG_H

@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <algorithm>
+#include "../geometry/linear_alg.h"
 
 using std::min;
 using std::max;
@@ -70,11 +71,11 @@ private:
 
         // Interpolate the color of the lower pixels along the x-axis.
         float x_prop = (max_x - x) * inv_width;
-        vec3 r1 = glm::mix(col21, col11, x_prop);
+        vec3 r1 = fast_lerp(col21, col11, x_prop);
         // Interpolate the color of the upper pixels along the x-axis.
-        vec3 r2 = glm::mix(col22, col12, x_prop);
+        vec3 r2 = fast_lerp(col22, col12, x_prop);
         // Interpolate along the y-axis.
-        vec3 q = glm::mix(r2, r1, (max_y - y) * inv_height);
+        vec3 q = fast_lerp(r2, r1, (max_y - y) * inv_height);
 
         return q;
     }
