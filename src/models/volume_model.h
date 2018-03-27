@@ -10,7 +10,7 @@ Object *volume_sphere_model() {
 
 	const vec3 extinction_color = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.3f;
     const float primary_step_size = 0.015f;
-	const float shadow_step_size = 0.035f;
+	const float shadow_step_size = 0.02f;
     const float extinction_coefficient = 5.5f;
 	const float scattering_coefficient = 0.135f;
 
@@ -43,22 +43,22 @@ vector<Light*> volume_lights() {
 
 	float radius = 0.01;
 
-	vec4 light1_pos = vec4(-2.0, -2.0, -1.0, 1.0);
+	vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
 	//vec3 light1_col = vec3(1.0f) * 25.0f;
-	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 25.0f;
+	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
 
 	vec4 light2_pos = vec4(2.0, 2.0, 0.0, 1.0);
-	vec3 light2_col = vec3(104, 118, 186) * vec3(1.0f/255.0f) * 15.0f;
+	vec3 light2_col = vec3(142, 135, 167) * vec3(1.0f/255.0f) * 7.0f;
 
 	vec3 ambient_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 0.5f;
 
-	PointLight *light1 = new PointLight(light1_col, light1_pos, radius, 0.5f);
-	PointLight *light2 = new PointLight(light2_col, light2_pos, radius, 0.5f);
+	PointLight *light1 = new PointLight(light1_col, light1_pos, radius, 0.25f);
+	PointLight *light2 = new PointLight(light2_col, light2_pos, radius, 0.25f);
     AmbientLight *ambient = new AmbientLight(ambient_col);
 
 	lights.push_back(light1);
 	lights.push_back(light2);
-    lights.push_back(ambient);
+    //lights.push_back(ambient);
 
 	return lights;
 }
