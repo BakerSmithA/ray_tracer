@@ -76,7 +76,7 @@ Object *sphere_inside_volume_model() {
 	Shader *shader = new Diffuse(col);
 
 	Primitive **primitives = new Primitive*[1];
-    primitives[0] = new Sphere(vec4(-0.4, 0.0, -0.37, 1.0), 0.2, shader);
+    primitives[0] = new Sphere(vec4(-0.4, 0.0, -0.2, 1.0), 0.2, shader);
     return new Object(1, primitives);
 }
 
@@ -111,7 +111,7 @@ vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
 	// vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
-	vec4 light1_pos = vec4(-2.0, -2.0, 1.0, 1.0);
+	vec4 light1_pos = vec4(-2.0, -2.0, 0.0, 1.0);
 	//vec3 light1_col = vec3(1.0f) * 25.0f;
 	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
 
@@ -133,7 +133,7 @@ vector<Light*> volume_lights() {
 
 // return: a scene containing a star.
 Scene volume_scene() {
-	return Scene(2, volume_objects(), volume_lights());
+	return Scene(3, volume_objects(), volume_lights());
 }
 
 #endif // VOLUME_MODEL_H

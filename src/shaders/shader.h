@@ -57,7 +57,7 @@ float shadow_ray_transparency(vec4 pos, const Primitive *prim, const Scene &scen
     const float shadow_len = length(shadow_ray.dir);
 
     // The opacity of all objects on the way to the light determines
-    // how much light gets through to this object.
+    // how much light gets through to this object, ignoring the primitive.
     vector<Intersection> all_intersections = scene.all_intersections(shadow_ray, prim);
     // The multiplication of all transparencies of all objects (before
     // the light) along the ray.
