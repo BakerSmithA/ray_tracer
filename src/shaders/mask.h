@@ -29,7 +29,7 @@ public:
     }
 
     // return: the opacity of each shader mixed in the specified proportion.
-    float transparency() const override {
+    float transparency(const Ray &shadow_ray) const override {
         return 0.0f;
     }
 };

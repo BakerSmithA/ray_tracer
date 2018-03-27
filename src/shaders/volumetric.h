@@ -183,7 +183,7 @@ private:
     // return: the proportion by which light is let through the
     //         material. E.g. a value of 1 is totally transparent, and a value
     //         of 0 is totally opaque.
-    virtual float transparency() const {
+    virtual float transparency(const Ray &shadow_ray) const {
         return 0.0f;
     }
 };

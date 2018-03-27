@@ -27,10 +27,10 @@ public:
     }
 
     // return: the opacity of each shader mixed in the specified proportion.
-    float transparency() const override {
+    float transparency(const Ray &shadow_ray) const override {
         // TODO: This is a bit of a hack, is there a better way?
-        vec3 a = vec3(s1->transparency(), 0, 0);
-        vec3 b = vec3(s2->transparency(), 0, 0);
+        vec3 a = vec3(s1->transparency(shadow_ray), 0, 0);
+        vec3 b = vec3(s2->transparency(shadow_ray), 0, 0);
         return this->combine_colors(a, b).x;
     }
 

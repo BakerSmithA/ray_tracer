@@ -53,7 +53,7 @@ public:
         return mix(color1, color2, kr);
     }
 
-    float transparency() const override {
+    float transparency(const Ray &shadow_ray) const override {
         return this->base_transparency;
     }
 };
