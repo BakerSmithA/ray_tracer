@@ -12,7 +12,7 @@ Object *volume_sphere_model() {
     const float primary_step_size = 0.015f;
 	const float shadow_step_size = 0.02f;
     const float extinction_coefficient = 5.5f;
-	const float scattering_coefficient = 0.135f;
+	const float scattering_coefficient = 0.13f;
 
     Shader *shader = new Volumetric(texture, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
 
@@ -54,7 +54,7 @@ vector<Light*> volume_lights() {
 
 	PointLight *light1 = new PointLight(light1_col, light1_pos, radius, 0.25f);
 	PointLight *light2 = new PointLight(light2_col, light2_pos, radius, 0.25f);
-    AmbientLight *ambient = new AmbientLight(ambient_col);
+    //AmbientLight *ambient = new AmbientLight(ambient_col);
 
 	lights.push_back(light1);
 	lights.push_back(light2);
