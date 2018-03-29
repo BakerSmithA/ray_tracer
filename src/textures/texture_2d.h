@@ -11,6 +11,14 @@ using std::max;
 // Interface for a 2D texture filling a space from 0-1 in each axis.
 class Texture2d {
 public:
+    // Whether to use the red color channel as the transparency of the texture,
+    // where 0 means fully opaque and 1 means fully transparent.
+    const bool use_red_as_alpha;
+
+    Texture2d(const bool use_red_as_alpha = false):
+        use_red_as_alpha(use_red_as_alpha) {
+    }
+
     virtual ~Texture2d() {
     }
 
@@ -18,12 +26,25 @@ public:
     // return: the color of the the texture at the given position in the
     //         coordinate space of the object.
     virtual vec3 color_at(vec2 position) const = 0;
+
+    // return: the alpha of the texture at the given position.
+    virtual float alpha_at(vec2 position) const {
+        if (this->use_red_as_alpha) {
+            vec3 col = this->color_at(position);
+            return col.x;
+        }
+        return 0.0f;
+    }
 };
 
 // Interface for a 2D texture created from a buffer of pixels, which can
 // be interpolated to generate a smooth texture.
 class BilinearTexture2d: public Texture2d {
 public:
+    BilinearTexture2d(bool use_red_as_alpha = false):
+        Texture2d(use_red_as_alpha) {
+    }
+
     // param position: position in the texture where each axis goes from 0-1.
     // return: the color of the the texture at the given position in the
     //         coordinate space of the object.

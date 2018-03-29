@@ -28,9 +28,14 @@ public:
         return glm::mix(color1, color2, mask_col.x);
     }
 
-    // return: the opacity of each shader mixed in the specified proportion.
+    // return: the opacity of the either s1 or s2 depending on whether the
+    //         ray hits the mask shader or not.
     float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const override {
-        return 0.0f;
+        float a = s1->transparency(position, prim, shadow_ray, scene);
+        float b = s2->transparency(position, prim, shadow_ray, scene);
+        float mask_transparency = this->mask->transparency(position, prim, shadow_ray, scene);
+
+        return glm::mix(a, b, mask_transparency);
     }
 };
 

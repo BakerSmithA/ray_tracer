@@ -28,10 +28,9 @@ public:
 
     // return: the opacity of each shader mixed in the specified proportion.
     float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const override {
-        // TODO: This is a bit of a hack, is there a better way?
-        vec3 a = vec3(s1->transparency(position, prim, shadow_ray, scene), 0, 0);
-        vec3 b = vec3(s2->transparency(position, prim, shadow_ray, scene), 0, 0);
-        return this->combine_colors(a, b).x;
+        float a = s1->transparency(position, prim, shadow_ray, scene);
+        float b = s2->transparency(position, prim, shadow_ray, scene);
+        return this->combine_colors(vec3(a), vec3(b)).x;
     }
 
     /*

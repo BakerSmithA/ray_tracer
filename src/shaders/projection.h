@@ -99,6 +99,23 @@ public:
         return this->texture->color_at(uv);
     }
 
+    // param position: the position of the intersection of the prim with the shadow ray.
+    // param prim: the primitive to calculate the transparency of.
+    // param shadow_ray: the shadow ray from the original object the shadow is
+    //                   being tested for, to the light source.
+    // return: the proportion by which light is let through the
+    //         material. E.g. a value of 1 is totally transparent, and a value
+    //         of 0 is totally opaque.
+    float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
+        // Convert the position u,v coordinate (i.e. in the object's coordinate
+        // space for planar mapping).
+        vec4 proj = prim->parent_obj->converted_world_to_obj(position);
+        // uv is in the range 0-1.
+        vec2 uv = this->project_to_uv(proj);
+        // Converts uv to be in image coordinates.
+        return this->texture->alpha_at(uv);
+    }
+
     /*
      ** Convenience functions for creating shaders with different
      ** projection methods.
@@ -121,10 +138,19 @@ public:
         return Projection::planar(texture, dir);
     }
 
+    // return: a texture shader which maps the texture using spherical mapping.
+    static Projection *spherical(const Texture2d *texture) {
+        const auto project_to_uv = [=](vec4 object_coordinate) {
+            return spherical_projected(object_coordinate);
+        };
+
+        return new Projection(texture, project_to_uv);
+    }
+
     // return: a texture shader which maps the file texture using a spherical projection.
     static Projection *spherical(const char *image_name) {
-        Texture2d *texture = new File2d(image_name);
-        return new Projection(texture, spherical_projected);
+        const Texture2d *texture = new File2d(image_name);
+        return Projection::spherical(texture);
     }
 };
 

@@ -18,7 +18,7 @@ public:
     vec4 center;
     float radius;
 
-    Sphere(vec4 center, float radius, Shader* shader):
+    Sphere(vec4 center, float radius, const Shader* shader):
         Primitive(shader, Sphere::make_bounding_cube(center, radius)),
         center(center),
         radius(radius)
@@ -32,7 +32,7 @@ public:
 
         //Computing inside of sqrt
         vec3 L = vec3(center) - orig;
-        
+
         const float *source_L = (const float*)glm::value_ptr(L);
         const float *source_dir = (const float*)glm::value_ptr(dir);
 

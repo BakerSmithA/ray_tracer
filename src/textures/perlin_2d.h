@@ -20,7 +20,9 @@ public:
     // param width: the width of the generated texture.
     // param height: the height of the generated texture.
     // param seed: the seed used when generating random numbers.
-    Perlin2d(int octaves, int seed = 0): octaves(octaves), side_length(1 << octaves) {
+    Perlin2d(int octaves, bool use_red_as_alpha = false, int seed = 0):
+        Texture2d(use_red_as_alpha), octaves(octaves), side_length(1 << octaves)
+    {
         this->buffer = new vec3[side_length * side_length];
         Perlin2d::fill_random(side_length, this->buffer);
 

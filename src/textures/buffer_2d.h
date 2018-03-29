@@ -11,8 +11,8 @@ public:
     // param width: the width of the generated texture.
     // param height: the height of the generated texture.
     // param seed: the seed used when generating random numbers.
-    Buffer2d(int width, int height, vec3 *buffer):
-        buffer(buffer), buff_width(width), buff_height(height) {
+    Buffer2d(int width, int height, vec3 *buffer, bool use_red_as_alpha = false):
+        BilinearTexture2d(use_red_as_alpha), buffer(buffer), buff_width(width), buff_height(height) {
     }
 
     // return: the color of the pixel at the given x, y in the space of the
