@@ -1,3 +1,5 @@
+#include "../textures/threshold_2d.h"
+
 #ifndef TRANSPARENCY_MODEL_H
 #define TRANSPARENCY_MODEL_H
 
@@ -72,9 +74,10 @@ namespace transparency_demo {
 
     // return: a lantern in which there will be a light.
     Object *lantern() {
-        int octaves = 10;
-        const Texture2d *noise = new Perlin2d(octaves, true);
-        const Shader *mask = Projection::spherical(noise);
+        int octaves = 8;
+        const Perlin2d *noise = new Perlin2d(octaves, true);
+        const Threshold2d *thresholded = new Threshold2d(noise, 0.4f);
+        const Shader *mask = Projection::spherical(thresholded);
 
         const Shader *s1 = new Glass();
         const Shader *s2 = new Diffuse(vec3(1));

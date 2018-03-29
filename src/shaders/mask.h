@@ -25,7 +25,7 @@ public:
         // No shadow rays as we don't want the mask to be affected by shadows.
         vec3 mask_col = this->mask->shadowed_color(position, prim, incoming, scene, light, num_shadow_rays);
 
-        return glm::mix(color1, color2, mask_col.x);
+        return glm::mix(color2, color1, mask_col.x);
     }
 
     // return: the opacity of the either s1 or s2 depending on whether the
@@ -35,7 +35,7 @@ public:
         float b = s2->transparency(position, prim, shadow_ray, scene);
         float mask_transparency = this->mask->transparency(position, prim, shadow_ray, scene);
 
-        return glm::mix(a, b, mask_transparency);
+        return glm::mix(b, a, mask_transparency);
     }
 };
 

@@ -16,6 +16,7 @@
 #include "../shaders/projection.h"
 #include "../textures/perlin_2d.h"
 #include "../shaders/mask.h"
+#include "../textures/threshold_2d.h"
 
 using std::vector;
 using glm::vec3;
@@ -73,9 +74,10 @@ Object *right_wall() {
 Object *back_wall() {
 	int octaves = 8;
 	const Texture2d *noise = new Perlin2d(octaves);
-	const Shader *mask = Projection::planar(noise, planar_z);
+	const Threshold2d *thresholded = new Threshold2d(noise, 0.4f);
+	const Shader *mask = Projection::planar(thresholded, planar_z);
 
-	const Shader *s1 = new Diffuse(vec3(0.2,0.2,0.2));
+	const Shader *s1 = new Diffuse(vec3(0.3,0.3,0.3));
 	const Shader *s2 = new Mirror();
 
 	const Shader *shader = new Mask(s1, s2, mask);
