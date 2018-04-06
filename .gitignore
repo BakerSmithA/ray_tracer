@@ -2,6 +2,7 @@
 *.d
 
 # Compiled Object files
+bin/
 *.slo
 *.lo
 *.o
@@ -30,6 +31,8 @@
 *.exe
 *.out
 *.app
+
+# Extras
 *.DS_STORE
-bin/
+*.vscode
 screenshot.bmp
