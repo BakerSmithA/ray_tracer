@@ -58,12 +58,12 @@ public:
 private:
     // return: the yaw matrix for the yaw of the camera.
     mat4 yaw_matrix() {
-        vec4 a = vec4(cos(yaw), 0.0f, -sin(yaw), 0.0f);
-        vec4 b = vec4(0.0f,     1.0f,      0.0f, 0.0f);
-        vec4 c = vec4(sin(yaw), 0.0f,  cos(yaw), 0.0f);
-        vec4 d = vec4(0.0f,     0.0f,      0.0f, 1.0f);
+        vec4 col0 = vec4(cos(yaw), 0.0f, -sin(yaw), 0.0f);
+        vec4 col1 = vec4(0.0f,     1.0f,      0.0f, 0.0f);
+        vec4 col2 = vec4(sin(yaw), 0.0f,  cos(yaw), 0.0f);
+        vec4 col3 = vec4(0.0f,     0.0f,      0.0f, 1.0f);
 
-        return mat4(a, b, c, d);
+        return mat4(col0, col1, col2, col3);
     }
 };
 
