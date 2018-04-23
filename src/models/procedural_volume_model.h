@@ -3,14 +3,14 @@
 namespace procedural_volume {
     Object *volume() {
         //Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
-        int octaves = 7;
+        int octaves = 4;
         Texture<vec3> *texture = new Perlin<vec3>(octaves);
-        Texture<vec3> *thresholded = new Threshold<vec3>(texture, 0.5);
+        Texture<vec3> *thresholded = new Threshold<vec3>(texture, 0.4);
 
     	const vec3 extinction_color = vec3(0.0f);
         // const float primary_step_size = 0.015f;
     	// const float shadow_step_size = 0.02f;
-        const float primary_step_size = 0.015f;
+        const float primary_step_size = 0.035f;
         const float shadow_step_size = 0.07f;
         const float extinction_coefficient = 5.5f;
     	const float scattering_coefficient = 2.0f;
@@ -39,7 +39,7 @@ namespace procedural_volume {
 
     	vec4 light1_pos = vec4(1.25, -2.0, 1.0, 1.0);
     	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
-        // 
+        //
     	// vec4 light2_pos = vec4(0.0, 1.0, 0.0, 1.0);
     	// vec3 light2_col = vec3(142, 135, 167) * vec3(1.0f/255.0f) * 1.15f;
         //

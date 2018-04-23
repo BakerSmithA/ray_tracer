@@ -48,6 +48,9 @@ private:
         // Clamp to ensure the min and max are inside the texture buffer.
         Vec min = glm::clamp(glm::floor(pos), Vec(0.0f), max_buffer_idx);
         Vec max = glm::clamp(glm::ceil(pos), Vec(0.0f), max_buffer_idx);
+        // Vec diff = max - min;
+        // Vec inv = diff == Vec(0.0f) ? Vec(0.5f) : 1.0f / diff;
+        // Vec prop = (max - pos) * diff;
         Vec prop = (max - pos);
         return this->lerp(min, max, prop);
     }
@@ -82,19 +85,16 @@ vec3 LerpedTexture<vec3>::lerp(vec3 min, vec3 max, vec3 prop) const {
     vec3 col212 = this->pixel_at(vec3(max.x, min.y, max.z));
     vec3 col222 = this->pixel_at(vec3(max.x, max.y, max.z));
 
-    // Interpolate the color of the lower pixels along the x-axis.
+    // Interpolate along the x-axes.
     vec3 x11 = fast_lerp(col211, col111, prop.x);
-    // Interpolate the color of the upper pixels along the x-axis.
-    vec3 x12 = fast_lerp(col221, col121, prop.x);
-
-    // Interpolate the color of the lower pixels along the x-axis.
-    vec3 x21 = fast_lerp(col212, col112, prop.x);
-    // Interpolate the color of the upper pixels along the x-axis.
+    vec3 x21 = fast_lerp(col221, col121, prop.x);
+    vec3 x12 = fast_lerp(col212, col112, prop.x);
     vec3 x22 = fast_lerp(col222, col122, prop.x);
 
-    // Interpolate along the y-axis.
-    vec3 y1 = fast_lerp(x11, x12, prop.y);
-    vec3 y2 = fast_lerp(x21, x22, prop.y);
+    // Interpolate along the y-axes.
+    vec3 y1 = fast_lerp(x21, x11, prop.y);
+    vec3 y2 = fast_lerp(x22, x12, prop.y);
 
-    return fast_lerp(y1, y2, prop.z);
+    // Interpolate along the z-axes.
+    return fast_lerp(y2, y1, prop.z);
 }
