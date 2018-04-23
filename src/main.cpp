@@ -17,6 +17,7 @@
 #include "shaders/smoke.h"
 #include "shaders/projection.h"
 #include "rendering/renderer.h"
+
 #include "models/cornel_box.h"
 #include "models/textured_test_model.h"
 #include "models/saturn_model.h"
@@ -25,11 +26,13 @@
 #include "models/volume_model.h"
 #include "models/interstellar_cloud.h"
 #include "models/transparency_model.h"
+#include "models/procedural_volume_model.h"
+
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 320 * 1
-#define SCREEN_HEIGHT 256 * 1
+#define SCREEN_WIDTH 320 * 2
+#define SCREEN_HEIGHT 256 * 2
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 5
 #define NUM_SHADOW_RAYS 1
@@ -82,8 +85,9 @@ int main(int argc, char* argv[]) {
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
     //Scene scene = volume_scene();
+    Scene scene = procedural_volume::scene();
     //Scene scene = interstellar_cloud::scene();
-    Scene scene = transparency_demo::scene();
+    //Scene scene = transparency_demo::scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);
