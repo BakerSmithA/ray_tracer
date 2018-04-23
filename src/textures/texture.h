@@ -48,9 +48,6 @@ private:
         // Clamp to ensure the min and max are inside the texture buffer.
         Vec min = glm::clamp(glm::floor(pos), Vec(0.0f), max_buffer_idx);
         Vec max = glm::clamp(glm::ceil(pos), Vec(0.0f), max_buffer_idx);
-        // Vec diff = max - min;
-        // Vec inv = diff == Vec(0.0f) ? Vec(0.5f) : 1.0f / diff;
-        // Vec prop = (max - pos) * diff;
         Vec prop = (max - pos);
         return this->lerp(min, max, prop);
     }

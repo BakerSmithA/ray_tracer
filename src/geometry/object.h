@@ -35,6 +35,11 @@ public:
         delete[] this->primitives;
     }
 
+    // return: the center point of the object in world coordinates.
+    vec4 center() const {
+        return bounding_cube.center;
+    }
+
     // return: the world_point converted to in the axis aligned coordinate
     //         space as of this object, as defined by the bounding box.
     //         The returned vector in therefore in the bounds 0-1.

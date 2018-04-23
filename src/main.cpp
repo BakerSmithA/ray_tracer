@@ -27,6 +27,7 @@
 #include "models/interstellar_cloud.h"
 #include "models/procedural_volume_model.h"
 #include "models/transparency_model.h"
+#include "models/gravitational_lens_model.h"
 
 #include <glm/glm.hpp>
 #include <SDL.h>
@@ -86,8 +87,9 @@ int main(int argc, char* argv[]) {
     //Scene scene = star_scene();
     //Scene scene = volume_scene();
     //Scene scene = interstellar_cloud::scene();
-    Scene scene = procedural_volume::scene();
+    //Scene scene = procedural_volume::scene();
     //Scene scene = transparency_demo::scene();
+    Scene scene = gravitational_lens::scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);

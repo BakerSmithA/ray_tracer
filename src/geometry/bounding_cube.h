@@ -13,8 +13,9 @@ using std::endl;
 class BoundingCube {
 public:
     const vec4 min, max;
+    const vec4 center;
 
-    BoundingCube(vec4 min, vec4 max): min(min), max(max) {
+    BoundingCube(vec4 min, vec4 max): min(min), max(max), center((max + min) * 0.5f) {
     }
 
     // return: whether the ray intersects the object. Used to reduce the number
