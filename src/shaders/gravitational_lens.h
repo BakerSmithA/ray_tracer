@@ -6,6 +6,13 @@
 // relationship with distance to the center of the object.
 class GravitationalLens: public Shader {
 public:
+    // The maximum distance from the center of the object that a ray can
+    // intersect the the object.
+    float max_dist;
+
+    GravitationalLens(float max_dist): max_dist(max_dist) {
+    }
+
     // return: the color of the intersected surface. Takes occulsion of the
     //         light, by other objects, into account.
     vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
@@ -20,8 +27,10 @@ public:
         vec4 diff = line_to_center - projection;
         // The length of the shortest distance from the ray to the mass.
         float closest_dist = glm::length(vec3(diff));
+        // The angle to deflect the ray towards the center of the lens.
+        float angle = this->deflection_angle(closest_dist);
 
-        return vec3(closest_dist);
+        return vec3(angle);
     }
 
     // return: 100% transparency, as this shader only deflects light, it does
@@ -33,9 +42,9 @@ public:
 private:
     // return: the deflection angle of a ray which passed closest_distance
     //         distance to the center of the lens.
-    float deflection_angle(float closest_distance, float max_dist) const {
-        float prop = closest_distance / max_dist;
-        return 1.0f / prop * prop;
+    float deflection_angle(float closest_distance) const {
+        float prop = closest_distance / this->max_dist;
+        return prop * prop;
     }
 
     // return: the projection of vec into the line spanned by line_vec. The
