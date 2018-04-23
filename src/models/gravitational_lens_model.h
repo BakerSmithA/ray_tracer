@@ -7,9 +7,9 @@ namespace gravitational_lens {
     Object *black_hole() {
     	Primitive **primitives = new Primitive*[1];
 
-        float radius = 0.5f;
-    	Shader *shader = new GravitationalLens(radius);
-    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), radius, shader);
+        float strength = 0.002f;
+    	Shader *shader = new GravitationalLens(strength);
+    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 0.5f, shader);
 
     	return new Object(1, primitives);
     }

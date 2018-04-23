@@ -52,8 +52,8 @@ void update(Camera &camera, Scene &scene) {
     // Translate Camera Position
     const uint8_t* scancodes = SDL_GetKeyboardState(NULL);
 
-    const float cam_move_delta = 0.2f;
-    const float yaw_delta = 0.07f;
+    const float cam_move_delta = 0.05f;
+    const float yaw_delta = 0.02f;
     const float light_move_delta = 0.5f;
 
     // Camera movement

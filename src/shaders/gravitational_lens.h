@@ -1,16 +1,16 @@
 #pragma once
 
 #include "shader.h"
+#include <math.h>
 
 // A shader which deflects light rays according to an inverse square
 // relationship with distance to the center of the object.
 class GravitationalLens: public Shader {
 public:
-    // The maximum distance from the center of the object that a ray can
-    // intersect the the object.
-    float max_dist;
+    // The stength of the distortion.
+    float strength;
 
-    GravitationalLens(float max_dist): max_dist(max_dist) {
+    GravitationalLens(float strength): strength(strength) {
     }
 
     // return: the color of the intersected surface. Takes occulsion of the
@@ -33,8 +33,9 @@ public:
         float closest_dist = glm::length(vec3(diff));
         // The angle to deflect the ray towards the center of the lens.
         float angle = this->deflection_angle(closest_dist);
+        float clamped_angle = glm::clamp(angle, 0.0f, (float)M_PI);
 
-        vec3 outgoing_dir_3d = deflected(vec3(incoming.dir), angle, vec3(projection), vec3(diff));
+        vec3 outgoing_dir_3d = deflected(vec3(incoming.dir), clamped_angle, vec3(projection), vec3(diff));
         vec4 outgoing_dir = project_to_4D(outgoing_dir_3d);
         // The number of bounces is reduced due to this interaction.
         Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
@@ -57,8 +58,7 @@ private:
     // return: the deflection angle of a ray which passed closest_distance
     //         distance to the center of the lens.
     float deflection_angle(float closest_distance) const {
-        float prop = closest_distance / this->max_dist;
-        return prop * prop;
+        return this->strength / (closest_distance * closest_distance);
     }
 
     // return: the projection of vec into the line spanned by line_vec. The
