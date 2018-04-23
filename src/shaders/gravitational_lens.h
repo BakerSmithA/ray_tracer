@@ -56,4 +56,23 @@ private:
         float y = dot(line_vec, line_vec);
         return x / y * line_vec;
     }
+
+    // return: the vector ray after deflecting it by angle in the plane defined by
+    //         vectors a and b.
+    // vec3 deflected(vec3 dor, float angle, vec3 a, vec3 b) {
+    //     // Uses Rodrigues' rotation formula
+    //     //  https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+    //
+    //     // A vector perdendicular to a and b.
+    //     vec3 perp = cross(a, b);
+    //
+    //     // The axis about which vector v is rotated by angle.
+    //     vec3 axis = normalize(perp);
+    //
+    //     vec3 x = ray * cos(angle);
+    //     vec3 y = cross(axis, ray) * sin(angle);
+    //     vec3 z = axis * dot(axis, ray) * (1 - cos(angle));
+    //
+    //     return x + y + z;
+    // }
 };
