@@ -16,7 +16,7 @@
 #include "../shaders/flat_color.h"
 #include "../shaders/smoke.h"
 #include "../shaders/projection.h"
-#include "../textures/perlin_2d.h"
+#include "../textures/perlin.h"
 #include "../shaders/mask.h"
 
 using std::vector;
