@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 #include <algorithm>
 #include "../geometry/linear_alg.h"
+#include "texture.h"
 
 using std::min;
 using std::max;
