@@ -23,7 +23,7 @@ public:
     }
 
     // return: the size of the buffer holding the pixels.
-    vec2 buffer_size() const {
+    Vec buffer_size() const {
         return this->buff_size;
     }
 };
@@ -32,6 +32,12 @@ public:
 template<>
 vec3 Buffer<vec2>::pixel_at(vec2 pos) const {
     int i = (int)(pos.y * this->buff_size.x + pos.x);
+    return this->buffer[i];
+}
+
+template<>
+vec3 Buffer<vec3>::pixel_at(vec3 pos) const {
+    int i = (int)(pos.x + buff_size.x * (pos.y + buff_size.y * pos.z));
     return this->buffer[i];
 }
 

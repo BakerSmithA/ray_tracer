@@ -2,18 +2,20 @@
 
 namespace procedural_volume {
     Object *volume() {
-        // Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
-        Texture<vec3> *texture = new Uniform<vec3>(1.0f);
+        //Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
+        int octaves = 7;
+        Texture<vec3> *texture = new Perlin<vec3>(octaves);
+        Texture<vec3> *thresholded = new Threshold<vec3>(texture, 0.5);
 
     	const vec3 extinction_color = vec3(0.0f);
         // const float primary_step_size = 0.015f;
     	// const float shadow_step_size = 0.02f;
-        const float primary_step_size = 0.03f;
+        const float primary_step_size = 0.015f;
         const float shadow_step_size = 0.07f;
-        const float extinction_coefficient = 1.5f;//3.5f;
+        const float extinction_coefficient = 5.5f;
     	const float scattering_coefficient = 2.0f;
 
-        Shader *shader = new Volumetric(texture,
+        Shader *shader = new Volumetric(thresholded,
     									extinction_color,
     									primary_step_size,
     									shadow_step_size,

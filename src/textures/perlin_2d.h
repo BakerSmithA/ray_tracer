@@ -62,7 +62,8 @@ private:
     static void fill_random(int side_length, int buff_length, vec3 *buffer) {
         for (int i=0; i<buff_length; i++) {
             float r = glm::linearRand(0.0f, 1.0f);
-            buffer[i] = vec3(r, r, r);
+            buffer[i] = vec3(r);
+            //buffer[i] = vec3((float)i / buff_length);
         }
     }
 };
