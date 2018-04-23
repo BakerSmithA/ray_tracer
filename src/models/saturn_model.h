@@ -1,5 +1,5 @@
 #include "../geometry/primitives/disc.h"
-#include "../textures/uniform_3d.h"
+#include "../textures/uniform.h"
 #include "../shaders/volumetric.h"
 
 #ifndef SATURN_MODEL_H
@@ -7,7 +7,7 @@
 
 // return: a star model.
 Object *saturn_model() {
-	Texture3d *volume_texture = new Uniform3d(1.0f);
+	Texture<vec3> *volume_texture = new Uniform<vec3>(1.0f);
 
 	const vec3 extinction_color = vec3(0.0f);
     const float primary_step_size = 0.015f;

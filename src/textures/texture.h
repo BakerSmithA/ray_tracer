@@ -3,6 +3,9 @@
 template<typename Vec>
 class Texture {
 public:
+    ~Texture() {
+    }
+
     // param position: position in the texture where each axis goes from 0-1.
     // return: the color of the the texture at the given position in the
     //         coordinate space of the object.

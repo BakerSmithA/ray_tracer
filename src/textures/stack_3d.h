@@ -6,18 +6,18 @@
 //
 // Inspiration from:
 //  See http://shaderbits.com/blog/authoring-pseudo-volume-textures
-class Stack3d: public Texture3d {
+class Stack3d: public Texture<vec3> {
 public:
     // An image containing all the frames. Assumes a square image with the
     // same number of frames on the x- and y-axes.
-    const Texture2d *frames;
+    const Texture<vec2> *frames;
     // The number of frames on the x- and y-axes.
     const int num_frames_per_side;
     const float inv_num_frames_per_side;
     // The total number of frames.
     const int num_frames;
 
-    Stack3d(const Texture2d *frames, const int num_frames_per_side):
+    Stack3d(const Texture<vec2> *frames, const int num_frames_per_side):
         frames(frames),
         num_frames_per_side(num_frames_per_side),
         inv_num_frames_per_side(1.0f/(float)num_frames_per_side),
@@ -34,13 +34,14 @@ public:
     // return: the density of the the texture at the given position in the
     //         coordinate space of the object. The denser this is, the less
     //         light will be allowed to pass through.
-    float density_at(vec4 pos) const {
+    vec3 color_at(vec3 pos) const {
         // Multiplied by the position to create an frame position.
         vec3 m = vec3(this->inv_num_frames_per_side, this->inv_num_frames_per_side, this->num_frames);
         // Slices the volume texture along the z-axis.
         vec3 slice_pos_side = vec3(pos) * m;
         // Linearly interpolate the z-axis to avoid slicing artefacts.
-        return lerp_density_at(slice_pos_side.x, slice_pos_side.y, slice_pos_side.z);
+        float density = lerp_density_at(slice_pos_side.x, slice_pos_side.y, slice_pos_side.z);
+        return vec3(density);
     }
 
 private:

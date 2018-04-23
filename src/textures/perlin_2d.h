@@ -5,7 +5,7 @@
 #define PERLIN_2D_H
 
 // Generates a random 2D noise texture.
-class Perlin2d: public Texture2d {
+class Perlin2d: public Texture<vec2> {
 private:
     // The number of noise images to combine.
     const int octaves;
@@ -21,7 +21,8 @@ public:
     // param height: the height of the generated texture.
     // param seed: the seed used when generating random numbers.
     Perlin2d(int octaves, bool use_red_as_alpha = false, int seed = 0):
-        Texture2d(use_red_as_alpha), octaves(octaves), side_length(1 << octaves)
+        // Texture2d(use_red_as_alpha), octaves(octaves), side_length(1 << octaves)
+        octaves(octaves), side_length(1 << octaves)
     {
         this->buffer = new vec3[side_length * side_length];
         Perlin2d::fill_random(side_length, this->buffer);
@@ -34,12 +35,12 @@ public:
     }
 
     ~Perlin2d() {
-        for (int i=0; i<octaves; i++) {
-            delete this->noise_textures[i];
-        }
-
-        delete[] this->buffer;
-        this->buffer = NULL;
+        // for (int i=0; i<octaves; i++) {
+        //     delete this->noise_textures[i];
+        // }
+        //
+        // delete[] this->buffer;
+        // this->buffer = NULL;
     }
 
     // param position: position in the texture where each axis goes from 0-1.

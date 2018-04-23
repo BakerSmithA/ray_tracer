@@ -1,4 +1,4 @@
-#include "../textures/uniform_3d.h"
+#include "../textures/uniform.h"
 #include "../textures/stack_3d.h"
 #include "../shaders/volumetric.h"
 
@@ -51,7 +51,7 @@ Primitive **converted_triangles(vector<Triangle*> triangles, float width) {
 }
 
 Object *volume_sphere_model() {
-	Texture3d *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
+	Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
 	const vec3 extinction_color = vec3(0.0f);
     const float primary_step_size = 0.015f;

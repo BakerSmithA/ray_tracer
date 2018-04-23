@@ -1,4 +1,3 @@
-#include "texture_2d.h"
 #include "texture.h"
 
 #ifndef FILE_2D_H
@@ -39,6 +38,7 @@ public:
         return vec3(r * INV_255, g * INV_255, b * INV_255);
     }
 
+    // return: the size of the buffer holding the pixels.
     vec2 buffer_size() const {
         return vec2(this->image->w, this->image->h);
     }

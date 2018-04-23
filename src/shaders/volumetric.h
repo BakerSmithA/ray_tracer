@@ -1,5 +1,5 @@
 #include "shader.h"
-#include "../textures/texture_3d.h"
+#include "../textures/texture.h"
 
 #ifndef VOLUMETRIC_H
 #define VOLUMETRIC_H
@@ -10,7 +10,7 @@
 class Volumetric: public Shader {
 public:
     // Describes the shape, color, and transparency of the 3d texture.
-    Texture3d *texture;
+    Texture<vec3> *texture;
     // Color of light exiting the volume.
     const vec3 extinction_color;
     // The size of the steps to use for primary ray marching inside the volume.
@@ -24,7 +24,7 @@ public:
     // The multiplier the step size for offsetting rays to be inside the volume.
     const float offset_multipler = -0.001f;
 
-    Volumetric(Texture3d *texture, vec3 extinction_color, float primary_ray_step_size, float shadow_ray_step_size, float extinction_coefficient, float scattering_coefficient):
+    Volumetric(Texture<vec3> *texture, vec3 extinction_color, float primary_ray_step_size, float shadow_ray_step_size, float extinction_coefficient, float scattering_coefficient):
         texture(texture),
         extinction_color(extinction_color),
         primary_ray_step_size(primary_ray_step_size),
@@ -184,7 +184,7 @@ private:
     // return: the density of the volume at the given position in world coordinates.
     float volume_density(vec4 world_pos, const Primitive *prim) const {
         vec4 proj = prim->parent_obj->converted_world_to_obj(world_pos);
-        return this->texture->density_at(proj);
+        return this->texture->color_at(vec3(proj)).x;
     }
 
     // return: the color of the object behind or inside the volume.

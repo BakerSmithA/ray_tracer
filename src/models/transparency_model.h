@@ -1,4 +1,4 @@
-#include "../textures/threshold_2d.h"
+#include "../textures/threshold.h"
 
 #ifndef TRANSPARENCY_MODEL_H
 #define TRANSPARENCY_MODEL_H
@@ -76,8 +76,9 @@ namespace transparency_demo {
     Object *lantern() {
         int octaves = 8;
         const Perlin2d *noise = new Perlin2d(octaves, true);
-        const Threshold2d *thresholded = new Threshold2d(noise, 0.4f);
-        const Shader *mask = Projection::spherical(thresholded);
+        const Threshold<vec2> *thresholded = new Threshold<vec2>(noise, 0.4f);
+        bool use_red_as_alpha = true;
+        const Shader *mask = Projection::spherical(thresholded, use_red_as_alpha);
 
         const Shader *s1 = new Glass();
         const Shader *s2 = new Diffuse(vec3(1));

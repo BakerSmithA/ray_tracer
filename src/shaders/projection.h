@@ -78,12 +78,14 @@ class Projection: public ShadowedShader {
 public:
     // The texture projected onto the surface.
     const Texture<vec2> *texture;
-
     // Takes a point in 4d object coordinates to a point 2d uv coordinate.
     const function<vec2(vec4)> project_to_uv;
+    // Whether to use the red color channel of the texture as the the
+    // transparency of the texture.
+    const bool use_red_as_alpha;
 
-    Projection(const Texture<vec2> *texture, const function<vec2(vec4)> project_to_uv):
-        texture(texture), project_to_uv(project_to_uv)
+    Projection(const Texture<vec2> *texture, const function<vec2(vec4)> project_to_uv, bool use_red_as_alpha=false):
+        texture(texture), project_to_uv(project_to_uv), use_red_as_alpha(use_red_as_alpha)
     {
     }
 
@@ -107,14 +109,16 @@ public:
     //         material. E.g. a value of 1 is totally transparent, and a value
     //         of 0 is totally opaque.
     float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
+        if (!use_red_as_alpha) {
+            return 0.0f;
+        }
         // Convert the position u,v coordinate (i.e. in the object's coordinate
         // space for planar mapping).
         vec4 proj = prim->parent_obj->converted_world_to_obj(position);
         // uv is in the range 0-1.
         vec2 uv = this->project_to_uv(proj);
         // Converts uv to be in image coordinates.
-        //return this->texture->alpha_at(uv);
-        return 0.0f;
+        return this->texture->color_at(uv).x;
     }
 
     /*
@@ -124,34 +128,34 @@ public:
 
     // return: a texture shader which maps the texture using planar mapping
     //         in the given direction.
-    static Projection *planar(const Texture<vec2> *texture, PlanarProjectionDirection dir) {
+    static Projection *planar(const Texture<vec2> *texture, PlanarProjectionDirection dir, bool use_red_as_alpha=false) {
         const auto project_to_uv = [=](vec4 object_coordinate) {
             return planar_projected(object_coordinate, dir);
         };
 
-        return new Projection(texture, project_to_uv);
+        return new Projection(texture, project_to_uv, use_red_as_alpha);
     }
 
     // return: a texture shader which maps the file texture using planar mapping
     //         in the given direction.
-    static Projection *planar(const char *image_name, PlanarProjectionDirection dir) {
+    static Projection *planar(const char *image_name, PlanarProjectionDirection dir, bool use_red_as_alpha=false) {
         const Texture<vec2> *texture = new File2d(image_name);
-        return Projection::planar(texture, dir);
+        return Projection::planar(texture, dir, use_red_as_alpha);
     }
 
     // return: a texture shader which maps the texture using spherical mapping.
-    static Projection *spherical(const Texture<vec2> *texture) {
+    static Projection *spherical(const Texture<vec2> *texture, bool use_red_as_alpha=false) {
         const auto project_to_uv = [=](vec4 object_coordinate) {
             return spherical_projected(object_coordinate);
         };
 
-        return new Projection(texture, project_to_uv);
+        return new Projection(texture, project_to_uv, use_red_as_alpha);
     }
 
     // return: a texture shader which maps the file texture using a spherical projection.
-    static Projection *spherical(const char *image_name) {
+    static Projection *spherical(const char *image_name, bool use_red_as_alpha=false) {
         const Texture<vec2> *texture = new File2d(image_name);
-        return Projection::spherical(texture);
+        return Projection::spherical(texture, use_red_as_alpha);
     }
 };
 
