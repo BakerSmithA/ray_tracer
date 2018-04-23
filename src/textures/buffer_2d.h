@@ -3,33 +3,36 @@
 
 // A texture created by bilinearly interpolating over a buffer of colors.
 // It is the responsibility of the creator of the buffer to free the buffer.
-class Buffer2d: public LerpedTexture<vec2> {
+template<typename Vec>
+class Buffer: public LerpedTexture<Vec> {
 public:
     const vec3 *buffer;
-    const int buff_width, buff_height;
+    const Vec buff_size;
 
-    // param width: the width of the generated texture.
-    // param height: the height of the generated texture.
+    // param buffer_size: width, height, depth, etc of the buffer.
     // param seed: the seed used when generating random numbers.
-    Buffer2d(int width, int height, vec3 *buffer, bool use_red_as_alpha = false):
-        // BilinearTexture2d(use_red_as_alpha), buffer(buffer), buff_width(width), buff_height(height) {
-        buffer(buffer), buff_width(width), buff_height(height) {
-    }
-
-    ~Buffer2d() {
+    Buffer(Vec buffer_size, vec3 *buffer):
+        buff_size(buffer_size), buffer(buffer){
     }
 
     // return: the color of the pixel at the given x, y in the space of the
     //         image buffer. Therefore the x and y go from 0 to image width
     //         and height respectively.
-    vec3 pixel_at(vec2 pos) const {
-        return this->buffer[(int)pos.y * this->buff_width + (int)pos.x];
+    vec3 pixel_at(Vec pos) const {
+        return vec3(1.0f, 0.0f, 0.0f);
     }
 
     // return: the size of the buffer holding the pixels.
     vec2 buffer_size() const {
-        return vec2(this->buff_width, this->buff_height);
+        return this->buff_size;
     }
 };
+
+// Specialised pixel at for 2d textures.
+template<>
+vec3 Buffer<vec2>::pixel_at(vec2 pos) const {
+    int i = (int)(pos.y * this->buff_size.x + pos.x);
+    return this->buffer[i];
+}
 
 #endif // BUFFER_2D_H

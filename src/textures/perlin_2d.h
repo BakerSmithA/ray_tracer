@@ -14,14 +14,13 @@ private:
     // Stores the noise which is used to initialise the noise textures.
     vec3 *buffer = NULL;
     // Added together to compose the final noise texture.
-    vector<Buffer2d*> noise_textures;
+    vector<Buffer<vec2>*> noise_textures;
 
 public:
     // param width: the width of the generated texture.
     // param height: the height of the generated texture.
     // param seed: the seed used when generating random numbers.
-    Perlin2d(int octaves, bool use_red_as_alpha = false, int seed = 0):
-        // Texture2d(use_red_as_alpha), octaves(octaves), side_length(1 << octaves)
+    Perlin2d(int octaves, int seed = 0):
         octaves(octaves), side_length(1 << octaves)
     {
         this->buffer = new vec3[side_length * side_length];
@@ -30,7 +29,8 @@ public:
         // Create the noise textures.
         for (int i=0; i<this->octaves; i++) {
             int octave_side_length = 1 << i; // 2^i
-            noise_textures.push_back(new Buffer2d(octave_side_length, octave_side_length, this->buffer));
+            vec2 buffer_size = vec2(octave_side_length);
+            noise_textures.push_back(new Buffer<vec2>(buffer_size, this->buffer));
         }
     }
 

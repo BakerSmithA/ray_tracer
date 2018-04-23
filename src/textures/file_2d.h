@@ -12,8 +12,7 @@ private:
     SDL_Surface *image;
 
 public:
-    File2d(const char *image_name, bool use_red_as_alpha = false):
-        // BilinearTexture2d(use_red_as_alpha), image(SDL_LoadBMP(image_name)) {
+    File2d(const char *image_name):
         image(SDL_LoadBMP(image_name)) {
         if (image == NULL) {
             printf("Unable to load bitmap: %s\n", SDL_GetError());
