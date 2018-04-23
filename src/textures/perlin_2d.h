@@ -1,5 +1,5 @@
 #include <glm/glm.hpp>
-#include "buffer_2d.h"
+#include "buffer.h"
 
 #ifndef PERLIN_2D_H
 #define PERLIN_2D_H
