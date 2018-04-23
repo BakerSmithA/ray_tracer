@@ -74,7 +74,6 @@ Object *right_wall() {
 Object *back_wall() {
 	int octaves = 8;
 	const Texture<vec2> *noise = new Perlin<vec2>(octaves);
-	const Threshold<vec2> *thresholded = new Threshold<vec2>(noise, 0.4f);
 	const Shader *mask = Projection::planar(noise, planar_z);
 
 	const Shader *s1 = new Diffuse(vec3(0.3,0.3,0.3));
@@ -83,8 +82,8 @@ Object *back_wall() {
 	const Shader *shader = new Mask(s1, s2, mask);
 
 	vector<Triangle*> triangles;
-	triangles.push_back(new Triangle(G, D, C, mask));
-	triangles.push_back(new Triangle(G, H, D, mask));
+	triangles.push_back(new Triangle(G, D, C, shader));
+	triangles.push_back(new Triangle(G, H, D, shader));
 
 	return new Object(triangles.size(), scaled_triangles(triangles));
 }

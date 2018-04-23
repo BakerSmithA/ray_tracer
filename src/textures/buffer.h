@@ -6,8 +6,8 @@
 template<typename Vec>
 class Buffer: public LerpedTexture<Vec> {
 public:
-    const vec3 *buffer;
     const Vec buff_size;
+    const vec3 *buffer;
 
     // param buffer_size: width, height, depth, etc of the buffer.
     // param seed: the seed used when generating random numbers.
