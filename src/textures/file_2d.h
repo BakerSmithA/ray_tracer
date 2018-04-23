@@ -7,7 +7,7 @@
 // from 0-255, whereas they need to be from 0-1.
 #define INV_255 (1.0f / 255.0f)
 
-class File2d: public LerpedTexture2d {
+class File2d: public LerpedTexture<vec2> {
 private:
     SDL_Surface *image;
 

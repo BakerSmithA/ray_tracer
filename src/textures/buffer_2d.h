@@ -3,7 +3,7 @@
 
 // A texture created by bilinearly interpolating over a buffer of colors.
 // It is the responsibility of the creator of the buffer to free the buffer.
-class Buffer2d: public LerpedTexture2d {
+class Buffer2d: public LerpedTexture<vec2> {
 public:
     const vec3 *buffer;
     const int buff_width, buff_height;
@@ -14,6 +14,9 @@ public:
     Buffer2d(int width, int height, vec3 *buffer, bool use_red_as_alpha = false):
         // BilinearTexture2d(use_red_as_alpha), buffer(buffer), buff_width(width), buff_height(height) {
         buffer(buffer), buff_width(width), buff_height(height) {
+    }
+
+    ~Buffer2d() {
     }
 
     // return: the color of the pixel at the given x, y in the space of the

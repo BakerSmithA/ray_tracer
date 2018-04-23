@@ -28,7 +28,9 @@ public:
 
     // param prop: the proportion to mix the pixel min and pixel max in each axis.
     // return: linearly interpolated color in all axes between the min and max.
-    virtual vec3 lerp(Vec pixel_min_pos, Vec pixel_max_pos, Vec prop) const = 0;
+    virtual vec3 lerp(Vec pixel_min_pos, Vec pixel_max_pos, Vec prop) const {
+        return vec3(1.0f, 0.0f, 0.0f);
+    }
 
 private:
     // return: the linearly interpolated color at the given position in
@@ -46,20 +48,18 @@ private:
     }
 };
 
-class LerpedTexture2d: public LerpedTexture<vec2> {
-    // param prop: the proportion to mix the pixel min and pixel max in each axis.
-    // return: linearly interpolated color in all axes between the min and max.
-    vec3 lerp(vec2 min, vec2 max, vec2 prop) const {
-        vec3 col11 = this->pixel_at(vec2(min.x, min.y));
-        vec3 col12 = this->pixel_at(vec2(min.x, max.y));
-        vec3 col21 = this->pixel_at(vec2(max.x, min.y));
-        vec3 col22 = this->pixel_at(vec2(max.x, max.y));
+// Specialise linear interpolation for 2d textures.
+template<>
+vec3 LerpedTexture<vec2>::lerp(vec2 min, vec2 max, vec2 prop) const {
+    vec3 col11 = this->pixel_at(vec2(min.x, min.y));
+    vec3 col12 = this->pixel_at(vec2(min.x, max.y));
+    vec3 col21 = this->pixel_at(vec2(max.x, min.y));
+    vec3 col22 = this->pixel_at(vec2(max.x, max.y));
 
-        // Interpolate the color of the lower pixels along the x-axis.
-        vec3 r1 = fast_lerp(col21, col11, prop.x);
-        // Interpolate the color of the upper pixels along the x-axis.
-        vec3 r2 = fast_lerp(col22, col12, prop.x);
-        // Interpolate along the y-axis.
-        return fast_lerp(r2, r1, prop.y);
-    }
-};
+    // Interpolate the color of the lower pixels along the x-axis.
+    vec3 r1 = fast_lerp(col21, col11, prop.x);
+    // Interpolate the color of the upper pixels along the x-axis.
+    vec3 r2 = fast_lerp(col22, col12, prop.x);
+    // Interpolate along the y-axis.
+    return fast_lerp(r2, r1, prop.y);
+}

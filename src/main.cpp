@@ -80,11 +80,11 @@ void update(Camera &camera, Scene &scene) {
 
 int main(int argc, char* argv[]) {
     //Scene scene = cornel_box();
-    //Scene scene = textured_test_scene();
+    Scene scene = textured_test_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
     //Scene scene = star_scene();
-    Scene scene = volume_scene();
+    //Scene scene = volume_scene();
     //Scene scene = interstellar_cloud::scene();
     //Scene scene = procedural_volume::scene();
     //Scene scene = transparency_demo::scene();
