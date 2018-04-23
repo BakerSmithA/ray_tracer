@@ -1,4 +1,5 @@
 #include "texture_2d.h"
+#include "texture.h"
 
 #ifndef FILE_2D_H
 #define FILE_2D_H
@@ -7,13 +8,14 @@
 // from 0-255, whereas they need to be from 0-1.
 #define INV_255 (1.0f / 255.0f)
 
-class File2d: public BilinearTexture2d {
+class File2d: public LerpedTexture2d {
 private:
     SDL_Surface *image;
 
 public:
     File2d(const char *image_name, bool use_red_as_alpha = false):
-        BilinearTexture2d(use_red_as_alpha), image(SDL_LoadBMP(image_name)) {
+        // BilinearTexture2d(use_red_as_alpha), image(SDL_LoadBMP(image_name)) {
+        image(SDL_LoadBMP(image_name)) {
         if (image == NULL) {
             printf("Unable to load bitmap: %s\n", SDL_GetError());
             exit(1);
@@ -27,8 +29,8 @@ public:
     // return: the color of the pixel at the given x, y in the space of the
     //         image buffer. Therefore the x and y go from 0 to image width
     //         and height respectively.
-    vec3 pixel_at(int x, int y) const {
-        Uint32 pixel = get_pixel_uint(x, y);
+    vec3 pixel_at(vec2 pos) const {
+        Uint32 pixel = get_pixel_uint((int)pos.x, (int)pos.y);
 
         uint8_t b = pixel & 0xFF;
         uint8_t g = (pixel >> 8) & 0xFF;
@@ -37,14 +39,8 @@ public:
         return vec3(r * INV_255, g * INV_255, b * INV_255);
     }
 
-    // return: the width of the image buffer.
-    int width() const {
-        return this->image->w;
-    }
-
-    // return: the height of the image buffer.
-    int height() const {
-        return this->image->h;
+    vec2 buffer_size() const {
+        return vec2(this->image->w, this->image->h);
     }
 
 private:

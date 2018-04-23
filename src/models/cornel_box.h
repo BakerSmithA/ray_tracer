@@ -234,16 +234,16 @@ Object *cornel_small_sphere() {
 	// Shader* shader = Mix::ratio(new Mirror(), new Diffuse(vec3(1.0f, 0.97f, 0.45f)), 0.1f);
 
 	int octaves = 8;
-	const Texture2d *noise = new Perlin2d(octaves);
-	const Shader *mask = Projection::planar(noise, planar_z);
+	// const Texture2d *noise = new Perlin2d(octaves);
+	// const Shader *mask = Projection::planar(noise, planar_z);
 
 	const Shader *s1 = new Diffuse(vec3(0.2,0.2,0.2));
-	const Shader *s2 = new Mirror();
+	//const Shader *s2 = new Mirror();
 
-	Shader *shader = new Mask(s1, s2, mask);
+	//Shader *shader = new Mask(s1, s2, mask);
 
 	Primitive **primitives = new Primitive*[1];
-	primitives[0] = new Sphere(vec4(0.3, -0.2, -0.1, 1.0), 0.2, shader);
+	primitives[0] = new Sphere(vec4(0.3, -0.2, -0.1, 1.0), 0.2, s1);
 	return new Object(1, primitives);
 }
 

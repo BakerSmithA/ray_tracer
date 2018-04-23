@@ -77,12 +77,12 @@ vec2 spherical_projected(vec4 object_space_point) {
 class Projection: public ShadowedShader {
 public:
     // The texture projected onto the surface.
-    const Texture2d *texture;
+    const Texture<vec2> *texture;
 
     // Takes a point in 4d object coordinates to a point 2d uv coordinate.
     const function<vec2(vec4)> project_to_uv;
 
-    Projection(const Texture2d *texture, const function<vec2(vec4)> project_to_uv):
+    Projection(const Texture<vec2> *texture, const function<vec2(vec4)> project_to_uv):
         texture(texture), project_to_uv(project_to_uv)
     {
     }
@@ -113,7 +113,8 @@ public:
         // uv is in the range 0-1.
         vec2 uv = this->project_to_uv(proj);
         // Converts uv to be in image coordinates.
-        return this->texture->alpha_at(uv);
+        //return this->texture->alpha_at(uv);
+        return 0.0f;
     }
 
     /*
@@ -123,7 +124,7 @@ public:
 
     // return: a texture shader which maps the texture using planar mapping
     //         in the given direction.
-    static Projection *planar(const Texture2d *texture, PlanarProjectionDirection dir) {
+    static Projection *planar(const Texture<vec2> *texture, PlanarProjectionDirection dir) {
         const auto project_to_uv = [=](vec4 object_coordinate) {
             return planar_projected(object_coordinate, dir);
         };
@@ -134,12 +135,12 @@ public:
     // return: a texture shader which maps the file texture using planar mapping
     //         in the given direction.
     static Projection *planar(const char *image_name, PlanarProjectionDirection dir) {
-        const Texture2d *texture = new File2d(image_name);
+        const Texture<vec2> *texture = new File2d(image_name);
         return Projection::planar(texture, dir);
     }
 
     // return: a texture shader which maps the texture using spherical mapping.
-    static Projection *spherical(const Texture2d *texture) {
+    static Projection *spherical(const Texture<vec2> *texture) {
         const auto project_to_uv = [=](vec4 object_coordinate) {
             return spherical_projected(object_coordinate);
         };
@@ -149,7 +150,7 @@ public:
 
     // return: a texture shader which maps the file texture using a spherical projection.
     static Projection *spherical(const char *image_name) {
-        const Texture2d *texture = new File2d(image_name);
+        const Texture<vec2> *texture = new File2d(image_name);
         return Projection::spherical(texture);
     }
 };
