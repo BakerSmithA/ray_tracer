@@ -75,7 +75,7 @@ namespace transparency_demo {
     // return: a lantern in which there will be a light.
     Object *lantern() {
         int octaves = 8;
-        const Perlin2d *noise = new Perlin2d(octaves, true);
+        const Perlin<vec2> *noise = new Perlin<vec2>(octaves);
         const Threshold<vec2> *thresholded = new Threshold<vec2>(noise, 0.4f);
         bool use_red_as_alpha = true;
         const Shader *mask = Projection::spherical(thresholded, use_red_as_alpha);

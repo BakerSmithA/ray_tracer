@@ -234,7 +234,7 @@ Object *cornel_small_sphere() {
 	// Shader* shader = Mix::ratio(new Mirror(), new Diffuse(vec3(1.0f, 0.97f, 0.45f)), 0.1f);
 
 	int octaves = 8;
-	const Texture<vec2> *noise = new Perlin2d(octaves);
+	const Texture<vec2> *noise = new Perlin<vec2>(octaves);
 	const Shader *mask = Projection::planar(noise, planar_z);
 
 	const Shader *s1 = new Diffuse(vec3(0.2,0.2,0.2));
