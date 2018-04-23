@@ -16,6 +16,10 @@ public:
     // return: the color of the intersected surface. Takes occulsion of the
     //         light, by other objects, into account.
     vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
+        if (!incoming.can_bounce()) {
+            return vec3(0.0f);
+        }
+
         // The center of the object to which primitive belongs.
         vec4 lens_center = prim->parent_obj->center();
         // Line from the ray start to the center of the object to which primitive belongs.
@@ -30,7 +34,17 @@ public:
         // The angle to deflect the ray towards the center of the lens.
         float angle = this->deflection_angle(closest_dist);
 
-        return vec3(angle);
+        vec3 outgoing_dir_3d = deflected(vec3(incoming.dir), angle, vec3(projection), vec3(diff));
+        vec4 outgoing_dir = project_to_4D(outgoing_dir_3d);
+        // The number of bounces is reduced due to this interaction.
+        Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
+
+        optional<Intersection> i = scene.closest_intersection(outgoing_ray, prim);
+        if (!i.has_value()) {
+            return vec3(0, 0, 0);
+        }
+
+        return i->primitive->shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light, num_shadow_rays);
     }
 
     // return: 100% transparency, as this shader only deflects light, it does
@@ -59,20 +73,20 @@ private:
 
     // return: the vector ray after deflecting it by angle in the plane defined by
     //         vectors a and b.
-    // vec3 deflected(vec3 dor, float angle, vec3 a, vec3 b) {
-    //     // Uses Rodrigues' rotation formula
-    //     //  https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
-    //
-    //     // A vector perdendicular to a and b.
-    //     vec3 perp = cross(a, b);
-    //
-    //     // The axis about which vector v is rotated by angle.
-    //     vec3 axis = normalize(perp);
-    //
-    //     vec3 x = ray * cos(angle);
-    //     vec3 y = cross(axis, ray) * sin(angle);
-    //     vec3 z = axis * dot(axis, ray) * (1 - cos(angle));
-    //
-    //     return x + y + z;
-    // }
+    vec3 deflected(vec3 incoming_dir, float angle, vec3 a, vec3 b) const {
+        // Uses Rodrigues' rotation formula
+        //  https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+
+        // A vector perdendicular to a and b.
+        vec3 perp = cross(a, b);
+
+        // The axis about which vector v is rotated by angle.
+        vec3 axis = normalize(perp);
+
+        vec3 x = incoming_dir * cos(angle);
+        vec3 y = cross(axis, incoming_dir) * sin(angle);
+        vec3 z = axis * dot(axis, incoming_dir) * (1 - cos(angle));
+
+        return x + y + z;
+    }
 };
