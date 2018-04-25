@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../shaders/gravitational_lens.h"
-#include "../shaders/id.h"
 
 namespace gravitational_lens {
     // return: a green sphere.
@@ -9,7 +8,7 @@ namespace gravitational_lens {
     	Primitive **primitives = new Primitive*[1];
 
         float strength = 0.002f;
-    	Shader *shader = new Id();//GravitationalLens(strength, 1.0f);
+    	Shader *shader = new GravitationalLens(strength, 1.0f);
     	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 0.5f, shader);
 
     	return new Object(1, primitives);

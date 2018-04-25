@@ -2,39 +2,44 @@
 
 #include "../textures/ramp.h"
 #include "../shaders/dist_from_center.h"
+#include "../shaders/id.h"
 
 namespace supernova_model {
-    Object *inner_cloud() {
-        float radius = 0.6f;
-
+    // return: shader which colors from red, to yellow, to blue, as the
+    //         distance from the center of the cloud increases.
+    Shader *inner_cloud_color(float radius) {
         vector<tuple<vec3, float>> colors;
         colors.push_back({ vec3(0,0,1), 0.0f });
         colors.push_back({ vec3(1,1,0.5), 0.7f });
         colors.push_back({ vec3(1,0,0), 1.0f });
 
         Texture<float> *ramp_tex = new Ramp(colors);
-        Shader *ramp = DistFromCenter::textured(ramp_tex, ramp_tex, radius);
+        return DistFromCenter::textured(ramp_tex, ramp_tex, radius);
+    }
 
+    // return: a shader for the cloud volume.
+    Shader *inner_cloud_gray_volume() {
         const vec3 extinction_color = vec3(0.0f);
-        // const float primary_step_size = 0.015f;
-        // const float shadow_step_size = 0.03f;
         const float primary_step_size = 0.05f;
         const float shadow_step_size = 0.07f;
         const float extinction_coefficient = 4.0f;
         const float scattering_coefficient = 1.3f;
 
         Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
-        Shader *cloud = new Volumetric(texture,
-                                       extinction_color,
-                                       primary_step_size,
-                                       shadow_step_size,
-                                       extinction_coefficient,
-                                       scattering_coefficient);
+        return new Volumetric(texture, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
+    }
 
-        Shader *combined = Mix::multiply(cloud, ramp);
+    // return: a shader for a clouded cloud.
+    Shader *inner_cloud_volume(float radius) {
+        return Mix::multiply(inner_cloud_gray_volume(), inner_cloud_color(radius));
+    }
+
+    Object *inner_cloud() {
+        float radius = 0.6f;
+        Shader *color_cloud = inner_cloud_volume(radius);
 
         Primitive **primitives = new Primitive*[1];
-        primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), radius, combined);
+        primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), radius, color_cloud);
         return new Object(1, primitives);
     }
 
