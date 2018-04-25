@@ -8,13 +8,7 @@
 class GravitationalLens: public DistFromCenter {
 public:
     GravitationalLens(float strength, float max_dist):
-        DistFromCenter(GravitationalLens::bent_ray_color(strength), max_dist) {
-    }
-
-    // return: 100% transparency, as this shader only deflects light, it does
-    //         not block it.
-    float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
-        return 0.0f;
+        DistFromCenter(GravitationalLens::bent_ray_color(strength), 0.0f, max_dist) {
     }
 
 private:

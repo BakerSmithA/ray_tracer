@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
     //Scene scene = interstellar_cloud::scene();
     //Scene scene = procedural_volume::scene();
     //Scene scene = transparency_demo::scene();
-    // Scene scene = gravitational_lens::scene();
+    //Scene scene = gravitational_lens::scene();
     Scene scene = supernova_model::scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
