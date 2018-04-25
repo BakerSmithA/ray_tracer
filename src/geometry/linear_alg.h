@@ -134,4 +134,23 @@ vec3 fast_lerp(vec3 a, vec3 b, float t) {
     return vec3(lerp_a, lerp_b, lerp_c);
 }
 
+// return: the vector ray after deflecting it by angle in the plane defined by
+//         vectors a and b.
+vec3 deflected(vec3 incoming_dir, float angle, vec3 a, vec3 b) {
+    // Uses Rodrigues' rotation formula
+    //  https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+
+    // A vector perdendicular to a and b.
+    vec3 perp = glm::cross(a, b);
+
+    // The axis about which vector v is rotated by angle.
+    vec3 axis = glm::normalize(perp);
+
+    vec3 x = incoming_dir * (float)cos(angle);
+    vec3 y = glm::cross(axis, incoming_dir) * (float)sin(angle);
+    vec3 z = axis * glm::dot(axis, incoming_dir) * (1.0f - (float)cos(angle));
+
+    return x + y + z;
+}
+
 #endif // LINEAR_ALG_H

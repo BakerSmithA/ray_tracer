@@ -1,51 +1,13 @@
 #pragma once
 
-#include "shader.h"
+#include "dist_from_center.h"
 #include <math.h>
 
 // A shader which deflects light rays according to an inverse square
 // relationship with distance to the center of the object.
-class GravitationalLens: public Shader {
+class GravitationalLens: public DistFromCenter {
 public:
-    // The stength of the distortion.
-    float strength;
-
-    GravitationalLens(float strength): strength(strength) {
-    }
-
-    // return: the color of the intersected surface. Takes occulsion of the
-    //         light, by other objects, into account.
-    vec3 shadowed_color(vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) const {
-        if (!incoming.can_bounce()) {
-            return vec3(0.0f);
-        }
-
-        // The center of the object to which primitive belongs.
-        vec4 lens_center = prim->parent_obj->center();
-        // Line from the ray start to the center of the object to which primitive belongs.
-        vec4 line_to_center = incoming.start - lens_center;
-
-        // A scalar multiple of ray, to the vector that is orthogonal to the mass.
-        vec4 projection = orthogonal_projection(line_to_center, incoming.dir);
-        // The shortest vector from the ray to the mass.
-        vec4 diff = line_to_center - projection;
-        // The length of the shortest distance from the ray to the mass.
-        float closest_dist = glm::length(vec3(diff));
-        // The angle to deflect the ray towards the center of the lens.
-        float angle = this->deflection_angle(closest_dist);
-        float clamped_angle = glm::clamp(angle, 0.0f, (float)M_PI);
-
-        vec3 outgoing_dir_3d = deflected(vec3(incoming.dir), clamped_angle, vec3(projection), vec3(diff));
-        vec4 outgoing_dir = project_to_4D(outgoing_dir_3d);
-        // The number of bounces is reduced due to this interaction.
-        Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
-
-        optional<Intersection> i = scene.closest_intersection(outgoing_ray, prim);
-        if (!i.has_value()) {
-            return vec3(0, 0, 0);
-        }
-
-        return i->primitive->shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light, num_shadow_rays);
+    GravitationalLens(float strength): DistFromCenter(GravitationalLens::bent_ray_color(strength)) {
     }
 
     // return: 100% transparency, as this shader only deflects light, it does
@@ -55,38 +17,25 @@ public:
     }
 
 private:
-    // return: the deflection angle of a ray which passed closest_distance
-    //         distance to the center of the lens.
-    float deflection_angle(float closest_distance) const {
-        return this->strength / (closest_distance * closest_distance);
-    }
+    static ConvertDistToColor bent_ray_color(float strength) {
+        auto bent_ray = [=](float closest_dist, vec4 projection, vec4 diff, vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) {
+            // The angle to deflect the ray towards the center of the lens.
+            float angle = strength / (closest_dist * closest_dist);
+            float clamped_angle = glm::clamp(angle, 0.0f, (float)M_PI);
 
-    // return: the projection of vec into the line spanned by line_vec. The
-    //         returned vector is a scalar multiple of line_vec.
-    vec4 orthogonal_projection(vec4 vec, vec4 line_vec) const {
-        // For reference, see
-        //  https://en.wikibooks.org/wiki/Linear_Algebra/Orthogonal_Projection_Onto_a_Line
-        float x = dot(vec, line_vec);
-        float y = dot(line_vec, line_vec);
-        return x / y * line_vec;
-    }
+            vec3 outgoing_dir_3d = deflected(vec3(incoming.dir), clamped_angle, vec3(projection), vec3(diff));
+            vec4 outgoing_dir = project_to_4D(outgoing_dir_3d);
+            // The number of bounces is reduced due to this interaction.
+            Ray outgoing_ray = Ray(position, outgoing_dir, incoming.bounces_remaining - 1);
 
-    // return: the vector ray after deflecting it by angle in the plane defined by
-    //         vectors a and b.
-    vec3 deflected(vec3 incoming_dir, float angle, vec3 a, vec3 b) const {
-        // Uses Rodrigues' rotation formula
-        //  https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+            optional<Intersection> i = scene.closest_intersection(outgoing_ray, prim);
+            if (!i.has_value()) {
+                return vec3(0, 0, 0);
+            }
 
-        // A vector perdendicular to a and b.
-        vec3 perp = cross(a, b);
+            return i->primitive->shader->shadowed_color(i->pos, i->primitive, outgoing_ray, scene, light, num_shadow_rays);
+        };
 
-        // The axis about which vector v is rotated by angle.
-        vec3 axis = normalize(perp);
-
-        vec3 x = incoming_dir * cos(angle);
-        vec3 y = cross(axis, incoming_dir) * sin(angle);
-        vec3 z = axis * dot(axis, incoming_dir) * (1 - cos(angle));
-
-        return x + y + z;
+        return bent_ray;
     }
 };

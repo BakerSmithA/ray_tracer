@@ -10,11 +10,6 @@ public:
     // return: the color of the the texture at the given position in the
     //         coordinate space of the object.
     virtual vec3 color_at(Vec position) const = 0;
-
-    // return: the number of dimensions of the texture.
-    int dims() const {
-        return Vec().length();
-    }
 };
 
 template<typename Vec>

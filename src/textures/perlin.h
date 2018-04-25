@@ -24,7 +24,7 @@ public:
     Perlin(int octaves):
         octaves(octaves), side_length(1 << octaves)
     {
-        int buff_length = pow(side_length, this->dims());
+        int buff_length = pow(side_length, Vec().length());
         this->buffer = new vec3[buff_length];
         Perlin::fill_random(side_length, buff_length, this->buffer);
 
