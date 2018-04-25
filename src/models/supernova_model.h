@@ -1,13 +1,22 @@
 #pragma once
 
 #include "../textures/ramp.h"
+#include "../shaders/dist_from_center.h"
 
 namespace supernova_model {
     Object *cloud() {
-        Shader *shader = new Diffuse(vec3(1,0,0));
+        float radius = 0.6f;
+
+        vector<tuple<vec3, float>> colors;
+        colors.push_back({ vec3(1,0,0), 0.0f });
+        colors.push_back({ vec3(0,1,0), 0.8f });
+        colors.push_back({ vec3(0,0,1), 1.0f });
+
+        Texture<float> *ramp = new Ramp(colors);
+        Shader *shader = DistFromCenter::textured(ramp, radius);
 
         Primitive **primitives = new Primitive*[1];
-        primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), 0.6, shader);
+        primitives[0] = new Sphere(vec4(0.1, 0, -0.4, 1.0), radius, shader);
         return new Object(1, primitives);
     }
 

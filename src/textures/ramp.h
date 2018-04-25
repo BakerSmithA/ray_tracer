@@ -16,7 +16,7 @@ private:
 public:
 
     Ramp(vector<tuple<vec3, float> > colors): colors(colors) {
-        std::sort(begin(colors), end(colors), [](tuple<vec3, float> const &t1, tuple<vec3, float> const &t2) {
+        std::sort(begin(this->colors), end(this->colors), [](tuple<vec3, float> const &t1, tuple<vec3, float> const &t2) {
             return get<1>(t1) < get<1>(t2);
         });
     }
@@ -38,12 +38,15 @@ public:
 private:
     int col_idx_before(float position) const {
         // -1 because the after index is calculated as this index +1.
-        for (size_t i=0; i<colors.size()-1; i++) {
-            if (get<1>(colors[i]) > position) {
+        for (size_t i=0; i<colors.size(); i++) {
+            float above_pos = get<1>(colors[i+1]);
+            float below_pos = get<1>(colors[i]);
+
+            if (below_pos <= position && position < above_pos) {
                 return i;
             }
         }
 
-        std::runtime_error("Ramp: position outside of color range");
+        return this->colors.size() - 2;
     }
 };

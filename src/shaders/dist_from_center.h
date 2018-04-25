@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../textures/texture.h"
+
 using ConvertDistToColor = function<vec3(float closest_dist,
                                          vec4 projection,
                                          vec4 diff,
@@ -15,8 +17,10 @@ using ConvertDistToColor = function<vec3(float closest_dist,
 class DistFromCenter: public Shader {
 public:
     ConvertDistToColor dist_to_color;
+    float max_dist;
 
-    DistFromCenter(ConvertDistToColor dist_to_color): dist_to_color(dist_to_color) {
+    DistFromCenter(ConvertDistToColor dist_to_color, float max_dist):
+        dist_to_color(dist_to_color), max_dist(max_dist) {
     }
 
     // return: the color of the intersected surface. Takes occulsion of the
@@ -36,19 +40,27 @@ public:
         // The shortest vector from the ray to the center.
         vec4 diff = line_to_center - projection;
         // The length of the shortest distance from the ray to the center.
-        float closest_dist = glm::length(vec3(diff));
+        float closest_dist = glm::length(vec3(diff)) / max_dist;
 
         return this->dist_to_color(closest_dist, projection, diff, position, prim, incoming, scene, light, num_shadow_rays);
     }
 
     // return: a DistFromCenter shader which only uses the distance to generate
     //         a color.
-    static DistFromCenter *dist(function<vec3(float)> dist_to_color) {
+    static DistFromCenter *dist(function<vec3(float)> dist_to_color, float max_dist) {
         auto f = [=](float closest_dist, vec4 projection, vec4 diff, vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) {
             return dist_to_color(closest_dist);
         };
 
-        return new DistFromCenter(f);
+        return new DistFromCenter(f, max_dist);
+    }
+
+    // return: a DistFromCenter shader which uses a 1d texture to decide the color.
+    static DistFromCenter *textured(Texture<float> *texture, float max_dist) {
+        auto dist_to_color = [=](float dist) {
+            return texture->color_at(dist);
+        };
+        return DistFromCenter::dist(dist_to_color, max_dist);
     }
 
 private:

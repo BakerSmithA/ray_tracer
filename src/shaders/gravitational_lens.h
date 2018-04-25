@@ -7,7 +7,8 @@
 // relationship with distance to the center of the object.
 class GravitationalLens: public DistFromCenter {
 public:
-    GravitationalLens(float strength): DistFromCenter(GravitationalLens::bent_ray_color(strength)) {
+    GravitationalLens(float strength, float max_dist):
+        DistFromCenter(GravitationalLens::bent_ray_color(strength), max_dist) {
     }
 
     // return: 100% transparency, as this shader only deflects light, it does
