@@ -34,9 +34,20 @@ namespace supernova_model {
         return Mix::multiply(inner_cloud_gray_volume(), inner_cloud_color(radius));
     }
 
+    // return: a shader to act as a mask for the hole in the middle of the
+    //         cloud where the particles have been blown away from the core.
+    Shader *hole_mask(float radius) {
+        vector<tuple<vec3, float>> colors;
+        colors.push_back({ vec3(1), 0.0f });
+        colors.push_back({ vec3(0), 1.0f });
+
+        Texture<float> *ramp_tex = new Ramp(colors);
+        return DistFromCenter::textured(ramp_tex, ramp_tex, radius);
+    }
+
     Object *inner_cloud() {
         float radius = 0.6f;
-        Shader *color_cloud = inner_cloud_volume(radius);
+        Shader *color_cloud = hole_mask(radius);//inner_cloud_volume(radius);
 
         Primitive **primitives = new Primitive*[1];
         primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), radius, color_cloud);
