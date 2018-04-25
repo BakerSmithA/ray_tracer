@@ -13,7 +13,7 @@ public:
     //         material. E.g. a value of 1 is totally transparent, and a value
     //         of 0 is totally opaque.
     float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const {
-        return 0.0f;
+        return 1.0f;
     }
 
     // return: the ray direction used to find the color of the shader, e.g. the

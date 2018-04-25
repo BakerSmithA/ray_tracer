@@ -62,6 +62,16 @@ public:
         return new DistFromCenter(col, alpha, max_dist);
     }
 
+    // return: a DistFromCenter shader which only uses the distance to generate
+    //         a color.
+    static DistFromCenter *dist(function<vec3(float)> dist_to_color, float alpha, float max_dist) {
+        auto col = [=](float closest_dist, vec4 projection, vec4 diff, vec4 position, const Primitive *prim, const Ray &incoming, const Scene &scene, const Light &light, const int num_shadow_rays) {
+            return dist_to_color(closest_dist);
+        };
+
+        return new DistFromCenter(col, DistFromCenter::const_dist_to_alpha(alpha), max_dist);
+    }
+
     // return: a DistFromCenter shader which uses a 1d texture to decide the color.
     static DistFromCenter *textured(Texture<float> *color, Texture<float> *alpha, float max_dist) {
         auto dist_to_color = [=](float dist) {
@@ -73,6 +83,14 @@ public:
         };
 
         return DistFromCenter::dist(dist_to_color, dist_to_alpha, max_dist);
+    }
+
+    static DistFromCenter *textured(Texture<float> *color, float alpha, float max_dist) {
+        auto dist_to_color = [=](float dist) {
+            return color->color_at(dist);
+        };
+
+        return DistFromCenter::dist(dist_to_color, alpha, max_dist);
     }
 
 private:
