@@ -9,7 +9,7 @@ using std::optional;
 class RaySpawner: public ShadowedShader {
     // return: the ray direction used to find the color of the shader, e.g. the
     //         reflected ray for a mirror.
-    virtual vec4 outgoing_ray_dir(const vec4 Position, const Primitive *prim, const Ray &incoming) const = 0;
+    virtual vec4 outgoing_ray_dir(const vec4 position, const Primitive *prim, const Ray &incoming) const = 0;
 
     // return: the color of the shader, determined by shooting another ray into
     //         the scene. Or, black if the incoming ray cannot bounce anymore.
