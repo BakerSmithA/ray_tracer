@@ -80,15 +80,16 @@ namespace supernova_model {
     // return: a shader for the cloud volume.
     Shader *outer_cloud_gray_volume() {
         const vec3 extinction_color = vec3(0.0f);
-        const float primary_step_size = 0.05f;
-        const float shadow_step_size = 0.07f;
-        // const float extinction_coefficient = 7.0f;
-        const float extinction_coefficient = 7.0f;
+        // const float primary_step_size = 0.05f;
+        // const float shadow_step_size = 0.07f;
+        const float primary_step_size = 0.015f;
+        const float shadow_step_size = 0.03f;
+        const float extinction_coefficient = 7.5f;
         const float scattering_coefficient = 1.0f;
         const int octaves = 6;
 
         Texture<vec3> *texture = new Perlin<vec3>(octaves);
-        Texture<vec3> *thresholded = new Threshold<vec3>(texture, 0.4);
+        Texture<vec3> *thresholded = new Threshold<vec3>(texture, 0.37);
         return new Volumetric(thresholded, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
     }
 
@@ -121,7 +122,7 @@ namespace supernova_model {
 
     Object *outer_cloud() {
         float radius = 1.0f;
-        float inner_radius = 0.8f;
+        float inner_radius = 0.9f;
         Shader *shader = outer_cloud_shader(inner_radius, radius);
 
         Primitive **primitives = new Primitive*[1];

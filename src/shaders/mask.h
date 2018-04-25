@@ -31,9 +31,17 @@ public:
     // return: the opacity of the either s1 or s2 depending on whether the
     //         ray hits the mask shader or not.
     float transparency(vec4 position, const Primitive *prim, const Ray &shadow_ray, const Scene &scene) const override {
+        float mask_transparency = this->mask->transparency(position, prim, shadow_ray, scene);
+
+        if (1.0f - mask_transparency >= 0.0001f) {
+            return s2->transparency(position, prim, shadow_ray, scene);
+        }
+        else if (1.0f - mask_transparency <= 9.9999f) {
+            return s1->transparency(position, prim, shadow_ray, scene);
+        }
+
         float a = s1->transparency(position, prim, shadow_ray, scene);
         float b = s2->transparency(position, prim, shadow_ray, scene);
-        float mask_transparency = this->mask->transparency(position, prim, shadow_ray, scene);
 
         return glm::mix(b, a, mask_transparency);
     }
