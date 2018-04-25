@@ -83,7 +83,7 @@ namespace supernova_model {
         const float primary_step_size = 0.015f;
         const float shadow_step_size = 0.03f;
         const float extinction_coefficient = 7.5f;
-        const float scattering_coefficient = 1.0f;
+        const float scattering_coefficient = 6.5f;
         const int octaves = 6;
 
         Texture<vec3> *texture = new Perlin<vec3>(octaves);
@@ -137,37 +137,31 @@ namespace supernova_model {
     	return new Object(1, primitives);
     }
 
-    // return: a green sphere.
-    Object *black_hole_disortion() {
+    // return: a star shader that fades the edges of the star.
+    Shader *star_shader(float radius) {
+        vector<tuple<vec3, float>> colors;
+        colors.push_back({ vec3(1), 0.0f });
+        colors.push_back({ vec3(1), 0.6f });
+        colors.push_back({ vec3(0), 1.0f });
+
+        Texture<float> *ramp_tex = new Ramp(colors);
+        return DistFromCenter::textured(ramp_tex, ramp_tex, radius);
+    }
+
+    // return: a star model.
+    Object *star_model() {
+        float radius = 0.02f;
     	Primitive **primitives = new Primitive*[1];
-
-        float radius = 0.6f;
-        float strength = 0.005f;
-    	Shader *shader = new GravitationalLens(strength, radius);
-    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), radius, shader);
-
+    	primitives[0] = new Sphere(vec4(0, 0, 0, 1), radius, star_shader(radius));
     	return new Object(1, primitives);
     }
 
-    // return: a green sphere.
-    Object *black_hole() {
-        Primitive **primitives = new Primitive*[1];
-
-        float strength = 0.002f;
-    	Shader *shader = new GravitationalLens(strength, 1.0f, 0.3f);
-    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 0.5f, shader);
-
-        return new Object(1, primitives);
-    }
-
     const Object **objects() {
-        const Object **objects = new const Object*[2];
-        objects[0] = black_hole();
+        const Object **objects = new const Object*[4];
+        objects[0] = star_model();
         objects[1] = star_map();
-        // objects[0] = inner_cloud();
-        // objects[1] = outer_cloud();
-        // objects[2] = star_map();
-        // objects[3] = black_hole();
+        objects[2] = inner_cloud();
+        objects[3] = outer_cloud();
         return objects;
     }
 
@@ -176,7 +170,7 @@ namespace supernova_model {
     	vector<Light*> lights;
 
     	vec4 light1_pos = vec4(0, 0, 0, 1.0);
-    	vec3 light1_col = vec3(100.0f);
+    	vec3 light1_col = vec3(18.0f);//vec3(100.0f);
     	PointLight *light1 = new PointLight(light1_col, light1_pos, 0.001f, 0.5f);
 
     	lights.push_back(light1);
@@ -184,6 +178,6 @@ namespace supernova_model {
     }
 
     Scene scene() {
-    	return Scene(2, objects(), lights());
+    	return Scene(4, objects(), lights());
     }
 }
