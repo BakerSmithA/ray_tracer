@@ -19,14 +19,29 @@ namespace supernova_model {
 
     // return: a shader for the cloud volume.
     Shader *inner_cloud_gray_volume() {
-        const vec3 extinction_color = vec3(0.0f);
-        const float primary_step_size = 0.05f;
-        const float shadow_step_size = 0.07f;
-        const float extinction_coefficient = 4.5f;
-        const float scattering_coefficient = 1.5f;
-
+        // const vec3 extinction_color = vec3(0.0f);
+        // const float primary_step_size = 0.15f;
+        // const float shadow_step_size = 0.03f;
+        // const float extinction_coefficient = 4.5f;
+        // const float scattering_coefficient = 1.5f;
+        //
         Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
-        return new Volumetric(texture, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
+        // return new Volumetric(texture, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
+
+        const vec3 extinction_color = vec3(0.0f);
+        const float primary_step_size = 0.015f;
+        const float shadow_step_size = 0.02f;
+        const float extinction_coefficient = 3.5f;
+        const float scattering_coefficient = 2.0f;
+
+        Shader *shader = new Volumetric(texture,
+                                        extinction_color,
+                                        primary_step_size,
+                                        shadow_step_size,
+                                        extinction_coefficient,
+                                        scattering_coefficient);
+
+        return shader;
     }
 
     // return: a shader for a clouded cloud.
@@ -83,7 +98,7 @@ namespace supernova_model {
         const float primary_step_size = 0.015f;
         const float shadow_step_size = 0.03f;
         const float extinction_coefficient = 7.5f;
-        const float scattering_coefficient = 6.5f;
+        const float scattering_coefficient = 7.0f;
         const int octaves = 6;
 
         Texture<vec3> *texture = new Perlin<vec3>(octaves);
@@ -141,16 +156,16 @@ namespace supernova_model {
     Shader *star_shader(float radius) {
         vector<tuple<vec3, float>> colors;
         colors.push_back({ vec3(1), 0.0f });
-        colors.push_back({ vec3(1), 0.6f });
+        colors.push_back({ vec3(1), 0.7f });
         colors.push_back({ vec3(0), 1.0f });
 
         Texture<float> *ramp_tex = new Ramp(colors);
-        return DistFromCenter::textured(ramp_tex, ramp_tex, radius);
+        return DistFromCenter::textured(ramp_tex, 1.0f, radius);
     }
 
     // return: a star model.
     Object *star_model() {
-        float radius = 0.02f;
+        float radius = 0.015f;
     	Primitive **primitives = new Primitive*[1];
     	primitives[0] = new Sphere(vec4(0, 0, 0, 1), radius, star_shader(radius));
     	return new Object(1, primitives);
@@ -170,7 +185,7 @@ namespace supernova_model {
     	vector<Light*> lights;
 
     	vec4 light1_pos = vec4(0, 0, 0, 1.0);
-    	vec3 light1_col = vec3(18.0f);//vec3(100.0f);
+    	vec3 light1_col = vec3(10.0f);
     	PointLight *light1 = new PointLight(light1_col, light1_pos, 0.001f, 0.5f);
 
     	lights.push_back(light1);
