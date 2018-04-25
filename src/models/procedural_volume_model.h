@@ -9,8 +9,6 @@ namespace procedural_volume {
     	const vec3 extinction_color = vec3(0.0f);
         const float primary_step_size = 0.015f;
     	const float shadow_step_size = 0.03f;
-        // const float primary_step_size = 0.035f;
-        // const float shadow_step_size = 0.07f;
         const float extinction_coefficient = 2.5f;
     	const float scattering_coefficient = 2.0f;
 

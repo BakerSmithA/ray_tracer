@@ -22,8 +22,8 @@ namespace supernova_model {
         const vec3 extinction_color = vec3(0.0f);
         const float primary_step_size = 0.05f;
         const float shadow_step_size = 0.07f;
-        const float extinction_coefficient = 4.0f;
-        const float scattering_coefficient = 1.3f;
+        const float extinction_coefficient = 4.5f;
+        const float scattering_coefficient = 1.5f;
 
         Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
         return new Volumetric(texture, extinction_color, primary_step_size, shadow_step_size, extinction_coefficient, scattering_coefficient);
@@ -80,8 +80,6 @@ namespace supernova_model {
     // return: a shader for the cloud volume.
     Shader *outer_cloud_gray_volume() {
         const vec3 extinction_color = vec3(0.0f);
-        // const float primary_step_size = 0.05f;
-        // const float shadow_step_size = 0.07f;
         const float primary_step_size = 0.015f;
         const float shadow_step_size = 0.03f;
         const float extinction_coefficient = 7.5f;
@@ -130,10 +128,46 @@ namespace supernova_model {
         return new Object(1, primitives);
     }
 
+    // return: a spherical star map.
+    Object *star_map() {
+    	Shader *shader = Projection::spherical("../texture_files/star_sphere_map.bmp");
+
+    	Primitive **primitives = new Primitive*[1];
+    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 2.5, shader);
+    	return new Object(1, primitives);
+    }
+
+    // return: a green sphere.
+    Object *black_hole_disortion() {
+    	Primitive **primitives = new Primitive*[1];
+
+        float radius = 0.6f;
+        float strength = 0.005f;
+    	Shader *shader = new GravitationalLens(strength, radius);
+    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), radius, shader);
+
+    	return new Object(1, primitives);
+    }
+
+    // return: a green sphere.
+    Object *black_hole() {
+        Primitive **primitives = new Primitive*[1];
+
+        float strength = 0.002f;
+    	Shader *shader = new GravitationalLens(strength, 1.0f, 0.3f);
+    	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 0.5f, shader);
+
+        return new Object(1, primitives);
+    }
+
     const Object **objects() {
         const Object **objects = new const Object*[2];
-        objects[0] = inner_cloud();
-        objects[1] = outer_cloud();
+        objects[0] = black_hole();
+        objects[1] = star_map();
+        // objects[0] = inner_cloud();
+        // objects[1] = outer_cloud();
+        // objects[2] = star_map();
+        // objects[3] = black_hole();
         return objects;
     }
 

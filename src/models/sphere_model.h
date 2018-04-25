@@ -5,7 +5,7 @@
 Object *sphere_object() {
 	Primitive **primitives = new Primitive*[1];
 
-	Shader *shader = new FlatColor(vec3(0.0, 1.0, 0.0));
+	Shader *shader = new FlatColor(vec3(0.0, 1.0, 0.0), 0.0f);
 	primitives[0] = new Sphere(vec4(0, 0, 0, 1.0), 1.0, shader);
 
 	return new Object(1, primitives);

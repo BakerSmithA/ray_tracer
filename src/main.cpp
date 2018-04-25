@@ -27,8 +27,8 @@
 #include "models/interstellar_cloud.h"
 #include "models/procedural_volume_model.h"
 #include "models/transparency_model.h"
-#include "models/supernova_model.h"
 #include "models/gravitational_lens_model.h"
+#include "models/supernova_model.h"
 
 #include <glm/glm.hpp>
 #include <SDL.h>
