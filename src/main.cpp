@@ -33,8 +33,8 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 320 * 2
-#define SCREEN_HEIGHT 256 * 2
+#define SCREEN_WIDTH 320 * 3
+#define SCREEN_HEIGHT 256 * 3
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 5
 #define NUM_SHADOW_RAYS 1
@@ -81,7 +81,7 @@ void update(Camera &camera, Scene &scene) {
 }
 
 int main(int argc, char* argv[]) {
-    //Scene scene = cornel_box();
+    Scene scene = cornel_box();
     //Scene scene = textured_test_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
     //Scene scene = procedural_volume::scene();
     //Scene scene = transparency_demo::scene();
     //Scene scene = gravitational_lens::scene();
-    Scene scene = supernova_model::scene();
+    //Scene scene = supernova_model::scene();
     Camera cam = Camera(vec4(0, 0, -2.3, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     //Camera cam = Camera(vec4(0, 0, -1.5, 1), SCREEN_WIDTH / 2, MAX_NUM_RAY_BOUNCES);
     screen *screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN_MODE);

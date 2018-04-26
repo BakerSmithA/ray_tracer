@@ -36,8 +36,8 @@ public:
 	optional<vec4> intersection(const Ray &ray) const override {
         vec3 b = vec3(ray.start - v0);
         mat3 A = mat3(-vec3(ray.dir), e1, e2);
-		//vec3 intersection_in_plane_coordinates = inverse(A) * b;
-		vec3 intersection_in_plane_coordinates = solve_linear(A, b);
+		vec3 intersection_in_plane_coordinates = inverse(A) * b;
+		//vec3 intersection_in_plane_coordinates = solve_linear(A, b);
 
 		if(!is_inside(intersection_in_plane_coordinates)) {
 			return nullopt;

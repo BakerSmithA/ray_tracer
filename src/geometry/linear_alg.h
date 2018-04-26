@@ -8,6 +8,7 @@ using glm::mat3;
 #define LINEAR_ALG_H
 
 // return: the determinant of the the matrix A
+__attribute__((always_inline))
 float determinant(const float source[16]) {
     // Column vec 0, i.e. A[0]
     float a = source[0];
@@ -30,6 +31,7 @@ float determinant(const float source[16]) {
 }
 
 // return: the determinant of the the matrix [ b, A[1], A[2] ]
+__attribute__((always_inline))
 float determinant0(const float source[16], const float source_b[3]) {
     // Column vec 0, i.e. b
     float a = source_b[0];
@@ -52,6 +54,7 @@ float determinant0(const float source[16], const float source_b[3]) {
 }
 
 // return: the determinant of the the matrix [ A[0], b, A[2] ]
+__attribute__((always_inline))
 float determinant1(const float source[16], const float source_b[3]) {
     // Column vec 0, i.e. A[0]
     float a = source[0];
@@ -74,6 +77,7 @@ float determinant1(const float source[16], const float source_b[3]) {
 }
 
 // return: the determinant of the the matrix [ A[0], A[1], b ]
+__attribute__((always_inline))
 float determinant2(const float source[16], const float source_b[3]) {
     // Column vec 0, i.e. A[0]
     float a = source[0];
