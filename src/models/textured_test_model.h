@@ -45,7 +45,7 @@ Object *left_wall() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_x);
+	const Shader *tex_shader = Projection::planar("../texture_files/metal_wall.bmp", planar_x);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
@@ -60,7 +60,7 @@ Object *right_wall() {
 	const vec3 col = vec3(1, 1, 1);
 
 	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../texture_files/bricks.bmp", planar_x);
+	const Shader *tex_shader = Projection::planar("../texture_files/metal_wall.bmp", planar_x);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
@@ -72,14 +72,10 @@ Object *right_wall() {
 
 // return: the back wall of the box.
 Object *back_wall() {
-	int octaves = 8;
-	const Texture<vec2> *noise = new Perlin<vec2>(octaves);
-	const Shader *mask = Projection::planar(noise, planar_z);
-
-	const Shader *s1 = new Diffuse(vec3(0.3,0.3,0.3));
-	const Shader *s2 = new Mirror();
-
-	const Shader *shader = new Mask(s1, s2, mask);
+	const vec3 col = vec3(1, 1, 1);
+	const Shader *diffuse_shader = new Diffuse(col);
+	const Shader *tex_shader = Projection::planar("../texture_files/metal_wall.bmp", planar_z);
+	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(G, D, C, shader));
@@ -90,8 +86,11 @@ Object *back_wall() {
 
 // return: the ceiling of the cornel box.
 Object *ceiling() {
-	const vec3 col = vec3(0.75f, 0.75f, 0.75f);
-	const Shader *shader = new Diffuse(col);
+	const vec3 col = vec3(1, 1, 1);
+
+	const Shader *diffuse_shader = new Diffuse(col);
+	const Shader *tex_shader = Projection::planar("../texture_files/concrete.bmp", planar_y);
+	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
 	triangles.push_back(new Triangle(E, F, G, shader));

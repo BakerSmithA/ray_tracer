@@ -33,8 +33,8 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 
-#define SCREEN_WIDTH 320 * 3
-#define SCREEN_HEIGHT 256 * 3
+#define SCREEN_WIDTH 320 * 2
+#define SCREEN_HEIGHT 256 * 2
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 5
 #define NUM_SHADOW_RAYS 1
@@ -55,7 +55,7 @@ void update(Camera &camera, Scene &scene) {
 
     const float cam_move_delta = 0.05f;
     const float yaw_delta = 0.02f;
-    const float light_move_delta = 0.5f;
+    const float light_move_delta = 0.05f;
 
     // Camera movement
     if(scancodes[SDL_SCANCODE_DOWN])  camera.move_forward(-cam_move_delta); // Backwards
@@ -81,8 +81,8 @@ void update(Camera &camera, Scene &scene) {
 }
 
 int main(int argc, char* argv[]) {
-    Scene scene = cornel_box();
-    //Scene scene = textured_test_scene();
+    //Scene scene = cornel_box();
+    Scene scene = textured_test_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
     //Scene scene = star_scene();
