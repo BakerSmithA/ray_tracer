@@ -79,9 +79,9 @@ vector<vec2> grid_primary_rays(int x, int y, int num_rays) {
 // return: fires a number of primary rays randomly into the pixel, and computes
 //         the mean color. Therefore performing anti-aliasing.
 vec3 mean_pixel_color(Scene &scene, Camera &camera, screen *screen, const int x, const int y, int num_primary_rays, int num_shadow_rays) {
-    //vector<vec2> targets = random_screen_targets(x, y, num_primary_rays);
+    vector<vec2> targets = random_screen_targets(x, y, num_primary_rays);
     //vector<vec2> targets = grid_primary_rays(x, y, num_primary_rays);
-    vector<vec2> targets = single_target(x, y);
+    //vector<vec2> targets = single_target(x, y);
 
     // Used to total up the color of all the pixels so it can be averaged.
     vec3 acc_color = vec3(0, 0, 0);
@@ -99,9 +99,9 @@ void render(Scene &scene, Camera &camera, screen* screen, const int num_samples,
     #pragma omp parallel for
     for (int y=0; y<screen->height; y++) {
         for (int x=0; x<screen->width; x++) {
-            //vec3 color = mean_pixel_color(scene, camera, screen, x, y, num_samples, num_shadow_rays);
-            Ray ray = camera.primary_ray(x, y, screen->width, screen->height);
-            vec3 color = colour_in_scene(scene, ray, num_shadow_rays);
+            vec3 color = mean_pixel_color(scene, camera, screen, x, y, num_samples, num_shadow_rays);
+            //Ray ray = camera.primary_ray(x, y, screen->width, screen->height);
+            //vec3 color = colour_in_scene(scene, ray, num_shadow_rays);
             PutPixelSDL(screen, x, y, color);
         }
     }
