@@ -13,7 +13,7 @@ EXEC=$(B_DIR)/$(FILE)
 #CC_OPTS=-c -pipe -Wall -Wno-switch -ggdb -g3 -std=c++17 -fopenmp
 CC_OPTS=-c -pipe -Wall -Wno-switch -O3 -ffast-math -std=c++17 -fopenmp
 LN_OPTS=
-CC=g++-7
+CC=g++
 
 ########
 #       SDL options
@@ -48,7 +48,7 @@ build : $(OBJ) Makefile
 clean:
 	rm -f $(B_DIR)/*
 
-buildd:
+run:
 	make clean
 	make
 	./bin/main
