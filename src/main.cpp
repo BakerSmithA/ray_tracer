@@ -38,7 +38,7 @@
 #define FULLSCREEN_MODE false
 #define MAX_NUM_RAY_BOUNCES 5
 #define NUM_SHADOW_RAYS 1
-#define NUM_SAMPLES 8
+#define NUM_SAMPLES 1
 
 // /*Place updates of parameters here*/
 void update(Camera &camera, Scene &scene) {
@@ -82,11 +82,11 @@ void update(Camera &camera, Scene &scene) {
 
 int main(int argc, char* argv[]) {
     //Scene scene = cornel_box();
-    Scene scene = textured_test_scene();
+    //Scene scene = textured_test_scene();
     //Scene scene = saturn_scene();
     //Scene scene = sphere_scene();
     //Scene scene = star_scene();
-    //Scene scene = volume_scene();
+    Scene scene = volume_scene();
     //Scene scene = interstellar_cloud::scene();
     //Scene scene = procedural_volume::scene();
     //Scene scene = transparency_demo::scene();
