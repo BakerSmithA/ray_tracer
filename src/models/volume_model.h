@@ -53,7 +53,7 @@ Primitive **converted_triangles(vector<Triangle*> triangles, float width) {
 Object *volume_sphere_model() {
 	Texture<vec3> *texture = new Stack3d("../texture_files/cloud_frames.bmp", 12);
 
-	const vec3 extinction_color = vec3(0.0f);
+	const vec3 extinction_color = vec3(135, 197, 255) / 255.0f;
     const float primary_step_size = 0.015f;
 	const float shadow_step_size = 0.02f;
     const float extinction_coefficient = 3.5f;
@@ -111,7 +111,8 @@ vector<Light*> volume_lights() {
 	vector<Light*> lights;
 
 	vec4 light1_pos = vec4(1.25, -2.0, 1.0, 1.0);
-	vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
+	// vec3 light1_col = vec3(211.f, 175.0f, 176.0f) * vec3(1.0f/255.0f) * 35.0f;
+	vec3 light1_col = vec3(239, 247, 255) / 255.0f * 28.0f;
 
 	// vec4 light2_pos = vec4(0.0, 1.0, 0.0, 1.0);
 	// vec3 light2_col = vec3(142, 135, 167) * vec3(1.0f/255.0f) * 1.15f;
