@@ -27,7 +27,7 @@ public:
         vec3 normal_3d = normalize(vec3(prim->normal_at(position)));
         vec3 incoming_3d = vec3(incoming.normalized_dir);
 
-        // cos(theta_1) = -(N . i)
+        // From Scratch a Pixel:
         float cosi = glm::clamp(-1.0f, 1.0f, dot(normal_3d, incoming_3d));
 
         float etai = 1, etat = this->ray_velocity_ratio;
