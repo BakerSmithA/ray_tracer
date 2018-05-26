@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "../projection.h"
 #include "../bounding_cube.h"
@@ -7,9 +9,6 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 using std::optional;
-
-#ifndef PRIMITIVE_H
-#define PRIMITIVE_H
 
 // Forward declarations.
 class Shader;
@@ -43,5 +42,3 @@ public:
 	// return: the normal to the primtive at the given point on the primitive.
     virtual vec4 normal_at(vec4 point) const = 0;
 };
-
-#endif // PRIMITIVE_H

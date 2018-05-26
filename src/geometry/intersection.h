@@ -1,11 +1,10 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "ray.h"
 
 using glm::mat3;
 using glm::inverse;
-
-#ifndef INTERSECTION_H
-#define INTERSECTION_H
 
 class Primitive;
 
@@ -19,5 +18,3 @@ public:
     Intersection(vec4 pos, const Primitive *primitive): pos(pos), primitive(primitive) {
     }
 };
-
-#endif // INTERSECTION_H

@@ -23,12 +23,6 @@ public:
         vec3 col = this->texture->color_at(position);
         return col.x < this->threshold ? vec3(0.0f) : vec3(1.0f);
     }
-
-    // return: the alpha of the texture at the given position.
-    // float alpha_at(vec2 position) const {
-    //     float alpha = this->texture->alpha_at(position);
-    //     return alpha < this->threshold ? 0.0f : 1.0f;
-    // }
 };
 
 #endif // THRESHOLD_2D_H

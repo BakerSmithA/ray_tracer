@@ -1,11 +1,10 @@
+#pragma once
+
 #include <glm/gtc/random.hpp>
 #include <math.h>
 
 using glm::vec2;
 using glm::vec3;
-
-#ifndef RANDOM_H
-#define RANDOM_H
 
 // return: a random point in the the box with the given origin.
 vec2 random_in_box(vec2 center, float width, float height) {
@@ -23,5 +22,3 @@ vec3 random_in_sphere(vec3 center, float max_radius) {
     vec3 p = glm::ballRand(max_radius);
     return vec3(p.x + center.x, p.y + center.y, p.z+ center.z);
 }
-
-#endif // RANDOM_H

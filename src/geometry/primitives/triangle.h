@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "primitive.h"
 #include "../linear_alg.h"
@@ -10,8 +12,6 @@ using glm::mat3;
 using std::optional;
 using std::nullopt;
 
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
 
 class Triangle : public Primitive {
 public:
@@ -88,5 +88,3 @@ private:
 		return BoundingCube(min, max);
 	}
 };
-
-#endif // TRIANGLE_H

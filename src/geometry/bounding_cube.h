@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <iostream>
 #include "ray.h"
@@ -6,9 +8,6 @@ using glm::vec4;
 using glm::mat4;
 using std::cout;
 using std::endl;
-
-#ifndef BOUNDING_CUBE_H
-#define BOUNDING_CUBE_H
 
 class BoundingCube {
 public:
@@ -36,5 +35,3 @@ public:
         return tmax >= tmin;
     }
 };
-
-#endif // BOUNDING_CUBE_H

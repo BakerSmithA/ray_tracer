@@ -1,11 +1,10 @@
+#pragma once
+
 #include "primitives/primitive.h"
 #include <iostream>
 #include "../debugging.h"
 
 using std::vector;
-
-#ifndef OBJECT_H
-#define OBJECT_H
 
 // A collection of primitives.
 //
@@ -76,5 +75,3 @@ private:
 		return BoundingCube(min, max);
     }
 };
-
-#endif // OBJECT_H

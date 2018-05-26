@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "primitive.h"
 #include "../projection.h"
@@ -9,9 +11,6 @@ using glm::vec4;
 using glm::normalize;
 using std::optional;
 using std::nullopt;
-
-#ifndef SPHERE_H
-#define SPHERE_H
 
 class Sphere : public Primitive {
 public:
@@ -82,5 +81,3 @@ private:
         return BoundingCube(project_to_4D(min_3d), project_to_4D(max_3d));
     }
 };
-
-#endif // SPHERE_H

@@ -1,11 +1,10 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 using glm::vec3;
 using glm::mat3;
-
-#ifndef LINEAR_ALG_H
-#define LINEAR_ALG_H
 
 // return: the determinant of the the matrix A
 __attribute__((always_inline))
@@ -156,5 +155,3 @@ vec3 deflected(vec3 incoming_dir, float angle, vec3 a, vec3 b) {
 
     return x + y + z;
 }
-
-#endif // LINEAR_ALG_H

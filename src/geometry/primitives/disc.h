@@ -1,7 +1,6 @@
-#include "primitive.h"
+#pragma once
 
-#ifndef TORUS_H
-#define TORUS_H
+#include "primitive.h"
 
 // A 2D primitive for a disk with a hole in the middle.
 class Disc: public Primitive {
@@ -75,5 +74,3 @@ private:
         return BoundingCube(project_to_4D(min_3d), project_to_4D(max_3d));
     }
 };
-
-#endif // TORUS_H

@@ -1,11 +1,10 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <stdexcept>
 
 using glm::vec4;
 using std::runtime_error;
-
-#ifndef RAY_H
-#define RAY_H
 
 class Ray {
 public:
@@ -41,5 +40,3 @@ public:
         return Ray(this->start + offset_scalar * offset_dir, this->dir, this->bounces_remaining);
     }
 };
-
-#endif // RAY_H

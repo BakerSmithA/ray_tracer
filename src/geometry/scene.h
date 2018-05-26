@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <limits.h>
 #include <vector>
@@ -13,9 +15,6 @@ using std::vector;
 using std::function;
 using std::optional;
 using std::nullopt;
-
-#ifndef SCENE_H
-#define SCENE_H
 
 // Contains all the geometry, lights, etc for a scene.
 //
@@ -152,5 +151,3 @@ public:
         return intersections;
     }
 };
-
-#endif // SCENE_H
