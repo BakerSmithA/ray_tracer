@@ -17,6 +17,7 @@
 #include "../textures/perlin.h"
 #include "../shaders/mask.h"
 #include "../textures/threshold.h"
+#include "../textures/positioned.h"
 
 using std::vector;
 using glm::vec3;
@@ -27,10 +28,11 @@ using glm::vec4;
 
 // return: the floor of the box.
 Object *floor() {
-	const vec3 col = vec3(1, 1, 1);
+	const Texture<vec2> *metal = new File2d("../texture_files/metal.bmp");
+	const Texture<vec2> *texture = new Positioned<vec2>(metal, vec2(0.25, 0.25), vec2(0.75, 0.75), vec3(1));
 
-	const Shader *diffuse_shader = new Diffuse(col);
-	const Shader *tex_shader = Projection::planar("../texture_files/metal.bmp", planar_y);
+	const Shader *diffuse_shader = new Diffuse(vec3(1, 1, 1));
+	const Shader *tex_shader = Projection::planar(texture, planar_y);
 	const Shader *shader = Mix::multiply(diffuse_shader, tex_shader);
 
 	vector<Triangle*> triangles;
