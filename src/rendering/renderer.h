@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "../geometry/scene.h"
 #include "../shaders/shader.h"
@@ -8,9 +10,6 @@
 #include <optional>
 
 using std::optional;
-
-#ifndef RENDERER_H
-#define RENDERER_H
 
 // return: the color in the scene at the point where the ray intersects the scene.
 vec3 colour_in_scene(Scene &scene, Ray &ray, const int num_shadow_rays) {
@@ -108,5 +107,3 @@ void render(Scene &scene, Camera &camera, screen* screen, const int num_samples,
         }
     }
 }
-
-#endif // RENDERER_H

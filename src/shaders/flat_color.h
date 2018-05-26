@@ -1,7 +1,6 @@
-#include "shader.h"
+#pragma once
 
-#ifndef COLOR_SHADER_H
-#define COLOR_SHADER_H
+#include "shader.h"
 
 // Surface which outputs the same color irrespective of lighting conditions,
 // therefore the surface does not respond to shadows either.
@@ -23,5 +22,3 @@ public:
         return this->alpha;
     }
 };
-
-#endif // COLOR_SHADER_H

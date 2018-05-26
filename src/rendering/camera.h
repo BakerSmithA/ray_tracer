@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 class Camera {
 private:
@@ -66,5 +65,3 @@ private:
         return mat4(col0, col1, col2, col3);
     }
 };
-
-#endif // CAMERA_H

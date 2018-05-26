@@ -1,8 +1,7 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "shader.h"
-
-#ifndef MASK_H
-#define MASK_H
 
 // Combines two shaders by masking using a grayscale shader to decide where
 // each shader should show through.
@@ -46,5 +45,3 @@ public:
         return glm::mix(b, a, mask_transparency);
     }
 };
-
-#endif // MASK_H

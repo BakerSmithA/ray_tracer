@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <math.h>
 #include <functional>
@@ -6,9 +8,6 @@
 using glm::mix;
 using glm::clamp;
 using std::optional;
-
-#ifndef SMOKE_H
-#define SMOKE_H
 
 // Models suspended particles.
 class Smoke: public Shader {
@@ -86,5 +85,3 @@ private:
         return length(position - smoke_exit->pos);
     }
 };
-
-#endif

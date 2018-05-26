@@ -1,12 +1,10 @@
-#include <glm/glm.hpp>
+#pragma once
+
 #include "specular.h"
 
 using glm::dot;
 using glm::normalize;
 using glm::length;
-
-#ifndef BLINN_H
-#define BLINN_H
 
 // Models a specular surface.
 class Blinn: public Specular {
@@ -33,5 +31,3 @@ public:
         return new_specular_highlight * intensity;
     }
 };
-
-#endif // BLINN_H

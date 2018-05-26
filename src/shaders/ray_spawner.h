@@ -1,9 +1,8 @@
+#pragma once
+
 #include <optional>
 
 using std::optional;
-
-#ifndef RAY_SPAWNER_H
-#define RAY_SPAWNER_H
 
 // Models a surface who's color is found by firing out another ray, e.g. mirror.
 class RaySpawner: public ShadowedShader {
@@ -36,5 +35,3 @@ class RaySpawner: public ShadowedShader {
         return vec3(0, 0, 0);
     }
 };
-
-#endif // RAY_SPAWNER_H

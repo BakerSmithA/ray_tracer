@@ -1,8 +1,7 @@
+#pragma once
+
 #include "shader.h"
 #include "../textures/texture.h"
-
-#ifndef VOLUMETRIC_H
-#define VOLUMETRIC_H
 
 // Represents a material which light can penetrate, e.g. smoke.
 // Uses ray marching to sample the interior structure of the volume.
@@ -222,5 +221,3 @@ private:
         return extinction;
     }
 };
-
-#endif // VOLUMETRIC_H

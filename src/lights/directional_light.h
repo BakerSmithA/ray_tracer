@@ -1,7 +1,6 @@
-#include "light.h"
+#pragma once
 
-#ifndef DIRECTIONAL_LIGHT_H
-#define DIRECTIONAL_LIGHT_H
+#include "light.h"
 
 class DirectionalLight: public Light {
 public:
@@ -67,5 +66,3 @@ public:
         return rays;
     }
 };
-
-#endif // DIRECTIONAL_LIGHT_H

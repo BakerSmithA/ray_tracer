@@ -1,5 +1,4 @@
-#ifndef SDL_AUXILIARY_H
-#define SDL_AUXILIARY_H
+#pragma once
 
 #include "SDL.h"
 #include <iostream>
@@ -159,5 +158,3 @@ void PutPixelSDL(screen* s, int x, int y, glm::vec3 colour)
 
   s->buffer[y*s->width+x] = (128<<24) + (r<<16) + (g<<8) + b;
 }
-
-#endif

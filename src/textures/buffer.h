@@ -1,5 +1,4 @@
-#ifndef BUFFER_2D_H
-#define BUFFER_2D_H
+#pragma once
 
 // A texture created by bilinearly interpolating over a buffer of colors.
 // It is the responsibility of the creator of the buffer to free the buffer.
@@ -40,5 +39,3 @@ vec3 Buffer<vec3>::pixel_at(vec3 pos) const {
     int i = (int)(pos.x + buff_size.x * (pos.y + buff_size.y * pos.z));
     return this->buffer[i];
 }
-
-#endif // BUFFER_2D_H

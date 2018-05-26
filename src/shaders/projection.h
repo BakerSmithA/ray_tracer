@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <SDL.h>
 #include "../rendering/SDLauxiliary.h"
@@ -10,9 +12,6 @@ using glm::vec2;
 using glm::normalize;
 using glm::length;
 using std::function;
-
-#ifndef PROJECTION_TEXTURE_H
-#define PROJECTION_TEXTURE_H
 
 // The axis to 'shine' a texture along in to generate a planar projection.
 enum PlanarProjectionDirection {
@@ -158,5 +157,3 @@ public:
         return Projection::spherical(texture, use_red_as_alpha);
     }
 };
-
-#endif // PROJECTION_TEXTURE_H

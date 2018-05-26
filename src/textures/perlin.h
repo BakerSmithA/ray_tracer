@@ -1,8 +1,7 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "buffer.h"
-
-#ifndef PERLIN_2D_H
-#define PERLIN_2D_H
 
 // Generates a random 2D noise texture.
 template<typename Vec>
@@ -57,5 +56,3 @@ private:
         }
     }
 };
-
-#endif // NOISE_2D_H

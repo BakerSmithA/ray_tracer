@@ -1,11 +1,10 @@
+#pragma once
+
 #include <glm/glm.hpp>
 
 using glm::dot;
 using glm::normalize;
 using glm::mix;
-
-#ifndef FRESNEL_H
-#define FRESNEL_H
 
 // Used to combine two shaders with a fresnel effect. Shader s1 will be shown
 // more the closer the angle of incidence is to the normal.
@@ -57,5 +56,3 @@ public:
         return this->base_transparency;
     }
 };
-
-#endif // FRESNEL_H

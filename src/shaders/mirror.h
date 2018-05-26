@@ -1,10 +1,9 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "ray_spawner.h"
 
 using glm::dot;
-
-#ifndef MIRROR_H
-#define MIRROR_H
 
 // Models an ideally specular surface, reflecting 100% of light the hits the surface.
 class Mirror: public RaySpawner {
@@ -16,5 +15,3 @@ public:
         return 2.0f * dot(incident_ray, normal) * normal - incident_ray;
     }
 };
-
-#endif // MIRROR_H

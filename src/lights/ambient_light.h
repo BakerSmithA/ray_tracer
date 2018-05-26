@@ -1,7 +1,6 @@
-#include "light.h"
+#pragma once
 
-#ifndef AMBIENT_LIGHT_H
-#define AMBIENT_LIGHT_H
+#include "light.h"
 
 // Models a light which cannot cast shadows, and has the same intensity
 // everywhere/
@@ -42,5 +41,3 @@ public:
         return vector<Ray>();
     }
 };
-
-#endif // AMBIENT_LIGHT_H

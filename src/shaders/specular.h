@@ -1,7 +1,6 @@
-#include "shader.h"
+#pragma once
 
-#ifndef SPECULAR_H
-#define SPECULAR_H
+#include "shader.h"
 
 // Models specular a surface which has only specular highlights. The base color
 // of the material is black.
@@ -28,5 +27,3 @@ public:
         return this->specular_color(position, prim, shadow_ray_dir, incoming, scene, light, num_shadow_rays);
     }
 };
-
-#endif // SPECULAR_H

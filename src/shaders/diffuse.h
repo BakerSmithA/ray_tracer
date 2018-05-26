@@ -1,12 +1,11 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include "shader.h"
 
 using glm::dot;
 using glm::normalize;
 using glm::length;
-
-#ifndef DIFFUSE_H
-#define DIFFUSE_H
 
 // Models an ideally diffuse surface.
 class Diffuse: public ShadowedShader {
@@ -23,5 +22,3 @@ public:
         return light.projection_factor(position, normal) * light.intensity(position) * this->base_color;
     }
 };
-
-#endif // DIFFUSE_H

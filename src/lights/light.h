@@ -1,9 +1,8 @@
+#pragma once
+
 #include <optional>
 
 using std::optional;
-
-#ifndef LIGHT_H
-#define LIGHT_H
 
 // Models a light source.
 class Light {
@@ -37,5 +36,3 @@ public:
     //         cannot cast shadows, e.g. ambient lighting.
     virtual vector<Ray> random_shadow_rays_from(vec4 point, int num) const = 0;
 };
-
-#endif // LIGHT_H

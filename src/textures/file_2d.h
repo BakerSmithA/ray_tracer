@@ -1,7 +1,6 @@
-#include "texture.h"
+#pragma once
 
-#ifndef FILE_2D_H
-#define FILE_2D_H
+#include "texture.h"
 
 // To avoid divisions when reading pixels as the RGB values from files are
 // from 0-255, whereas they need to be from 0-1.
@@ -74,5 +73,3 @@ private:
         }
     }
 };
-
-#endif // FILE_2D_H

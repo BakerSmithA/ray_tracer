@@ -1,8 +1,7 @@
+#pragma once
+
 #include "../geometry/scene.h"
 #include "../lights/light.h"
-
-#ifndef SHADER_H
-#define SHADER_H
 
 // return: the mean transparency from the intersection position to the
 //         random points in the sphere of the light source.
@@ -100,5 +99,3 @@ float mean_random_transparency(vec4 pos, const Primitive *prim, const Scene &sce
     // Calculate the mean by dividing by the number of rays.
     return acc_add_transparency / shadow_rays.size();
 }
-
-#endif // SHADER_H

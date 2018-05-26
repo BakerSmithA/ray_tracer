@@ -1,10 +1,9 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <functional>
 
 using std::function;
-
-#ifndef MIX_SHADER_H
-#define MIX_SHADER_H
 
 // Mixes two shaders together with a given operation.
 class Mix: public Shader {
@@ -63,5 +62,3 @@ public:
         return new Mix(s1, s2, combine_colors);
     }
 };
-
-#endif // MIX_SHADER_H

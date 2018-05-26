@@ -1,3 +1,5 @@
+#pragma once
+
 #include "shader.h"
 #include "fresnel.h"
 #include "mirror.h"
@@ -6,9 +8,6 @@
 #include "mix.h"
 #include "flat_color.h"
 #include "scale.h"
-
-#ifndef GLASS_SHADER_H
-#define GLASS_SHADER_H
 
 // Models a transparent glass surface.
 class Glass: public Shader {
@@ -56,5 +55,3 @@ public:
         return 0.7f;
     }
 };
-
-#endif // GLASS_SHADER_H

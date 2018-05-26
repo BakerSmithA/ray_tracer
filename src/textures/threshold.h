@@ -1,7 +1,6 @@
-#include <glm/glm.hpp>
+#pragma once
 
-#ifndef THRESHOLD_2D_H
-#define THRESHOLD_2D_H
+#include <glm/glm.hpp>
 
 // A texture node which thresholds the supplied texture if the euclidean
 // distance of the vector represented by the RGB values is above the given
@@ -24,5 +23,3 @@ public:
         return col.x < this->threshold ? vec3(0.0f) : vec3(1.0f);
     }
 };
-
-#endif // THRESHOLD_2D_H

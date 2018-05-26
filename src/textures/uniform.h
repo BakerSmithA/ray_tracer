@@ -1,7 +1,6 @@
-#include "texture.h"
+#pragma once
 
-#ifndef CONSTANT_TEXTURE_H
-#define CONSTANT_TEXTURE_H
+#include "texture.h"
 
 template<typename Vec>
 class Uniform: public Texture<Vec> {
@@ -18,5 +17,3 @@ public:
         return vec3(this->value);
     }
 };
-
-#endif // CONSTANT_TEXTURE_H

@@ -1,10 +1,9 @@
+#pragma once
+
 #include <math.h>
 #include "../geometry/random.h"
 #include "../geometry/projection.h"
 #include "light.h"
-
-#ifndef POINT_LIGHT_H
-#define POINT_LIGHT_H
 
 // Models a point light which radiates light outwards.
 class PointLight: public Light {
@@ -72,5 +71,3 @@ public:
         return rays;
     }
 };
-
-#endif // POINT_LIGHT_H

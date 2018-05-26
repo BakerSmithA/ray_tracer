@@ -1,5 +1,4 @@
-#ifndef SCALE_SHADER_H
-#define SCALE_SHADER_H
+#pragma once
 
 // Scales the color of the supplied shader to be within the supplied minimum
 // and maximum colors.
@@ -24,5 +23,3 @@ public:
         return glm::mix(this->min_col, this->max_col, t);
     }
 };
-
-#endif //SCALE_SHADER_H

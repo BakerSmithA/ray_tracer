@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <math.h>
 #include "../geometry/projection.h"
@@ -6,9 +8,6 @@
 using glm::vec3;
 using glm::cross;
 using glm::dot;
-
-#ifndef REFRACTION_H
-#define REFRACTION_H
 
 // Models an ideal refraction surface, i.e. 100% of the light entering is
 // refracted.
@@ -63,5 +62,3 @@ public:
         return 1.0f;
     }
 };
-
-#endif // REFRACTION_H

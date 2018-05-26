@@ -1,5 +1,4 @@
-#ifndef STACK_3D_H
-#define STACK_3D_H
+#pragma once
 
 // A 3d texture made from stacking 2d textures. All the invidivual images are
 // contained within one large image, the frames.
@@ -81,5 +80,3 @@ private:
         return this->frames->color_at(pos).x;
     }
 };
-
-#endif // STACK_3D_H
