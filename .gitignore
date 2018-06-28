@@ -36,3 +36,4 @@ bin/
 *.DS_STORE
 *.vscode
 screenshot.bmp
+glm/doc
